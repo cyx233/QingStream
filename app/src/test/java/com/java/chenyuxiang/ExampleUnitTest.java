@@ -1,4 +1,4 @@
-package com.example.qingsteam;
+package com.java.chenyuxiang;
 
 import org.junit.Test;
 

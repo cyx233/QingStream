@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QingSteam</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="tab_news">疫情新闻</string>
+    <string name="tab_data">最新数据</string>
+    <string name="tab_scholar">知疫学者</string>
+</resources>

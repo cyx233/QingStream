@@ -21,12 +21,12 @@ android {
             storeFile file('/home/cyx/Github/QingStream/app/key.jks')
             storePassword 'ppnn13%'
         }
-        debug {
-            storeFile file('/home/cyx/Github/QingStream/app/key.jks')
-            storePassword 'ppnn13%'
-            keyAlias 'key0'
-            keyPassword 'ppnn13%'
-        }
+//        debug {
+//            storeFile file('/home/cyx/Github/QingStream/app/key.jks')
+//            storePassword 'ppnn13%'
+//            keyAlias 'key0'
+//            keyPassword 'ppnn13%'
+//        }
     }
 
     buildTypes {

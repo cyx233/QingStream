@@ -3,7 +3,7 @@ package com.java.tanghao;
 import androidx.room.*;
 import com.google.gson.Gson;
 
-@Entity(tableName = "newsList")
+@Entity(tableName = "news")
 @TypeConverters({StringConverter.class, AuthorConverter.class, EntitiesConverter.class, GeoInfoConverter.class, RelatedEventsConverter.class})
 public class News {
     @PrimaryKey

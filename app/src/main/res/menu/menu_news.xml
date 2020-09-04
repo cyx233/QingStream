@@ -1,0 +1,15 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_search"
+        android:title="@string/bar_search"
+        android:imeOptions="actionSearch"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
+
+    <item
+        android:id="@+id/app_bar_edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/bar_category"
+        app:showAsAction="always"/>
+</menu>

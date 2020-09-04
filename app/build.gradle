@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId 'com.java.chenyuxiang'
@@ -20,12 +20,6 @@ android {
             keyPassword 'ppnn13%'
             storeFile file('/home/cyx/Github/QingStream/app/key.jks')
             storePassword 'ppnn13%'
-        }
-        debug {
-            storeFile file('/home/cyx/Github/QingStream/app/key.jks')
-            storePassword 'ppnn13%'
-            keyAlias 'key0'
-            keyPassword 'ppnn13%'
         }
     }
 

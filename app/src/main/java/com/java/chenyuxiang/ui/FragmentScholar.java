@@ -1,4 +1,4 @@
-package com.java.chenyuxiang;
+package com.java.chenyuxiang.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.java.chenyuxiang.R;
 
 public class FragmentScholar extends Fragment {
     @Nullable

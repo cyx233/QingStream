@@ -6,4 +6,8 @@
     <string name="tab_news">疫情新闻</string>
     <string name="tab_data">最新数据</string>
     <string name="tab_scholar">知疫学者</string>
+
+    <string name="bar_search">搜索</string>
+    <string name="bar_category">分类</string>
+    <string name="search_hint">请输入</string>
 </resources>

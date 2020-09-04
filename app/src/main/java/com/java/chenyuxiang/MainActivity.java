@@ -1,15 +1,23 @@
 package com.java.chenyuxiang;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.java.chenyuxiang.ui.FragmentData;
+import com.java.chenyuxiang.ui.FragmentNews;
+import com.java.chenyuxiang.ui.FragmentScholar;
+import com.java.chenyuxiang.ui.MyFragmentPagerAdapter;
 
 import java.util.ArrayList;
 
@@ -18,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private MyFragmentPagerAdapter mFragmentPagerAdapter;
-    private SearchView mSearchView;
+    private Toolbar mToolbar;
 
     private TabLayout.Tab one;
     private TabLayout.Tab two;
@@ -47,24 +55,23 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        mSearchView = findViewById(R.id.searchView);
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_news, menu);
 
-        mSearchView.setOnQueryTextListener(new OnQueryTextListener(){
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String s) {
-//                if (!TextUtils.isEmpty(s)){
-//                    mListView.setFilterText(s);
-//                }else{
-//                    mListView.clearTextFilter();
-//                }
-                return false;
-            }
-        });
-
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.item_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        return true;
     }
 }

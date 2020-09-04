@@ -56,16 +56,16 @@ public class NewsManager {
     public ArrayList<News> getAllNews(){
         try {
             GetAllNewsTask getAllNewsTask = new GetAllNewsTask();
-            return new ArrayList<News>(Arrays.asList(getAllNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,0).get()));
+            return new ArrayList<News>(Arrays.asList(getAllNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"0").get()));
         }catch(Exception e){
             e.printStackTrace();
         }
         return null;
     }
 
-    private class GetAllNewsTask extends AsyncTask<Integer, Void, News[]>{
+    private class GetAllNewsTask extends AsyncTask<String, Void, News[]>{
         @Override
-        protected  News[] doInBackground(Integer... params){
+        protected  News[] doInBackground(String... params){
             return newsDao.getAllNews();
         }
     }

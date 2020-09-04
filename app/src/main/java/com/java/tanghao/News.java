@@ -1,5 +1,7 @@
 package com.java.tanghao;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.*;
 import com.google.gson.Gson;
 
@@ -7,6 +9,7 @@ import com.google.gson.Gson;
 @TypeConverters({StringConverter.class, AuthorConverter.class, EntitiesConverter.class, GeoInfoConverter.class, RelatedEventsConverter.class})
 public class News {
     @PrimaryKey
+    @NonNull
     private String _id;
 
     private Author authors[];
@@ -16,6 +19,7 @@ public class News {
     private String doi;
     private Entities entities[];
     private GeoInfo geoInfo[];
+    @Ignore
     private String id;
     private Double influence;
     private String lang;
@@ -33,17 +37,18 @@ public class News {
 
     public String get_id(){return _id;}
     public Author[] getAuthors(){return authors;}
+    public String getCategory(){return category;}
     public String getContent(){return content;}
     public String getDate(){return date;}
     public String getDoi(){return doi;}
     public Entities[] getEntities(){return entities;}
     public GeoInfo[] geoInfo(){return geoInfo;}
-    public String getId(){return id;}
+//    public String getId(){return id;}
     public Double getInfluence(){return influence;}
     public String getLang(){return lang;}
     public String getPdf(){return pdf;}
     public String[] getRegionIds(){return regionIds;}
-    public RelatedEvents[] getRekatedEvents(){return related_events;}
+    public RelatedEvents[] getRelated_events(){return related_events;}
     public String getSeg_text(){return seg_text;}
     public String getSource(){return source;}
     public Long getTflag(){return tflag;}
@@ -52,6 +57,58 @@ public class News {
     public String getType(){return type;}
     public String[] getUrls(){return urls;}
     public Long getYear(){return year;}
+
+    public void set_id(String _id){this._id = _id;}
+    public void setAuthors(Author[] authors){this.authors = authors;}
+    public void setCategory(String category){this.category = category;}
+    public void setContent(String content){this.content = content;}
+    public void setDate(String date){this.date = date;}
+    public void setDoi(String doi){this.doi = doi;}
+    public void setEntities(Entities entities[]){this.entities = entities;}
+    public void setGeoInfo(GeoInfo geoInfo[]){this.geoInfo = geoInfo;}
+//    public void setId(String id){this.id = id;}
+    public void setInfluence(Double influence){this.influence = influence;}
+    public void setLang(String lang){this.lang = lang;}
+    public void setPdf(String pdf){this.pdf = pdf;}
+    public void setRegionIds(String regionIds[]){this.regionIds = regionIds;}
+    public void setRelated_events(RelatedEvents related_events[]){this.related_events = related_events;}
+    public void setSeg_text(String seg_text){this.seg_text = seg_text;}
+    public void setSource(String source){this.source = source;}
+    public void setTflag(Long tflag){this.tflag = tflag;}
+    public void setTime(String time){this.time = time;}
+    public void setTitle(String title){this.title = title;}
+    public void setType(String type){this.type = type;}
+    public void setUrls(String urls[]){this.urls = urls;}
+    public void setYear(Long year){this.year = year;}
+
+    News(
+            String _id, Author authors[], String category, String content, String date,
+            String doi, Entities entities[], GeoInfo geoInfo[], String id, Double influence,
+            String lang, String pdf, String[] regionIds, RelatedEvents related_events[], String seg_text,
+            String source, Long tflag, String time, String type, String urls[], Long year
+    ){
+        this._id = _id;
+        this.authors = authors;
+        this.category = category;
+        this.content = content;
+        this.date = date;
+        this.doi = doi;
+        this.entities = entities;
+        this.geoInfo = geoInfo;
+        this.id = id;
+        this.influence = influence;
+        this.lang = lang;
+        this.pdf = pdf;
+        this.regionIds = regionIds;
+        this.related_events = related_events;
+        this.seg_text = seg_text;
+        this.source = source;
+        this.tflag = tflag;
+        this.time = time;
+        this.type = type;
+        this.urls = urls;
+        this.year = year;
+    }
 }
 
 class Author{

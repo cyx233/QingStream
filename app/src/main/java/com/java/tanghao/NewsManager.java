@@ -56,7 +56,7 @@ public class NewsManager {
     public ArrayList<News> getAllNews(){
         try {
             GetAllNewsTask getAllNewsTask = new GetAllNewsTask();
-            return new ArrayList<News>(Arrays.asList(getAllNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,0).get()));
+            return new ArrayList<News>(Arrays.asList(getAllNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"0").get()));
         }catch(Exception e){
             e.printStackTrace();
         }

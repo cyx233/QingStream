@@ -63,9 +63,9 @@ public class NewsManager {
         return null;
     }
 
-    private class GetAllNewsTask extends AsyncTask<Integer, Void, News[]>{
+    private class GetAllNewsTask extends AsyncTask<String, Void, News[]>{
         @Override
-        protected  News[] doInBackground(Integer... params){
+        protected  News[] doInBackground(String... params){
             return newsDao.getAllNews();
         }
     }

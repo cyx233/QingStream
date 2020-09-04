@@ -1,21 +1,53 @@
 package com.java.chenyuxiang.ui;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.ListFragment;
 
 import com.java.chenyuxiang.R;
+import com.java.tanghao.News;
 
-public class FragmentNews extends Fragment {
-    @Nullable
+import java.util.ArrayList;
+
+
+public class FragmentNews extends ListFragment {
+    ArrayList<News> newsList;
+    public FragmentNews(ArrayList<News> list){
+        newsList=list;
+    }
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_news, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        NewsListAdapter adapter = new NewsListAdapter(newsList);//new出适配器的实例
+        setListAdapter(adapter);//和List绑定
+    }
+    class NewsListAdapter extends ArrayAdapter<News> {
+        private ArrayList<News> mList;
+        public NewsListAdapter(ArrayList<News> list) {
+            super(requireActivity(), android.R.layout.simple_list_item_1, list);
+            mList=list;
+        }
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            if (null == convertView) {
+                convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
+            }
+            News c = getItem(position);
+            TextView titleTextView = (TextView)convertView.findViewById(R.id.news_list_item_titleTextView);
+            assert c != null;
+            titleTextView.setText(c.getTitle());
+            return convertView;
+        }
+
+        @Override
+        public int getCount() {
+            return mList.size();
+        }
     }
 }
 

@@ -3,10 +3,9 @@ package com.java.tanghao;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import androidx.room.*;
-import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import java.util.*;
 
 public class NewsManager {
     private static NewsManager Instance = null;
@@ -28,8 +27,8 @@ public class NewsManager {
     public News[] getPageNews(String url){
         News news[] = new News[0];
         try{
-            Utils.GetHttpResponseTask g = new Utils.GetHttpResponseTask();
-            Utils.ParseNewsTask p = new Utils.ParseNewsTask();
+            QingUtils.GetHttpResponseTask g = new QingUtils.GetHttpResponseTask();
+            QingUtils.ParseNewsTask p = new QingUtils.ParseNewsTask();
             String data = g.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url).get();
             news = p.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data).get();
             insertNews(news);

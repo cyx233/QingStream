@@ -18,8 +18,11 @@ import com.java.chenyuxiang.ui.FragmentData;
 import com.java.chenyuxiang.ui.FragmentNews;
 import com.java.chenyuxiang.ui.FragmentScholar;
 import com.java.chenyuxiang.ui.MyFragmentPagerAdapter;
+import com.java.tanghao.News;
+import com.java.tanghao.NewsManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         ArrayList<Pair<Fragment,String>> list = new ArrayList<>();
-        list.add(new Pair<Fragment, String>(new FragmentNews(),"疫情新闻"));
+        NewsManager manager = NewsManager.getNewsManager(getApplicationContext());
+        ArrayList<News> newslist = new ArrayList<News>(Arrays.asList(manager.getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=paper%page=18&size=5")));
+
+        list.add(new Pair<Fragment, String>(new FragmentNews(newslist),"疫情新闻"));
         list.add(new Pair<Fragment, String>(new FragmentData(),"最新数据"));
         list.add(new Pair<Fragment, String>(new FragmentScholar(),"知疫学者"));
 

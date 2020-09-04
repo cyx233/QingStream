@@ -22,7 +22,6 @@ import com.java.tanghao.News;
 import com.java.tanghao.NewsManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,10 +44,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         ArrayList<Pair<Fragment,String>> list = new ArrayList<>();
-        NewsManager manager = NewsManager.getNewsManager(getApplicationContext());
-        ArrayList<News> newslist = new ArrayList<News>(Arrays.asList(manager.getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=paper%page=18&size=5")));
+        NewsManager manager = NewsManager.getNewsManager(this);
+        ArrayList<News> newsList = manager.getAllNews();
 
-        list.add(new Pair<Fragment, String>(new FragmentNews(newslist),"疫情新闻"));
+        list.add(new Pair<Fragment, String>(new FragmentNews(newsList),"疫情新闻"));
         list.add(new Pair<Fragment, String>(new FragmentData(),"最新数据"));
         list.add(new Pair<Fragment, String>(new FragmentScholar(),"知疫学者"));
 

@@ -37,16 +37,16 @@ public class FragmentNews extends ListFragment {
             if (null == convertView) {
                 convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
             }
-            News c = getItem(position);
+//            News c = getItem(position);
             TextView titleTextView = (TextView)convertView.findViewById(R.id.news_list_item_titleTextView);
-            assert c != null;
-            titleTextView.setText(c.getTitle());
+            titleTextView.setText("Hello"+position);
+//            titleTextView.setText(c.getTitle());
             return convertView;
         }
 
         @Override
         public int getCount() {
-            return mList.size();
+            return mList.size()+100;
         }
     }
 }

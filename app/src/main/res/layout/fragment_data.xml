@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/text_view_news"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/tab_data"/>

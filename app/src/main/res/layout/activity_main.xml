@@ -7,15 +7,22 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="请输入搜索内容" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="40dp"
         android:background="#ffff00"
-        app:tabIndicatorColor="#66ff33"
-        app:tabIndicatorHeight="20dp"
-        app:tabTextColor="@color/colorPrimary"
-        app:tabSelectedTextColor="#CC33FF"
+        app:tabIndicatorColor="@color/colorRed"
+        app:tabIndicatorHeight="5dp"
+        app:tabTextColor="@color/colorBlack"
+        app:tabSelectedTextColor="@color/colorRed"
         app:tabMode="fixed"
         app:tabBackground="@drawable/tab_selector"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"/>

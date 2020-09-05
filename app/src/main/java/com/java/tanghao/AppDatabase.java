@@ -10,6 +10,9 @@ interface NewsDao{
     @Query("SELECT * FROM news")
     News[] getAllNews();
 
+    @Query("SELECT * FROM news WHERE type = '%'||:type||'%'")
+    News[] getTypeNews(String type);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(News... news);
 

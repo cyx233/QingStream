@@ -69,4 +69,21 @@ public class NewsManager {
         }
     }
 
+    public ArrayList<News> getTypeNews(String type){
+        try {
+            GetTypeNewsTask getTypeNewsTask = new GetTypeNewsTask();
+            return new ArrayList<News>(Arrays.asList(getTypeNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, type).get()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private class GetTypeNewsTask extends AsyncTask<String, Void, News[]>{
+        @Override
+        protected  News[] doInBackground(String... params){
+            return newsDao.getTypeNews(params[0]);
+        }
+    }
+
 }

@@ -13,6 +13,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class QingUtils {
+    static class ParseNewsTask extends AsyncTask<String, Void, News[]> {
+        @Override
+        protected News[] doInBackground(String... strings) {
+            Gson gson = new Gson();
+            String s = null;
+            if(strings[0] != null)s = strings[0];
+            NewsApi na = gson.fromJson(s, NewsApi.class);
+            if (na != null) return na.getData();
+            return new News[0];
+        }
+    }
     static class GetHttpResponseTask extends AsyncTask<String, Void, String>{
         @Override
         protected String doInBackground(String... strings) {
@@ -66,19 +77,13 @@ public class QingUtils {
             }
         }
     }
-
-    static class ParseNewsTask extends AsyncTask<String, Void, News[]> {
-        @Override
-        protected News[] doInBackground(String... strings) {
-            Gson gson = new Gson();
-            String s = null;
-            if(strings[0] != null)s = strings[0];
-            NewsApi na = gson.fromJson(s, NewsApi.class);
-            if (na != null) return na.getData();
-            return new News[0];
-        }
-    }
 }
+
+
+
+
+
+
 
 class NewsApi{
     private News data[];

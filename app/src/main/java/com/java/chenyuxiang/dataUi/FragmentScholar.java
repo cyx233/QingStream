@@ -1,4 +1,4 @@
-package com.java.chenyuxiang.ui;
+package com.java.chenyuxiang.dataUi;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,14 +10,12 @@ import androidx.fragment.app.Fragment;
 
 import com.java.chenyuxiang.R;
 
-public class FragmentData extends Fragment {
+public class FragmentScholar extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_data, container, false);
+        return inflater.inflate(R.layout.fragment_scholar, container, false);
     }
 }
-
-

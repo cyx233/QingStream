@@ -29,7 +29,7 @@
         app:tabIndicatorHeight="5dp"
         app:tabTextColor="@color/colorBlack"
         app:tabSelectedTextColor="@color/colorRed"
-        app:tabMode="fixed"
+        app:tabMode="scrollable"
         app:tabBackground="@drawable/tab_selector"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"/>
 

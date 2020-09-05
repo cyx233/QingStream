@@ -1,12 +1,13 @@
-package com.java.chenyuxiang;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.java.chenyuxiang.searchUI;
 
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.java.chenyuxiang.R;
 
 public class SearchResultActivity extends AppCompatActivity {
 

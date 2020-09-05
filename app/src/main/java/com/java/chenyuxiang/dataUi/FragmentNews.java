@@ -1,4 +1,4 @@
-package com.java.chenyuxiang.ui;
+package com.java.chenyuxiang.dataUi;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;

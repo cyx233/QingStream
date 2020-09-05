@@ -17,10 +17,11 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.java.chenyuxiang.ui.FragmentData;
-import com.java.chenyuxiang.ui.FragmentNews;
-import com.java.chenyuxiang.ui.FragmentScholar;
-import com.java.chenyuxiang.ui.MyFragmentPagerAdapter;
+import com.java.chenyuxiang.channelUI.ChannelActivity;
+import com.java.chenyuxiang.dataUi.FragmentData;
+import com.java.chenyuxiang.dataUi.FragmentNews;
+import com.java.chenyuxiang.dataUi.FragmentScholar;
+import com.java.chenyuxiang.dataUi.MyFragmentPagerAdapter;
 import com.java.tanghao.News;
 import com.java.tanghao.NewsManager;
 
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         list.add(new Pair<Fragment, String>(new FragmentNews(newsList),"疫情新闻"));
         list.add(new Pair<Fragment, String>(new FragmentData(),"最新数据"));
         list.add(new Pair<Fragment, String>(new FragmentScholar(),"知疫学者"));
+        list.add(new Pair<Fragment, String>(new FragmentScholar(),"新闻聚类"));
+
 
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.item_search:
                 break;
             case R.id.item_category:
-                intent = new Intent(this, CategoryActivity.class);
+                intent = new Intent(this, ChannelActivity.class);
                 startActivity(intent);
                 break;
         }

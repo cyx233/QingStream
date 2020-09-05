@@ -29,6 +29,7 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+        <activity android:name=".CategoryActivity" />
     </application>
 
 </manifest>

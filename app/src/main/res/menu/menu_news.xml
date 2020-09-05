@@ -8,8 +8,7 @@
         app:showAsAction="collapseActionView|ifRoom" />
 
     <item
-        android:id="@+id/app_bar_edit"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:id="@+id/item_category"
         android:title="@string/bar_category"
         app:showAsAction="always"/>
 </menu>

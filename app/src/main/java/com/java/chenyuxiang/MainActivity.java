@@ -2,12 +2,15 @@ package com.java.chenyuxiang;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Pair<Fragment,String>> list = new ArrayList<>();
         NewsManager manager = NewsManager.getNewsManager(this);
 
-        News news[] = manager.getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
+        manager.getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
         ArrayList<News> newsList = manager.getTypeNews("news");
 //        ArrayList<News> newsList = manager.getAllNews();
 
@@ -81,5 +84,20 @@ public class MainActivity extends AppCompatActivity {
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent=null;
+        switch (id){
+            case R.id.item_search:
+                break;
+            case R.id.item_category:
+                intent = new Intent(this, CategoryActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return false;
     }
 }

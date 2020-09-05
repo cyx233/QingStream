@@ -13,11 +13,18 @@ interface NewsDao{
     @Query("SELECT * FROM news WHERE type = :type")
     News[] getTypeNews(String type);
 
+    @Query("SELECT * FROM news WHERE title like :value")
+    News[] getSearchNews(String value);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(News... news);
 
-    @Update
-    void update(News... news);
+    @Query("UPDATE news SET isRead = :isRead")
+    void updateIsRead(Boolean isRead);
+
+    @Query("UPDATE news SET isRead = :isFavorite")
+    void updateIsFavorite(Boolean isFavorite);
+
 
     @Delete
     void delete(News... news);

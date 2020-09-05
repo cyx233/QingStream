@@ -2,8 +2,14 @@ package com.java.tanghao;
 
 import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.*;
+
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,7 +79,22 @@ public class QingUtils {
     static class ParseNewsTask extends AsyncTask<String, Void, News[]> {
         @Override
         protected News[] doInBackground(String... strings) {
-            Gson gson = new Gson();
+            ExclusionStrategy myExclusionStrategy = new ExclusionStrategy() {
+
+                @Override
+                public boolean shouldSkipField(FieldAttributes fa) {
+                    return fa.getName().equals("isRead") || fa.getName().equals("isFavorite"); // <---
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            };
+
+            Gson gson = new GsonBuilder()
+                    .setExclusionStrategies(myExclusionStrategy)
+                    .create();
             String s = null;
             if(strings[0] != null)s = strings[0];
             NewsApi na = gson.fromJson(s, NewsApi.class);

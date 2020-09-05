@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.*;
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 
 @Entity(tableName = "news")
 @TypeConverters({StringConverter.class, AuthorConverter.class, EntitiesConverter.class, GeoInfoConverter.class, RelatedEventsConverter.class})
@@ -108,7 +109,17 @@ public class News {
         this.type = type;
         this.urls = urls;
         this.year = year;
+        this.isRead = false;
+        this.isFavorite = false;
     }
+
+    private Boolean isRead;
+    private Boolean isFavorite;
+
+    public Boolean getIsRead(){return isRead;}
+    public Boolean getIsFavorite(){return isFavorite;}
+    public void setIsRead(Boolean isRead){this.isRead = isRead;}
+    public void setIsFavorite(Boolean isFavorite){this.isFavorite = isFavorite;}
 }
 
 class Author{

@@ -86,6 +86,55 @@ public class NewsManager {
         }
     }
 
+    public ArrayList<News> getSearchNews(String value){
+        try {
+            GetSearchNewsTask getSearchNewsTask = new GetSearchNewsTask();
+            return new ArrayList<News>(Arrays.asList(getSearchNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, value).get()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    private class GetSearchNewsTask extends AsyncTask<String, Void, News[]>{
+        @Override
+        protected  News[] doInBackground(String... params){
+            return newsDao.getTypeNews(params[0]);
+        }
+    }
+
+    public void updateIsRead(Boolean isRead){
+        try {
+            UpdateIsReadTask updateIsReadTask = new UpdateIsReadTask();
+            updateIsReadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, isRead);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private class UpdateIsReadTask extends AsyncTask<Boolean, Void, Void>{
+        @Override
+        protected Void doInBackground(Boolean... params){
+            newsDao.updateIsRead(params[0]);
+            return null;
+        }
+    }
+
+    public void updateIsFavorate(Boolean isFavorite){
+        try {
+            UpdateIsFavorateTask updateIsFavorateTask = new UpdateIsFavorateTask();
+            updateIsFavorateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, isFavorite);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private class UpdateIsFavorateTask extends AsyncTask<Boolean, Void, Void>{
+        @Override
+        protected Void doInBackground(Boolean... params){
+            newsDao.updateIsFavorite(params[0]);
+            return null;
+        }
+    }
 
 }

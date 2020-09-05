@@ -46,8 +46,9 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Pair<Fragment,String>> list = new ArrayList<>();
         NewsManager manager = NewsManager.getNewsManager(this);
 
-        News news[] = manager.getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=paper%page=18&size=5");
-        ArrayList<News> newsList = manager.getAllNews();
+        News news[] = manager.getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
+        ArrayList<News> newsList = manager.getTypeNews("news");
+//        ArrayList<News> newsList = manager.getAllNews();
 
         list.add(new Pair<Fragment, String>(new FragmentNews(newsList),"疫情新闻"));
         list.add(new Pair<Fragment, String>(new FragmentData(),"最新数据"));

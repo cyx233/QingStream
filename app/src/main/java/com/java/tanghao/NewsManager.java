@@ -12,14 +12,14 @@ public class NewsManager {
     private final NewsDao newsDao;
     private final AppDatabase appDB;
 
-    private NewsManager(Context context){
-        this.appDB = AppDatabase.getInstance(context);
+    private NewsManager(AppDatabase appDB){
+        this.appDB = appDB;
         this.newsDao = this.appDB.newsDao();
     }
 
-    public static NewsManager getNewsManager(Context context){
+    public static NewsManager getInstance(AppDatabase appDB){
         if(Instance == null){
-            Instance = new NewsManager(context);
+            Instance = new NewsManager(appDB);
         }
         return Instance;
     }
@@ -40,8 +40,13 @@ public class NewsManager {
     }
 
     public void insertNews(News... news){
-        InsertNewsTask insertNewsTask = new InsertNewsTask();
-        insertNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,news);
+        try {
+            InsertNewsTask insertNewsTask = new InsertNewsTask();
+            insertNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,news);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private class InsertNewsTask extends AsyncTask<News, Void, Void>{

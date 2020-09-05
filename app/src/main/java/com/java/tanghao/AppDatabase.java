@@ -25,18 +25,30 @@ interface NewsDao{
     @Query("UPDATE news SET isRead = :isFavorite")
     void updateIsFavorite(Boolean isFavorite);
 
-
     @Delete
     void delete(News... news);
+}
+
+@Dao
+interface CategoryDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Category... categories);
+
+    @Query("SELECT * FROM category")
+    Category[] getAllCategories();
+
+    @Query("UPDATE category SET inCategory = :inCategory")
+    void updateInCategory(Boolean inCategory);
 
 }
 
-@Database(entities = {News.class}, version = 1)
+@Database(entities = {News.class, Category.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
     private static final Object sLock = new Object();
     public abstract NewsDao newsDao();
+    public abstract CategoryDao categoryDao();
 
     public static AppDatabase getInstance(Context context) {
         synchronized (sLock) {

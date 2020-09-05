@@ -11,6 +11,7 @@ import com.google.gson.annotations.Expose;
 public class News {
     @PrimaryKey
     @NonNull
+    @ColumnInfo(name = "id")
     private String _id;
 
     private Author authors[];

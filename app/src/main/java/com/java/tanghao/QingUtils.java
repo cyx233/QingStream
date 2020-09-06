@@ -9,25 +9,24 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-
-
-
+import java.util.Map;
 
 public class QingUtils {
-    static class GetHttpResponseTask extends AsyncTask<String, Void, String>{
+    static class GetHttpResponseTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
             StringBuilder sb = new StringBuilder();
-            for(String s: strings)sb.append(s);
+            for (String s : strings) sb.append(s);
             String httpurl = sb.toString();
             HttpURLConnection connection = null;
             InputStream is = null;
@@ -76,6 +75,7 @@ public class QingUtils {
             }
         }
     }
+
     static class ParseNewsTask extends AsyncTask<String, Void, News[]> {
         @Override
         protected News[] doInBackground(String... strings) {
@@ -96,22 +96,34 @@ public class QingUtils {
                     .setExclusionStrategies(myExclusionStrategy)
                     .create();
             String s = null;
-            if(strings[0] != null)s = strings[0];
+            if (strings[0] != null) s = strings[0];
             NewsApi na = gson.fromJson(s, NewsApi.class);
             if (na != null) return na.getData();
             return new News[0];
         }
     }
+
+    static class ParseYiqingDataTask extends AsyncTask<String, Void, YiqingData[]> {
+        @Override
+        protected YiqingData[] doInBackground(String... strings) {
+            GsonBuilder builder = new GsonBuilder();
+            builder.serializeNulls();
+            Gson gson = builder.create();
+            String s = null;
+            if (strings[0] != null) s = strings[0];
+            Type mapType = new TypeToken<Map<String, YiqingDataApi>>() {
+            }.getType();
+            Map<String, YiqingDataApi> j = gson.fromJson(s, mapType);
+            YiqingData[] result = new YiqingData[j.size()];
+            int index = 0;
+            for (Map.Entry<String, YiqingDataApi> entry : j.entrySet()) {
+                result[index++] = new YiqingData(entry.getKey(), entry.getValue());
+            }
+            return result;
+        }
+
+    }
 }
 
-class NewsApi{
-    private News data[];
-    class Pagination{
-        private Long page;
-        private Long size;
-        private Long total;
-    }
-    private Pagination pagination;
-    private Boolean status;
-    public News[] getData(){return data;}
-}
+
+

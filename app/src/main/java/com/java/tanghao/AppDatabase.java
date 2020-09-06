@@ -42,13 +42,27 @@ interface CategoryDao{
 
 }
 
-@Database(entities = {News.class, Category.class}, version = 1)
+@Dao
+interface YiqingDataDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(YiqingData... yiqingData);
+
+    @Query("SELECT * FROM yiqingdata")
+    YiqingData[] getAllYiqingData();
+
+    @Query("SELECT * FROM yiqingdata WHERE location = :location")
+    YiqingData[] getLocationYiqingData(String location);
+
+}
+
+@Database(entities = {News.class, Category.class, YiqingData.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
     private static final Object sLock = new Object();
     public abstract NewsDao newsDao();
     public abstract CategoryDao categoryDao();
+    public abstract YiqingDataDao yiqingDataDao();
 
     public static AppDatabase getInstance(Context context) {
         synchronized (sLock) {

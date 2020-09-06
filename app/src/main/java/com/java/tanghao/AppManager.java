@@ -26,4 +26,7 @@ public class AppManager {
         return CategoryManager.getInstance(appDB);
     }
 
+    public static YiqingDataManager getYiqingDataManager(){
+        return YiqingDataManager.getInstance(appDB);
+    }
 }

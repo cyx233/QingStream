@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.*;
 
 @Entity(tableName = "category")
-public class Category {
+public class Category extends Thread{
     @PrimaryKey
     @NonNull
     private String category;

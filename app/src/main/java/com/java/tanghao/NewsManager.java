@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class NewsManager {
+public class NewsManager extends Thread{
     private static NewsManager Instance = null;
     private final NewsDao newsDao;
     private final AppDatabase appDB;

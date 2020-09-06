@@ -24,6 +24,40 @@ class StringConverter {
     }
 }
 
+class Integer2DConverter{
+    @TypeConverter
+    public static Integer[][] fromTimestamp(String data) {
+        if(data == null || data.equals(""))return new Integer[0][];
+        String[] ss = data.split("#QingSteamSplit#");
+        Integer[][] result = new Integer[ss.length][];
+        for(int i = 0; i < ss.length; i++){
+            String[] sss = ss[i].split("QingSteam2DSplit");
+            result[i] = new Integer[sss.length];
+            for(int j = 0; j < sss.length; j++){
+                result[i][j] = Integer.valueOf(sss[j]);
+            }
+        }
+        return result;
+    }
+
+    @TypeConverter
+    public static String toTimestamp(Integer[][] data){
+        if(data == null || data.length==0){
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < data.length; i++){
+            for(int j = 0; j < data[i].length; j++)
+            {
+                sb.append(data[i][j].toString());
+                sb.append("#QingSteam2DSplit#");
+            }
+            sb.append("#QingSteamSplit#");
+        }
+        return sb.toString();
+    }
+}
+
 class AuthorConverter{
     @TypeConverter
     public static Author[] fromTimestamp(String data) {

@@ -196,3 +196,15 @@ class RelatedEvents{
         this.score = score;
     }
 }
+
+class NewsApi{
+    private News data[];
+    class Pagination{
+        private Long page;
+        private Long size;
+        private Long total;
+    }
+    private Pagination pagination;
+    private Boolean status;
+    public News[] getData(){return data;}
+}

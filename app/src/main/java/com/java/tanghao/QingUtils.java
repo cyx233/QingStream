@@ -97,6 +97,7 @@ public class QingUtils {
                     .create();
             String s = null;
             if (strings[0] != null) s = strings[0];
+            else s = "";
             NewsApi na = gson.fromJson(s, NewsApi.class);
             if (na != null) return na.getData();
             return new News[0];
@@ -111,6 +112,7 @@ public class QingUtils {
             Gson gson = builder.create();
             String s = null;
             if (strings[0] != null) s = strings[0];
+            else s = "";
             Type mapType = new TypeToken<Map<String, YiqingDataApi>>() {
             }.getType();
             Map<String, YiqingDataApi> j = gson.fromJson(s, mapType);
@@ -122,6 +124,18 @@ public class QingUtils {
             return result;
         }
 
+    }
+
+    static class ParseYiqingEntityTask extends AsyncTask<String, Void, YiqingEntity[]>{
+        @Override
+        protected YiqingEntity[] doInBackground(String... strings) {
+            Gson gson = new Gson();
+            String s = null;
+            if (strings[0] != null) s = strings[0];
+            else s = "";
+            YiqingEntityApi j = gson.fromJson(s, YiqingEntityApi.class);
+            return j.getData();
+        }
     }
 }
 

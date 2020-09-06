@@ -37,8 +37,8 @@ interface CategoryDao{
     @Query("SELECT * FROM category")
     Category[] getAllCategories();
 
-    @Query("UPDATE category SET inCategory = :inCategory")
-    void updateInCategory(Boolean inCategory);
+    @Query("UPDATE category SET inCategory = :inCategory WHERE category = :category")
+    void updateInCategory(String category, Boolean inCategory);
 
 }
 

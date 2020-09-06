@@ -22,6 +22,7 @@ import com.java.chenyuxiang.dataUi.FragmentData;
 import com.java.chenyuxiang.dataUi.FragmentNews;
 import com.java.chenyuxiang.dataUi.FragmentScholar;
 import com.java.chenyuxiang.dataUi.MyFragmentPagerAdapter;
+import com.java.tanghao.AppManager;
 import com.java.tanghao.News;
 import com.java.tanghao.NewsManager;
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         ArrayList<Pair<Fragment,String>> list = new ArrayList<>();
-        NewsManager manager = NewsManager.getNewsManager(this);
+        AppManager manager = AppManager.getAppManager(this);
 
         manager.getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
         ArrayList<News> newsList = manager.getTypeNews("news");

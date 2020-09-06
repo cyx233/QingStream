@@ -15,4 +15,9 @@ public class Category {
 
     public void setCategory(String category){this.category = category;}
     public void setInCategory(Boolean inCategory){this.inCategory = inCategory;}
+
+    public Category(String category, Boolean inCategory){
+        this.category = category;
+        this.inCategory = inCategory;
+    }
 }

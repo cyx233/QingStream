@@ -24,7 +24,6 @@ import com.java.chenyuxiang.dataUi.FragmentScholar;
 import com.java.chenyuxiang.dataUi.MyFragmentPagerAdapter;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.News;
-import com.java.tanghao.NewsManager;
 
 import java.util.ArrayList;
 
@@ -49,16 +48,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         ArrayList<Pair<Fragment,String>> list = new ArrayList<>();
-        AppManager manager = AppManager.getAppManager(this);
+        AppManager.getAppManager(this);
 
-        manager.getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
-        ArrayList<News> newsList = manager.getTypeNews("news");
-//        ArrayList<News> newsList = manager.getAllNews();
+        AppManager.getAppManager(this);
+        News[] a = AppManager.getNewsManager().getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
+        ArrayList<News> newsList = AppManager.getNewsManager().getTypeNews("news");
 
         list.add(new Pair<Fragment, String>(new FragmentNews(newsList),"疫情新闻"));
         list.add(new Pair<Fragment, String>(new FragmentData(),"最新数据"));
         list.add(new Pair<Fragment, String>(new FragmentScholar(),"知疫学者"));
-        list.add(new Pair<Fragment, String>(new FragmentScholar(),"新闻聚类"));
+        list.add(new Pair<Fragment, String>(new FragmentScholar(),"我的收藏"));
 
 
         //使用适配器将ViewPager与Fragment绑定在一起

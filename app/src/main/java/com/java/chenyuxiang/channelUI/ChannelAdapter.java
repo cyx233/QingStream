@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.java.chenyuxiang.R;
+import com.java.tanghao.AppManager;
+import com.java.tanghao.Category;
 
 import java.util.List;
 
@@ -276,15 +278,18 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyViewHolder) {
-
             MyViewHolder myHolder = (MyViewHolder) holder;
             myHolder.textView.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER).getName());
+
+            if(mMyChannelItems.get(position-COUNT_PRE_MY_HEADER).isCurrent()){
+                myHolder.textView.setTextColor(0xef4836);
+            }
+
             if (isEditMode) {
                 myHolder.imgEdit.setVisibility(View.VISIBLE);
             } else {
                 myHolder.imgEdit.setVisibility(View.INVISIBLE);
             }
-
         } else if (holder instanceof OtherViewHolder) {
 
             ((OtherViewHolder) holder).textView.setText(mOtherChannelItems.get(position - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER).getName());
@@ -351,6 +356,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return;
         }
         ChannelEntity item = mMyChannelItems.get(startPosition);
+        AppManager.getCategoryManager().updateInCategory(new Category(item.getName(),false));
         mMyChannelItems.remove(startPosition);
         mOtherChannelItems.add(0, item);
 
@@ -398,6 +404,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return -1;
         }
         ChannelEntity item = mOtherChannelItems.get(startPosition);
+        AppManager.getCategoryManager().updateInCategory(new Category(item.getName(),true));
         mOtherChannelItems.remove(startPosition);
         mMyChannelItems.add(item);
         return position;

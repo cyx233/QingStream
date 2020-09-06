@@ -16,7 +16,7 @@
 
     <ImageView
         android:id="@+id/img_edit"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_width="16dp"
         android:visibility="invisible"
         android:layout_height="16dp"/>

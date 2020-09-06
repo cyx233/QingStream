@@ -8,10 +8,11 @@ public class Category {
     @PrimaryKey
     @NonNull
     private String category;
+    @NonNull
     private Boolean inCategory;
 
     public String getCategory(){return category;}
-    public boolean getInCategory(){return inCategory;}
+    public Boolean getInCategory(){return inCategory;}
 
     public void setCategory(String category){this.category = category;}
     public void setInCategory(Boolean inCategory){this.inCategory = inCategory;}

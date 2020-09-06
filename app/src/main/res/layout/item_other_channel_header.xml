@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:text="@string/other_channel"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:textSize="16sp"/>
 
     <View

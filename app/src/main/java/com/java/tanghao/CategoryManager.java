@@ -59,19 +59,19 @@ public class CategoryManager {
         }
     }
 
-    public void updateInCategory(Boolean inCategory){
+    public void updateInCategory(Category category){
         try {
             CategoryManager.UpdateInCategoryTask updateInCategoryTask = new CategoryManager.UpdateInCategoryTask();
-            updateInCategoryTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,inCategory);
+            updateInCategoryTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,category);
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    private class UpdateInCategoryTask extends AsyncTask<Boolean, Void, Void>{
+    private class UpdateInCategoryTask extends AsyncTask<Category, Void, Void>{
         @Override
-        protected Void doInBackground(Boolean... params){
-            categoryDao.updateInCategory(params[0]);
+        protected Void doInBackground(Category... params){
+            categoryDao.updateInCategory(params[0].getCategory(), params[0].getInCategory());
             return null;
         }
     }

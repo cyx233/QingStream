@@ -22,8 +22,8 @@ public class AppManager {
         return NewsManager.getInstance(appDB);
     }
 
-    public static CategoryManager categoryManager(){
-        return categoryManager().getInstance(appDB);
+    public static CategoryManager getCategoryManager(){
+        return CategoryManager.getInstance(appDB);
     }
 
 }

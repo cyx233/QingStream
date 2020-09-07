@@ -1,8 +1,8 @@
 package com.java.chenyuxiang.channelUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,6 +16,7 @@ import com.java.tanghao.CategoryManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 频道 增删改查 排序
@@ -26,27 +27,20 @@ public class ChannelActivity extends AppCompatActivity {
     private RecyclerView mRecy;
     final List<ChannelEntity> otherItems = new ArrayList<>();
     final List<ChannelEntity> items = new ArrayList<>();
+    String currentCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
-
         mRecy = (RecyclerView) findViewById(R.id.recy);
+        currentCategory = Objects.requireNonNull(getIntent().getExtras()).getString("currentCategory");
         init();
     }
 
     private void init() {
         CategoryManager mCategoryManager = AppManager.getCategoryManager();
         ArrayList<Category> categoryList = mCategoryManager.getAllCategories();
-
-        if(categoryList==null || categoryList.size()==0){
-            mCategoryManager.insertCategory(new Category("论文",true));
-            mCategoryManager.insertCategory(new Category("事件",true));
-            mCategoryManager.insertCategory(new Category("国内",false));
-            mCategoryManager.insertCategory(new Category("国外",false));
-
-        }
 
         categoryList = mCategoryManager.getAllCategories();
         for(int i=0;i<categoryList.size();++i){
@@ -70,7 +64,7 @@ public class ChannelActivity extends AppCompatActivity {
         final ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(mRecy);
 
-        final ChannelAdapter adapter = new ChannelAdapter(this, helper, items, otherItems);
+        final ChannelAdapter adapter = new ChannelAdapter(this, helper, items, otherItems,currentCategory);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -83,19 +77,17 @@ public class ChannelActivity extends AppCompatActivity {
         adapter.setOnMyChannelItemClickListener(new ChannelAdapter.OnMyChannelItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                chooseChannel(items.get(position));
-                Toast.makeText(ChannelActivity.this, items.get(position).getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+
+                //把返回数据存入Intent
+                intent.putExtra("result", items.get(position).getName());
+
+                //设置返回数据
+                ChannelActivity.this.setResult(RESULT_OK, intent);
+
+                //关闭Activity
+                ChannelActivity.this.finish();
             }
         });
-    }
-    private void chooseChannel(ChannelEntity chosenOne){
-        for (ChannelEntity item:items) {
-            if(item.getName().equals(chosenOne.getName())){
-                item.setCurrent(true);
-            }
-            else{
-                item.setCurrent(false);
-            }
-        }
     }
 }

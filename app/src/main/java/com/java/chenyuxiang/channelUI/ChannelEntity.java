@@ -25,8 +25,4 @@ public class ChannelEntity {
     public void setName(String name) {
         this.name = name;
     }
-
-    public boolean isCurrent(){return isCurrentChannel;}
-
-    public void setCurrent(boolean isCurrent){isCurrentChannel=isCurrent;}
 }

@@ -2,6 +2,7 @@ package com.java.chenyuxiang.channelUI;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -62,11 +63,14 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // 我的频道点击事件
     private OnMyChannelItemClickListener mChannelItemClickListener;
 
-    public ChannelAdapter(Context context, ItemTouchHelper helper, List<ChannelEntity> mMyChannelItems, List<ChannelEntity> mOtherChannelItems) {
+    String currentCategory;
+
+    public ChannelAdapter(Context context, ItemTouchHelper helper, List<ChannelEntity> mMyChannelItems, List<ChannelEntity> mOtherChannelItems,String currentCategory) {
         this.mInflater = LayoutInflater.from(context);
         this.mItemTouchHelper = helper;
         this.mMyChannelItems = mMyChannelItems;
         this.mOtherChannelItems = mOtherChannelItems;
+        this.currentCategory = currentCategory;
     }
 
     @Override
@@ -279,10 +283,10 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyViewHolder) {
             MyViewHolder myHolder = (MyViewHolder) holder;
-            myHolder.textView.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER).getName());
-
-            if(mMyChannelItems.get(position-COUNT_PRE_MY_HEADER).isCurrent()){
-                myHolder.textView.setTextColor(0xef4836);
+            String name = mMyChannelItems.get(position - COUNT_PRE_MY_HEADER).getName();
+            myHolder.textView.setText(name);
+            if(currentCategory.equals(name)){
+                myHolder.textView.setTextColor(Color.parseColor("#ef4836"));
             }
 
             if (isEditMode) {

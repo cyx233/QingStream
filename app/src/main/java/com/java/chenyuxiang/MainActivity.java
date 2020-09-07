@@ -9,8 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -23,9 +25,14 @@ import com.java.chenyuxiang.dataUi.FragmentNews;
 import com.java.chenyuxiang.dataUi.FragmentScholar;
 import com.java.chenyuxiang.dataUi.MyFragmentPagerAdapter;
 import com.java.tanghao.AppManager;
+import com.java.tanghao.Category;
+import com.java.tanghao.CategoryManager;
 import com.java.tanghao.News;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,36 +40,50 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private MyFragmentPagerAdapter mFragmentPagerAdapter;
     private Toolbar mToolbar;
+    private String currentCategory;
+    ArrayList<Pair<Fragment,String>> tabList = new ArrayList<>();
+    ArrayList<News> newsList = new ArrayList<>();
 
-    private TabLayout.Tab one;
-    private TabLayout.Tab two;
-    private TabLayout.Tab three;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initData();
         //初始化视图
         initViews();
     }
+    private void initData(){
+        currentCategory = "全部";
+        AppManager.getAppManager(this);
+        CategoryManager mCategoryManager = AppManager.getCategoryManager();
+        ArrayList<Category> categoryList = mCategoryManager.getAllCategories();
+        if(categoryList==null || categoryList.size()==0){
+            mCategoryManager.insertCategory(new Category("全部",true));
+            mCategoryManager.insertCategory(new Category("论文",true));
+            mCategoryManager.insertCategory(new Category("事件",true));
+            mCategoryManager.insertCategory(new Category("国内",false));
+            mCategoryManager.insertCategory(new Category("国外",false));
+        }
+
+        News[] news = AppManager.getNewsManager().getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
+        List<News> list = Arrays.asList(news);
+        newsList = new ArrayList<>(list);
+
+
+
+
+        tabList.add(new Pair<Fragment, String>(new FragmentNews(newsList),"疫情新闻"));
+        tabList.add(new Pair<Fragment, String>(new FragmentData(),"最新数据"));
+        tabList.add(new Pair<Fragment, String>(new FragmentScholar(),"知疫学者"));
+        tabList.add(new Pair<Fragment, String>(new FragmentScholar(),"我的收藏"));
+    }
 
     private void initViews() {
-        ArrayList<Pair<Fragment,String>> list = new ArrayList<>();
-        AppManager.getAppManager(this);
-
-        AppManager.getAppManager(this);
-        News[] a = AppManager.getNewsManager().getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
-        ArrayList<News> newsList = AppManager.getNewsManager().getTypeNews("news");
-
-        list.add(new Pair<Fragment, String>(new FragmentNews(newsList),"疫情新闻"));
-        list.add(new Pair<Fragment, String>(new FragmentData(),"最新数据"));
-        list.add(new Pair<Fragment, String>(new FragmentScholar(),"知疫学者"));
-        list.add(new Pair<Fragment, String>(new FragmentScholar(),"我的收藏"));
-
 
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
-        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),list);
+        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),tabList);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起
@@ -81,8 +102,7 @@ public class MainActivity extends AppCompatActivity {
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.item_search).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.item_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
@@ -98,9 +118,17 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.item_category:
                 intent = new Intent(this, ChannelActivity.class);
-                startActivity(intent);
+                intent.putExtra("currentCategory",currentCategory);
+                startActivityForResult(intent,1);
                 break;
         }
         return false;
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
+        currentCategory = Objects.requireNonNull(data.getExtras()).getString("result");//得到新Activity 关闭后返回的数据
+        Toast.makeText(this,currentCategory,Toast.LENGTH_SHORT).show();
     }
 }

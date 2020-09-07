@@ -169,3 +169,69 @@ class RelatedEventsConverter{
         return sb.toString();
     }
 }
+
+class DoubleConverter{
+    @TypeConverter
+    public static Double[] fromTimestamp(String data) {
+        if(data == null || data.equals(""))return new Double[0];
+        String[] ss = data.split("#QingSteamSplit#");
+        Double[] result = new Double[ss.length];
+        for(int i = 0; i < ss.length; i++){
+            result[i] = Double.valueOf(ss[i]);
+        }
+        return result;
+    }
+
+    @TypeConverter
+    public static String toTimestamp(Double[] data){
+        if(data == null || data.length==0){
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < data.length; i++){
+            sb.append(data[i].toString());
+            sb.append("#QingSteamSplit#");
+        }
+        return sb.toString();
+    }
+}
+
+class IndiceConverter{
+    @TypeConverter
+    public static Indice fromTimestamp(String data) {
+        if(data == null || data.equals(""))return new Indice();
+        Indice indices = new Indice();
+        Gson gson = new Gson();
+        indices = gson.fromJson(data, Indice.class);
+        return indices;
+    }
+
+    @TypeConverter
+    public static String toTimestamp(Indice data){
+        if(data == null){
+            return "";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(data);
+    }
+}
+
+class ProfileConverter{
+    @TypeConverter
+    public static Profile fromTimestamp(String data) {
+        if(data == null || data.equals(""))return new Profile();
+        Profile profile = new Profile();
+        Gson gson = new Gson();
+        profile = gson.fromJson(data, Profile.class);
+        return profile;
+    }
+
+    @TypeConverter
+    public static String toTimestamp(Profile data){
+        if(data == null){
+            return "";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(data);
+    }
+}

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class NewsManager extends Thread{
+public class NewsManager{
     private static NewsManager Instance = null;
     private final NewsDao newsDao;
     private final AppDatabase appDB;
@@ -119,7 +119,7 @@ public class NewsManager extends Thread{
     private class GetSearchNewsTask extends AsyncTask<String, Void, Description[]>{
         @Override
         protected  Description[] doInBackground(String... params){
-            News[] news = newsDao.getTypeNews(params[0]);
+            News[] news = newsDao.getSearchNews(params[0]);
             Description[] d = new Description[news.length];
             for(int i = 0; i < news.length; i++){
                 d[i] = new Description(news[i]);

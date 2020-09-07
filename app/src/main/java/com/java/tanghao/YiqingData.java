@@ -21,6 +21,12 @@ public class YiqingData {
         this.data = a.getData();
     }
 
+    public YiqingData(String location, String begin, Integer[][] data){
+        this.location = location;
+        this.begin = begin;
+        this.data = data;
+    }
+
     public void setLocation(String location) {
         this.location = location;
     }

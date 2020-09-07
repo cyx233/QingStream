@@ -1,4 +1,4 @@
-package com.java.chenyuxiang.dataUi;
+package com.java.chenyuxiang.listViewUi;
 
 
 import androidx.annotation.NonNull;
@@ -18,9 +18,9 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     FragmentScholar mFragmentScholar;
     FragmentFavorite mFragmentFavorite;
 
-    public MyFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> list) {
+    public MyFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> list, Integer currentPage, String currentCategory) {
         super(fm,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        mFragmentNews = new FragmentNews(list);
+        mFragmentNews = new FragmentNews(list,currentPage,currentCategory);
         mFragmentData = new FragmentData();
         mFragmentScholar = new FragmentScholar();
         mFragmentFavorite = new FragmentFavorite();
@@ -30,8 +30,10 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         tabList.add("我的收藏");
     }
     public void updateNews(ArrayList<Description>list){
-        mFragmentNews.update(list);
+        mFragmentNews.updateNews(list);
     }
+
+    public void updateNewsCategory(String category){mFragmentNews.updateCategory(category);}
 
     @NonNull
     @Override

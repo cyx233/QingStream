@@ -1,10 +1,9 @@
 package com.java.tanghao;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.room.*;
-import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 class YiqingScholarApi{
     private Integer status;
@@ -37,7 +36,7 @@ class YiqingScholarApi{
 }
 
 @Entity(tableName = "scholar")
-@TypeConverters({StringConverter.class, DoubleConverter.class, ProfileConverter.class})
+@TypeConverters({StringConverter.class, DoubleConverter.class, ProfileConverter.class, IndiceConverter.class})
 public class YiqingScholar{
     //    Aff aff;
     private String avatar;

@@ -18,4 +18,5 @@
     <string name="finish">完成</string>
     <string name="view_news_content">正文</string>
     <string name="view_news_title">标题</string>
+    <string name="view_footer_hint">加载中</string>
 </resources>

@@ -18,12 +18,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
-import com.java.chenyuxiang.dataUi.MyFragmentPagerAdapter;
+import com.java.chenyuxiang.listViewUi.MyFragmentPagerAdapter;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Category;
 import com.java.tanghao.CategoryManager;
 import com.java.tanghao.Description;
-import com.java.tanghao.News;
 import com.java.tanghao.NewsManager;
 
 import java.util.ArrayList;
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Description> newsList = new ArrayList<>();
     private NewsManager mNewsManager;
     private CategoryManager mCategoryManager;
-    private int currentPage=1;
     private HashMap<String,Integer> loadPage= new HashMap<>();
 
 
@@ -67,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
             mCategoryManager.insertCategory(new Category("国内",false));
             mCategoryManager.insertCategory(new Category("国外",false));
         }
-        loadPage.put("news",1);
-        loadPage.put("paper",1);
-        loadPage.put("all",1);
+        loadPage.put("news",2);
+        loadPage.put("paper",2);
+        loadPage.put("all",2);
 
         Description[] news = mNewsManager.getPageNews(generateUrl("all"));
         List<Description> list = Arrays.asList(news).subList(0,20);
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
-        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList);
+        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList,2,currentCategory);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起
@@ -137,23 +135,30 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Description>newsList;
         currentCategory = Objects.requireNonNull(data.getExtras()).getString("result");//得到新Activity 关闭后返回的数据
         assert currentCategory != null;
-        currentPage = 1;
-        News[] temp;
         switch (currentCategory){
             case "论文":
                 newsList = mNewsManager.getTypeNews("paper");
+                if(newsList.size()==0){
+                    Description[]temp = mNewsManager.getPageNews(generateUrl("paper"));
+                    newsList = new ArrayList<Description>(Arrays.asList(temp));
+                }
                 break;
             case "新闻":
                 newsList = mNewsManager.getTypeNews("news");
+                if(newsList.size()==0){
+                    Description[]temp = mNewsManager.getPageNews(generateUrl("news"));
+                    newsList = new ArrayList<Description>(Arrays.asList(temp));
+                }
                 break;
             default:
                 newsList = mNewsManager.getAllNews();
                 break;
         }
-        if(newsList.size()>currentPage*20)
+        if(newsList.size()>20)
             mFragmentPagerAdapter.updateNews(new ArrayList<Description>(newsList.subList(0,20)));
         else
             mFragmentPagerAdapter.updateNews(newsList);
+        mFragmentPagerAdapter.updateNewsCategory(currentCategory);
         Toast.makeText(this,currentCategory,Toast.LENGTH_SHORT).show();
     }
 }

@@ -6,6 +6,49 @@ import androidx.room.*;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
+
+class Description{
+    private String id;
+    private String date;
+    private String title;
+
+    Description(String id, String date, String title){
+        this.id = id;
+        this.date = date;
+        this.title = title;
+    }
+
+    Description(News news){
+        this.id = news.get_id();
+        this.date = news.getDate();
+        this.title = news.getTitle();
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+}
+
 @Entity(tableName = "news")
 @TypeConverters({StringConverter.class, AuthorConverter.class, EntitiesConverter.class, GeoInfoConverter.class, RelatedEventsConverter.class})
 public class News {

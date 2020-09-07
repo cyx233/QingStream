@@ -6,47 +6,6 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class Description{
-    private String id;
-    private String date;
-    private String title;
-
-    Description(String id, String date, String title){
-        this.id = id;
-        this.date = date;
-        this.title = title;
-    }
-
-    Description(News news){
-        this.id = news.get_id();
-        this.date = news.getDate();
-        this.title = news.getTitle();
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-}
 
 public class NewsManager extends Thread{
     private static NewsManager Instance = null;

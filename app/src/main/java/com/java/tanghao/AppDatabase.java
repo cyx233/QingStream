@@ -16,6 +16,9 @@ interface NewsDao{
     @Query("SELECT * FROM news WHERE title like :value")
     News[] getSearchNews(String value);
 
+    @Query("SELECT * FROM news WHERE id = :id")
+    News[] getIdNews(String id);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(News... news);
 

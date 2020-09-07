@@ -137,6 +137,18 @@ public class QingUtils {
             return j.getData();
         }
     }
+
+    static class ParseYiqingScholarTask extends AsyncTask<String, Void, YiqingScholar[]>{
+        @Override
+        protected YiqingScholar[] doInBackground(String... strings) {
+            Gson gson = new Gson();
+            String s = null;
+            if (strings[0] != null) s = strings[0];
+            else s = "";
+            YiqingScholarApi j = gson.fromJson(s, YiqingScholarApi.class);
+            return j.getData();
+        }
+    }
 }
 
 

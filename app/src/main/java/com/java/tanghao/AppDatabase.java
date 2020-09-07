@@ -58,7 +58,21 @@ interface YiqingDataDao{
 
 }
 
-@Database(entities = {News.class, Category.class, YiqingData.class}, version = 1)
+@Dao
+interface YiqingScholarDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(YiqingScholar... yiqingScholars);
+
+    @Query("SELECT * FROM scholar")
+    YiqingScholar[] getAllYiqingScholar();
+
+//    @Query("SELECT * FROM yiqingdata WHERE location = :location")
+//    YiqingData[] getLocationYiqingData(String location);
+}
+
+@Database(entities = {
+        News.class, Category.class, YiqingData.class, YiqingScholar.class
+}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -66,6 +80,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract NewsDao newsDao();
     public abstract CategoryDao categoryDao();
     public abstract YiqingDataDao yiqingDataDao();
+    public abstract YiqingScholarDao yiqingScholarDao();
 
     public static AppDatabase getInstance(Context context) {
         synchronized (sLock) {

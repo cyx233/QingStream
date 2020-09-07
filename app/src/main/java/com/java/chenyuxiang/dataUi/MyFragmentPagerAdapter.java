@@ -1,38 +1,62 @@
 package com.java.chenyuxiang.dataUi;
 
 
-import android.util.Pair;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import java.util.List;
+import com.java.tanghao.Description;
+
+import java.util.ArrayList;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private List<Pair<Fragment,String>> mFragmentsList;
+    private ArrayList<String> tabList=new ArrayList<>();
+    FragmentNews mFragmentNews;
+    FragmentData mFragmentData;
+    FragmentScholar mFragmentScholar;
+    FragmentFavorite mFragmentFavorite;
 
-    public MyFragmentPagerAdapter(FragmentManager fm, List<Pair<Fragment,String>> list) {
+    public MyFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> list) {
         super(fm,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        mFragmentsList = list;
+        mFragmentNews = new FragmentNews(list);
+        mFragmentData = new FragmentData();
+        mFragmentScholar = new FragmentScholar();
+        mFragmentFavorite = new FragmentFavorite();
+        tabList.add("疫情新闻");
+        tabList.add("最新数据");
+        tabList.add("知疫学者");
+        tabList.add("我的收藏");
+    }
+    public void updateNews(ArrayList<Description>list){
+        mFragmentNews.update(list);
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return mFragmentsList.get(position).first;
+        switch (position){
+            case 0:
+                return mFragmentNews;
+            case 1:
+                return mFragmentData;
+            case 2:
+                return mFragmentScholar;
+            case 3: default:
+                return mFragmentFavorite;
+        }
     }
 
     @Override
     public int getCount() {
-        return mFragmentsList.size();
+        return tabList.size();
     }
+
 
     //ViewPager与TabLayout绑定后，这里获取到PageTitle就是Tab的Text
     @Override
     public CharSequence getPageTitle(int position) {
-        return mFragmentsList.get(position).second;
+        return tabList.get(position);
     }
 }

@@ -28,6 +28,7 @@ public class ChannelActivity extends AppCompatActivity {
     final List<ChannelEntity> otherItems = new ArrayList<>();
     final List<ChannelEntity> items = new ArrayList<>();
     String currentCategory;
+    Intent backintent = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,8 @@ public class ChannelActivity extends AppCompatActivity {
         setContentView(R.layout.activity_demo);
         mRecy = (RecyclerView) findViewById(R.id.recy);
         currentCategory = Objects.requireNonNull(getIntent().getExtras()).getString("currentCategory");
+        backintent.putExtra("result", currentCategory);
+        ChannelActivity.this.setResult(RESULT_OK, backintent);
         init();
     }
 
@@ -77,14 +80,9 @@ public class ChannelActivity extends AppCompatActivity {
         adapter.setOnMyChannelItemClickListener(new ChannelAdapter.OnMyChannelItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Intent intent = new Intent();
-
-                //把返回数据存入Intent
-                intent.putExtra("result", items.get(position).getName());
-
+                backintent.putExtra("result", items.get(position).getName());
                 //设置返回数据
-                ChannelActivity.this.setResult(RESULT_OK, intent);
-
+                ChannelActivity.this.setResult(RESULT_OK, backintent);
                 //关闭Activity
                 ChannelActivity.this.finish();
             }

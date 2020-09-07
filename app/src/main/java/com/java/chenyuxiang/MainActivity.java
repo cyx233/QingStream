@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,22 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
-import com.java.chenyuxiang.dataUi.FragmentData;
-import com.java.chenyuxiang.dataUi.FragmentNews;
-import com.java.chenyuxiang.dataUi.FragmentScholar;
 import com.java.chenyuxiang.dataUi.MyFragmentPagerAdapter;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Category;
 import com.java.tanghao.CategoryManager;
+import com.java.tanghao.Description;
 import com.java.tanghao.News;
+import com.java.tanghao.NewsManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
     private MyFragmentPagerAdapter mFragmentPagerAdapter;
     private Toolbar mToolbar;
     private String currentCategory;
-    ArrayList<Pair<Fragment,String>> tabList = new ArrayList<>();
-    ArrayList<News> newsList = new ArrayList<>();
+    ArrayList<Description> newsList = new ArrayList<>();
+    private NewsManager mNewsManager;
+    private CategoryManager mCategoryManager;
+    private int currentPage=1;
+    private HashMap<String,Integer> loadPage= new HashMap<>();
 
 
     @Override
@@ -56,34 +57,38 @@ public class MainActivity extends AppCompatActivity {
     private void initData(){
         currentCategory = "全部";
         AppManager.getAppManager(this);
-        CategoryManager mCategoryManager = AppManager.getCategoryManager();
+        mCategoryManager = AppManager.getCategoryManager();
+        mNewsManager = AppManager.getNewsManager();
         ArrayList<Category> categoryList = mCategoryManager.getAllCategories();
         if(categoryList==null || categoryList.size()==0){
             mCategoryManager.insertCategory(new Category("全部",true));
             mCategoryManager.insertCategory(new Category("论文",true));
-            mCategoryManager.insertCategory(new Category("事件",true));
+            mCategoryManager.insertCategory(new Category("新闻",true));
             mCategoryManager.insertCategory(new Category("国内",false));
             mCategoryManager.insertCategory(new Category("国外",false));
         }
+        loadPage.put("news",1);
+        loadPage.put("paper",1);
+        loadPage.put("all",1);
 
-        News[] news = AppManager.getNewsManager().getPageNews("http://covid-dashboard.aminer.cn/api/events/list?type=all%page=18&size=5");
-        List<News> list = Arrays.asList(news);
+        Description[] news = mNewsManager.getPageNews(generateUrl("all"));
+        List<Description> list = Arrays.asList(news).subList(0,20);
         newsList = new ArrayList<>(list);
+    }
 
-
-
-
-        tabList.add(new Pair<Fragment, String>(new FragmentNews(newsList),"疫情新闻"));
-        tabList.add(new Pair<Fragment, String>(new FragmentData(),"最新数据"));
-        tabList.add(new Pair<Fragment, String>(new FragmentScholar(),"知疫学者"));
-        tabList.add(new Pair<Fragment, String>(new FragmentScholar(),"我的收藏"));
+    private String generateUrl(String type){
+        Integer page = loadPage.get(type);
+        String url= "http://covid-dashboard.aminer.cn/api/events/list?type="+type+"&page="+page+"&size="+20;
+        page+=1;
+        loadPage.put(type, page);
+        return url;
     }
 
     private void initViews() {
 
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
-        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),tabList);
+        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起
@@ -118,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.item_category:
                 intent = new Intent(this, ChannelActivity.class);
+                mCategoryManager.updateInCategory(new Category(currentCategory,true));
                 intent.putExtra("currentCategory",currentCategory);
                 startActivityForResult(intent,1);
                 break;
@@ -128,7 +134,26 @@ public class MainActivity extends AppCompatActivity {
     @Override protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         assert data != null;
+        ArrayList<Description>newsList;
         currentCategory = Objects.requireNonNull(data.getExtras()).getString("result");//得到新Activity 关闭后返回的数据
+        assert currentCategory != null;
+        currentPage = 1;
+        News[] temp;
+        switch (currentCategory){
+            case "论文":
+                newsList = mNewsManager.getTypeNews("paper");
+                break;
+            case "新闻":
+                newsList = mNewsManager.getTypeNews("news");
+                break;
+            default:
+                newsList = mNewsManager.getAllNews();
+                break;
+        }
+        if(newsList.size()>currentPage*20)
+            mFragmentPagerAdapter.updateNews(new ArrayList<Description>(newsList.subList(0,20)));
+        else
+            mFragmentPagerAdapter.updateNews(newsList);
         Toast.makeText(this,currentCategory,Toast.LENGTH_SHORT).show();
     }
 }

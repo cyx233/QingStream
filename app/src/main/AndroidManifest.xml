@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="android.app.default_searchable"
-            android:value=".SearchResultActivity" />
+            android:value=".searchUI.SearchResultActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -30,6 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".channelUI.ChannelActivity" />
+        <activity android:name=".detailUI.DetailActivity" />
     </application>
 
 </manifest>

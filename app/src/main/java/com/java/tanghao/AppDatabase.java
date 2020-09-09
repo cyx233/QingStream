@@ -73,8 +73,20 @@ interface YiqingScholarDao{
 //    YiqingData[] getLocationYiqingData(String location);
 }
 
+@Dao
+interface HistoryDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(History... histories);
+
+    @Query("SELECT * FROM history")
+    History[] getAllHistories();
+
+    @Delete
+    void delete(History... histories);
+}
+
 @Database(entities = {
-        News.class, Category.class, YiqingData.class, YiqingScholar.class
+        News.class, Category.class, YiqingData.class, YiqingScholar.class, History.class
 }, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -84,6 +96,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract CategoryDao categoryDao();
     public abstract YiqingDataDao yiqingDataDao();
     public abstract YiqingScholarDao yiqingScholarDao();
+    public abstract HistoryDao historyDao();
 
     public static AppDatabase getInstance(Context context) {
         synchronized (sLock) {

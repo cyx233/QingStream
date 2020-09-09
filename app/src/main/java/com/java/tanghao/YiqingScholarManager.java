@@ -76,4 +76,21 @@ public class YiqingScholarManager {
             return d;
         }
     }
+
+    public ArrayList<YiqingScholar> getIdScholar(String id){
+        try {
+            YiqingScholarManager.GetIdScholarTask getIdScholarTask = new YiqingScholarManager.GetIdScholarTask();
+            return new ArrayList<YiqingScholar>(Arrays.asList(getIdScholarTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id).get()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private class GetIdScholarTask extends AsyncTask<String, Void, YiqingScholar[]>{
+        @Override
+        protected  YiqingScholar[] doInBackground(String... params){
+            return yiqingScholarDao.getIdYiqingScholar(params[0]);
+        }
+    }
 }

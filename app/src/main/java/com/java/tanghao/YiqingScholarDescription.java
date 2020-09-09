@@ -1,12 +1,17 @@
 package com.java.tanghao;
 
 public class YiqingScholarDescription {
+    private String id;
     private String name;
     private String name_zh;
     private Indice indice;
     private String aff;
     private String position;
     private String avatar;
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -30,6 +35,10 @@ public class YiqingScholarDescription {
 
     public String getAvatar() {
         return avatar;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -57,6 +66,7 @@ public class YiqingScholarDescription {
     }
 
     YiqingScholarDescription(YiqingScholar yiqingScholar){
+        this.id = yiqingScholar.getId();
         this.name = yiqingScholar.getName();
         this.name_zh = yiqingScholar.getName_zh();
         this.indice = yiqingScholar.getIndices();

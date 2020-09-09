@@ -7,10 +7,10 @@ import com.google.gson.Gson;
 
 @Dao
 interface NewsDao{
-    @Query("SELECT * FROM news")
+    @Query("SELECT * FROM news ORDER BY time")
     News[] getAllNews();
 
-    @Query("SELECT * FROM news WHERE type = :type")
+    @Query("SELECT * FROM news WHERE type = :type ORDER BY time")
     News[] getTypeNews(String type);
 
     @Query("SELECT * FROM news WHERE title like :value")
@@ -65,6 +65,9 @@ interface YiqingScholarDao{
 
     @Query("SELECT * FROM scholar WHERE passedaway = :passedaway")
     YiqingScholar[] getYiqingScholar(Boolean passedaway);
+
+    @Query("SELECT * FROM scholar WHERE id = :id")
+    YiqingScholar[] getIdYiqingScholar(String id);
 
 //    @Query("SELECT * FROM yiqingdata WHERE location = :location")
 //    YiqingData[] getLocationYiqingData(String location);

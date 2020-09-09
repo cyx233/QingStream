@@ -55,20 +55,25 @@ public class YiqingScholarManager {
         }
     }
 
-    public ArrayList<YiqingScholar> getAllScholar(){
+    public ArrayList<YiqingScholarDescription> getScholar(Boolean passedaway){
         try {
-            YiqingScholarManager.GetAllScholarTask getAllScholarTask = new YiqingScholarManager.GetAllScholarTask();
-            return new ArrayList<YiqingScholar>(Arrays.asList(getAllScholarTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"0").get()));
+            YiqingScholarManager.GetScholarTask getScholarTask = new YiqingScholarManager.GetScholarTask();
+            return new ArrayList<YiqingScholarDescription>(Arrays.asList(getScholarTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,passedaway).get()));
         }catch(Exception e){
             e.printStackTrace();
         }
         return null;
     }
 
-    private class GetAllScholarTask extends AsyncTask<String, Void, YiqingScholar[]>{
+    private class GetScholarTask extends AsyncTask<Boolean, Void, YiqingScholarDescription[]>{
         @Override
-        protected  YiqingScholar[] doInBackground(String... params){
-            return yiqingScholarDao.getAllYiqingScholar();
+        protected  YiqingScholarDescription[] doInBackground(Boolean... params){
+            YiqingScholar yiqingScholar[] = yiqingScholarDao.getYiqingScholar(params[0]);
+            YiqingScholarDescription d[] = new YiqingScholarDescription[yiqingScholar.length];
+            for(int i = 0; i < yiqingScholar.length; i++){
+                d[i] = new YiqingScholarDescription(yiqingScholar[i]);
+            }
+            return d;
         }
     }
 }

@@ -29,4 +29,8 @@ public class AppManager {
     public static YiqingDataManager getYiqingDataManager(){
         return YiqingDataManager.getInstance(appDB);
     }
+
+    public static YiqingScholarManager getYiqingScholarManager(){
+        return YiqingScholarManager.getInstance(appDB);
+    }
 }

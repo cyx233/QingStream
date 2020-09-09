@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.java.tanghao.Description;
+import com.java.tanghao.YiqingScholarDescription;
 
 import java.util.ArrayList;
 
@@ -18,11 +19,11 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     FragmentScholar mFragmentScholar;
     FragmentFavorite mFragmentFavorite;
 
-    public MyFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> list, Integer currentPage, String currentCategory) {
+    public MyFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> newslist, ArrayList<YiqingScholarDescription> scholarList, Integer currentPage, String currentCategory) {
         super(fm,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        mFragmentNews = new FragmentNews(list,currentPage,currentCategory);
+        mFragmentNews = new FragmentNews(newslist,currentPage,currentCategory);
         mFragmentData = new FragmentData();
-        mFragmentScholar = new FragmentScholar(list,currentPage);
+        mFragmentScholar = new FragmentScholar(scholarList,currentPage);
         mFragmentFavorite = new FragmentFavorite();
         tabList.add("疫情新闻");
         tabList.add("最新数据");

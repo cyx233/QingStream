@@ -12,14 +12,14 @@ import com.java.tanghao.News;
 
 import java.util.ArrayList;
 
-public class DetailActivity extends AppCompatActivity {
+public class NewsDetailActivity extends AppCompatActivity {
     private TextView titleView;
     private TextView contentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_news_detail);
         handleIntent(getIntent());
     }
 

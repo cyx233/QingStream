@@ -17,28 +17,29 @@ import androidx.fragment.app.ListFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.java.chenyuxiang.R;
-import com.java.chenyuxiang.detailUI.DetailActivity;
+import com.java.chenyuxiang.detailUI.MarqueeTextView;
+import com.java.chenyuxiang.detailUI.NewsDetailActivity;
 import com.java.tanghao.AppManager;
-import com.java.tanghao.Description;
+import com.java.tanghao.YiqingScholarDescription;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FragmentScholar extends ListFragment {
-    ArrayList<Description> newsList;
-    NewsListAdapter adapter;//new出适配器的实例
+    ArrayList<YiqingScholarDescription> scholarList;
+    ScholarListAdapter adapter;//new出适配器的实例
     private SwipeRefreshView mSwipeRefreshView;
     private Integer currentPage;
-    private String currentCategory;
-    public FragmentScholar(ArrayList<Description> list,Integer currentPage){
-        newsList = list;
+
+    public FragmentScholar(ArrayList<YiqingScholarDescription> list, Integer currentPage){
+        scholarList = list;
         this.currentPage = currentPage;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new NewsListAdapter(newsList);//new出适配器的实例
+        currentPage = 1;
+        adapter = new ScholarListAdapter(scholarList);//new出适配器的实例
         setListAdapter(adapter);//和List绑定
     }
 
@@ -46,23 +47,11 @@ public class FragmentScholar extends ListFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-
         mSwipeRefreshView = view.findViewById(R.id.view_news_swipe);
-
-        // 设置下拉刷新监听器
         mSwipeRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getContext(), "refresh", Toast.LENGTH_SHORT).show();
-                mSwipeRefreshView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        myUpdateOperation();
-                        adapter.notifyDataSetChanged();
-                        // 更新完后调用该方法结束刷新
-                        mSwipeRefreshView.setRefreshing(false);
-                    }
-                }, 1000);
+                mSwipeRefreshView.setRefreshing(false);
             }
         });
 
@@ -84,88 +73,26 @@ public class FragmentScholar extends ListFragment {
         });
         return view;
     }
-    private void myUpdateOperation(){
-        currentPage = 1;
-        Description[] temp;
-        ArrayList<Description> list;
-        switch (currentCategory){
-            case "news": case"paper": case "all":
-                temp = AppManager.getNewsManager().getPageNews(generateUrl(currentCategory,currentPage));
-                list = new ArrayList<>(Arrays.asList(temp));
-                break;
-            default:
-                list = AppManager.getNewsManager().getTypeNews(currentCategory);
-                break;
-        }
-        updateNews(list);
-    }
 
     private void myLoadOperation(){
-        Description[] temp;
-        ArrayList<Description> list;
-        switch (currentCategory){
-            case "news": case"paper": case "all":
-                temp = AppManager.getNewsManager().getPageNews(generateUrl(currentCategory,currentPage+1));
-                newsList.addAll(Arrays.asList(temp));
-                currentPage+=1;
-                break;
-            default:
-                list = AppManager.getNewsManager().getTypeNews(currentCategory);
-                if(list.size()<currentPage*20){
-                    Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT);
-                }else{
-                    currentPage+=1;
-                    if(list.size()<currentPage*20){
-                        list.addAll(list.subList((currentPage-1)*20,list.size()));
-                    }else{
-                        list.addAll(list.subList((currentPage-1)*20,currentPage*20));
-                    }
-                }
-                break;
-        }
+        ArrayList<YiqingScholarDescription> list;
+        list = AppManager.getYiqingScholarManager().getScholar(false);
+        currentPage += 1;
+        scholarList.addAll(list.subList((currentPage-1)*20,currentPage*20));
         adapter.notifyDataSetChanged();
     }
-
-    private String generateUrl(String type,Integer page){
-        return "http://covid-dashboard.aminer.cn/api/events/list?type="+type+"&page="+page+"&size="+20;
-    }
-
-    public void updateNews(ArrayList<Description>list){
-        newsList.clear();
-        newsList.addAll(list);
-        adapter.notifyDataSetChanged();
-    }
-
-    public void updateCategory(String category){
-        switch (category){
-            case "全部":
-                currentCategory="all";
-                break;
-            case "新闻":
-                currentCategory="news";
-                break;
-            case "论文":
-                currentCategory="paper";
-                break;
-            default:
-                currentCategory="";
-                break;
-        }
-    }
-
-
 
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
-        Description detail = newsList.get(position);
-        Intent intent = new Intent(this.getActivity(), DetailActivity.class);
+        YiqingScholarDescription detail = scholarList.get(position);
+        Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
         intent.putExtra("id",detail.getId());
         startActivity(intent);
     }
 
-    class NewsListAdapter extends ArrayAdapter<Description> {
-        private ArrayList<Description> mList;
-        public NewsListAdapter(ArrayList<Description> list) {
+    class ScholarListAdapter extends ArrayAdapter<YiqingScholarDescription> {
+        private ArrayList<YiqingScholarDescription> mList;
+        public ScholarListAdapter(ArrayList<YiqingScholarDescription> list) {
             super(requireActivity(), android.R.layout.simple_list_item_1, list);
             mList=list;
         }
@@ -173,12 +100,30 @@ public class FragmentScholar extends ListFragment {
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if (null == convertView) {
-                convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
+                convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_scholar, null);
             }
-            Description c = getItem(position);
-            TextView titleTextView = (TextView) convertView.findViewById(R.id.news_list_item_titleTextView);
+            YiqingScholarDescription c = getItem(position);
+            TextView nameTextView,companyTextView,profileTextView;
+            MarqueeTextView dataTextView;
+            nameTextView = (TextView)convertView.findViewById(R.id.view_list_scholar_name);
+            dataTextView = (MarqueeTextView) convertView.findViewById(R.id.view_list_scholar_data);
+            companyTextView = (TextView)convertView.findViewById(R.id.view_list_scholar_company);
+            profileTextView = (TextView)convertView.findViewById(R.id.view_list_scholar_profile);
             assert c != null;
-            titleTextView.setText(c.getTitle());
+            if(c.getName_zh().equals(" "))
+                nameTextView.setText(c.getName());
+            else
+                nameTextView.setText(c.getName_zh());
+            Integer hIndex = c.getIndice().getHindex();
+            Double activity = c.getIndice().getActivity();
+            Double sociability = c.getIndice().getSociability();
+            Integer citation = c.getIndice().getCitations();
+            Integer paper = c.getIndice().getPubs();
+            String data = "H指数:"+hIndex+" 活跃度:"+activity+" 学术合作:"+sociability+" 引用数:"+citation+" 论文数:"+paper;
+
+            dataTextView.setText(data);
+            profileTextView.setText(c.getPosition());
+            companyTextView.setText(c.getAff());
             return convertView;
         }
 

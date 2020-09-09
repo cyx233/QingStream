@@ -1,6 +1,6 @@
 package com.java.tanghao;
 
-class Indice{
+public class Indice{
     private Double activity;
     private Integer citations;
     private Double diversity;

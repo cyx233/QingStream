@@ -70,7 +70,7 @@ public class YiqingScholarDescription {
         this.name = yiqingScholar.getName();
         this.name_zh = yiqingScholar.getName_zh();
         this.indice = yiqingScholar.getIndices();
-        this.aff = yiqingScholar.getAvatar();
+        this.aff = yiqingScholar.getProfile().getAffiliation();
         this.position = yiqingScholar.getProfile().getPosition();
         this.avatar = yiqingScholar.getAvatar();
     }

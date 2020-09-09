@@ -16,7 +16,7 @@ import androidx.fragment.app.ListFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.java.chenyuxiang.R;
-import com.java.chenyuxiang.detailUI.DetailActivity;
+import com.java.chenyuxiang.detailUI.NewsDetailActivity;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
 
@@ -159,7 +159,7 @@ public class FragmentNews extends ListFragment {
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         Description detail = newsList.get(position);
-        Intent intent = new Intent(this.getActivity(), DetailActivity.class);
+        Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
         intent.putExtra("id",detail.getId());
         startActivity(intent);
     }

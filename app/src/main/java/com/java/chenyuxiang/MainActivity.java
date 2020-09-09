@@ -24,6 +24,7 @@ import com.java.tanghao.Category;
 import com.java.tanghao.CategoryManager;
 import com.java.tanghao.Description;
 import com.java.tanghao.NewsManager;
+import com.java.tanghao.YiqingScholarDescription;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private String currentCategory;
     ArrayList<Description> newsList = new ArrayList<>();
+    ArrayList<YiqingScholarDescription> scholarList = new ArrayList<>();
     private NewsManager mNewsManager;
     private CategoryManager mCategoryManager;
     private HashMap<String,Integer> loadPage= new HashMap<>();
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private void initData(){
         currentCategory = "全部";
         AppManager.getAppManager(this);
+        AppManager.getYiqingScholarManager().getPageScholar("https://innovaapi.aminer.cn/predictor/api/v1/valhalla/highlight/get_ncov_expers_list?v=2");
         mCategoryManager = AppManager.getCategoryManager();
         mNewsManager = AppManager.getNewsManager();
         ArrayList<Category> categoryList = mCategoryManager.getAllCategories();
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         Description[] news = mNewsManager.getPageNews(generateUrl("all"));
         List<Description> list = Arrays.asList(news).subList(0,20);
         newsList = new ArrayList<>(list);
+        scholarList = AppManager.getYiqingScholarManager().getScholar(false);
     }
 
     private String generateUrl(String type){
@@ -83,10 +87,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
-        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList,2,currentCategory);
+        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList,scholarList,2,currentCategory);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起

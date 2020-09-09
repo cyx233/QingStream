@@ -19,4 +19,8 @@
     <string name="view_news_content">正文</string>
     <string name="view_news_title">标题</string>
     <string name="view_footer_hint">加载中</string>
+    <string name="view_scholar_detail_bio">简介</string>
+    <string name="view_scholar_detail_edu">教育经历</string>
+    <string name="view_scholar_detail_homepage">主页</string>
+    <string name="view_scholar_detail_work">工作经历</string>
 </resources>

@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".channelUI.ChannelActivity" />
-        <activity android:name=".detailUI.DetailActivity" />
+        <activity android:name=".detailUI.NewsDetailActivity" />
     </application>
 
 </manifest>

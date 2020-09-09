@@ -63,8 +63,8 @@ interface YiqingScholarDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(YiqingScholar... yiqingScholars);
 
-    @Query("SELECT * FROM scholar")
-    YiqingScholar[] getAllYiqingScholar();
+    @Query("SELECT * FROM scholar WHERE passedaway = :passedaway")
+    YiqingScholar[] getYiqingScholar(Boolean passedaway);
 
 //    @Query("SELECT * FROM yiqingdata WHERE location = :location")
 //    YiqingData[] getLocationYiqingData(String location);

@@ -1,6 +1,7 @@
 package com.java.tanghao;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -56,6 +57,7 @@ public class YiqingScholar{
     private Double[] tags_score;
     private Integer index;
     private Integer tab;
+    @ColumnInfo(name="passedaway")
     private Boolean is_passedaway;
 
     public void setAvatar(String avatar) {

@@ -33,4 +33,8 @@ public class AppManager {
     public static YiqingScholarManager getYiqingScholarManager(){
         return YiqingScholarManager.getInstance(appDB);
     }
+
+    public static HistoryManager getHistoryManager(){
+        return HistoryManager.getInstance(appDB);
+    }
 }

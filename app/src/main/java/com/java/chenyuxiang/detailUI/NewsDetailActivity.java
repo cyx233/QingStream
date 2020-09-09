@@ -36,6 +36,9 @@ public class NewsDetailActivity extends AppCompatActivity {
         contentView = findViewById(R.id.view_detail_content);
         ArrayList<News> detail = AppManager.getNewsManager().getNewsContent(newsId);
         titleView.setText(detail.get(0).getTitle());
-        contentView.setText(detail.get(0).getContent());
+        if(detail.get(0).getContent()!=null){
+            String content = "    "+detail.get(0).getContent().replace("<br>","\n    ");
+            contentView.setText(content);
+        }
     }
 }

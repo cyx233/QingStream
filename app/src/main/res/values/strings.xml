@@ -23,4 +23,5 @@
     <string name="view_scholar_detail_edu">教育经历</string>
     <string name="view_scholar_detail_homepage">主页</string>
     <string name="view_scholar_detail_work">工作经历</string>
+    <string name="view_scholar_detail_field">研究领域</string>
 </resources>

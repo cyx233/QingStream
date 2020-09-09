@@ -31,6 +31,7 @@
         </activity>
         <activity android:name=".channelUI.ChannelActivity" />
         <activity android:name=".detailUI.NewsDetailActivity" />
+        <activity android:name=".detailUI.ScholarDetailActivity"/>
     </application>
 
 </manifest>

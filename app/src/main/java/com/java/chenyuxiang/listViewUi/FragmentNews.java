@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.java.chenyuxiang.R;
 import com.java.chenyuxiang.detailUI.NewsDetailActivity;
+import com.java.chenyuxiang.view.SwipeRefreshView;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
 
@@ -54,7 +55,7 @@ public class FragmentNews extends ListFragment {
         mSwipeRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getContext(), "refresh", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "更新新闻", Toast.LENGTH_SHORT).show();
                 mSwipeRefreshView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -71,7 +72,7 @@ public class FragmentNews extends ListFragment {
         mSwipeRefreshView.setOnLoadListener(new SwipeRefreshView.OnLoadListener() {
             @Override
             public void onLoad() {
-                Toast.makeText(getContext(), "load", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "加载新闻", Toast.LENGTH_SHORT).show();
                 mSwipeRefreshView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -113,13 +114,13 @@ public class FragmentNews extends ListFragment {
             default:
                 list = AppManager.getNewsManager().getTypeNews(currentCategory);
                 if(list.size()<currentPage*20){
-                    Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
                 }else{
                     currentPage+=1;
                     if(list.size()<currentPage*20){
-                        list.addAll(list.subList((currentPage-1)*20,list.size()));
+                        newsList.addAll(list.subList((currentPage-1)*20,list.size()));
                     }else{
-                        list.addAll(list.subList((currentPage-1)*20,currentPage*20));
+                        newsList.addAll(list.subList((currentPage-1)*20,currentPage*20));
                     }
                 }
                 break;
@@ -178,8 +179,11 @@ public class FragmentNews extends ListFragment {
             }
             Description c = getItem(position);
             TextView titleTextView = (TextView) convertView.findViewById(R.id.news_list_item_titleTextView);
+            TextView dateTextView = (TextView) convertView.findViewById(R.id.news_list_item_dateTextView);
             assert c != null;
+
             titleTextView.setText(c.getTitle());
+            dateTextView.setText(c.getDate());
             return convertView;
         }
 

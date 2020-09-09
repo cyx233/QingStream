@@ -76,9 +76,11 @@ public class MainActivity extends AppCompatActivity {
         List<Description> list = Arrays.asList(news).subList(0,20);
         newsList = new ArrayList<>(list);
         scholarList = AppManager.getYiqingScholarManager().getScholar(false);
+        if(scholarList.size()>20){
+            scholarList = new ArrayList<>(scholarList.subList(0,20));
+        }
     }
-
-    private String generateUrl(String type){
+private String generateUrl(String type){
         Integer page = loadPage.get(type);
         String url= "http://covid-dashboard.aminer.cn/api/events/list?type="+type+"&page="+page+"&size="+20;
         page+=1;

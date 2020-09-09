@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="blocksDescendants"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <ImageView
+    <com.java.chenyuxiang.view.UrlImageView
         android:id="@+id/view_list_scholar_avatar"
-        android:scaleType="centerInside"
-        android:layout_width="wrap_content"
+        android:scaleType="fitCenter"
+        android:padding="5dp"
+        android:layout_width="100dp"
         android:layout_height="150dp"/>
     <LinearLayout
         android:orientation="vertical"
-        android:layout_alignStart="@id/view_list_scholar_avatar"
+        android:layout_toEndOf="@id/view_list_scholar_avatar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView android:id="@+id/view_list_scholar_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"/>
+            android:textSize="20sp"
+            android:paddingTop="5dp"/>
         <com.java.chenyuxiang.detailUI.MarqueeTextView
             android:id="@+id/view_list_scholar_data"
             android:singleLine="true"
@@ -27,16 +29,19 @@
             android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:textSize="15sp"
             android:orientation="horizontal"/>
         <TextView android:id="@+id/view_list_scholar_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingTop="4dp"/>
+            android:textSize="15sp"
+            android:paddingTop="5dp"/>
         <TextView
             android:id="@+id/view_list_scholar_company"
+            android:paddingTop="5dp"
             android:layout_width="match_parent"
+            android:textSize="15sp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 </RelativeLayout>

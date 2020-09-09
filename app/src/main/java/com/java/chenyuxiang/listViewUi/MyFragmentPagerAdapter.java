@@ -22,7 +22,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         super(fm,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mFragmentNews = new FragmentNews(list,currentPage,currentCategory);
         mFragmentData = new FragmentData();
-        mFragmentScholar = new FragmentScholar();
+        mFragmentScholar = new FragmentScholar(list,currentPage);
         mFragmentFavorite = new FragmentFavorite();
         tabList.add("疫情新闻");
         tabList.add("最新数据");

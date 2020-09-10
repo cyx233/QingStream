@@ -33,8 +33,10 @@ public class NewsManager{
             String data = g.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url).get();
             news = p.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data).get();
             for(int i = 0; i < news.length; i++){
-                news[i].setIsRead(false);
-                news[i].setIsFavorite(false);
+                if(getNewsContent(news[i].get_id()).size() == 0){
+                    news[i].setIsRead(false);
+                    news[i].setIsFavorite(false);
+                }
             }
             insertNews(news);
             d = new Description[news.length];

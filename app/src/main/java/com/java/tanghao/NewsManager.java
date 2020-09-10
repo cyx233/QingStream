@@ -32,6 +32,10 @@ public class NewsManager{
             QingUtils.ParseNewsTask p = new QingUtils.ParseNewsTask();
             String data = g.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url).get();
             news = p.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data).get();
+            for(int i = 0; i < news.length; i++){
+                news[i].setIsRead(false);
+                news[i].setIsFavorite(false);
+            }
             insertNews(news);
             d = new Description[news.length];
             for(int i = 0; i < news.length; i++){

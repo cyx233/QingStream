@@ -138,6 +138,7 @@ public class FragmentNewsResult extends ListFragment {
             Description c = getItem(position);
             TextView titleTextView = (TextView) convertView.findViewById(R.id.news_list_item_titleTextView);
             TextView dateTextView = (TextView) convertView.findViewById(R.id.news_list_item_dateTextView);
+            TextView sourceTextView = (TextView) convertView.findViewById(R.id.news_list_item_sourceTextView);
             assert c != null;
 
             titleTextView.setText(c.getTitle());

@@ -63,6 +63,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "io.reactivex.rxjava3:rxjava:3.0.6"
 
     // if u use AndroidX, use the following
     implementation 'com.blankj:utilcodex:1.28.0'

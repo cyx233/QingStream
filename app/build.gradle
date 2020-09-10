@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.chaquo.python'
 
 android {
     compileSdkVersion 30
@@ -11,6 +12,18 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        python {
+//            buildPython "/home/ryan/anaconda3/envs/thu/lib/python3.7"
+            pip{
+                install "scipy"
+//                options "-i", "https://pypi.tuna.tsinghua.edu.cn/simple"
+                install "jieba"
+            }
+        }
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
     }
 
     signingConfigs{
@@ -28,7 +41,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+        repositories {
+            google()
+            jcenter()
+            maven { url "https://chaquo.com/maven" }
+        }
     }
+    buildTypes {}
 }
 
 dependencies {

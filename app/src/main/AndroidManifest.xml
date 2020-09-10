@@ -30,8 +30,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".channelUI.ChannelActivity" />
+<<<<<<< Updated upstream
         <activity android:name=".detailUI.NewsDetailActivity" />
         <activity android:name=".detailUI.ScholarDetailActivity"/>
+=======
+        <activity android:name=".detailUI.DetailActivity" />
+>>>>>>> Stashed changes
     </application>
 
 </manifest>

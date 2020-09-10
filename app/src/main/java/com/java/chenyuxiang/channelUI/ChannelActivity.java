@@ -42,6 +42,7 @@ public class ChannelActivity extends AppCompatActivity {
 
     private void init() {
         CategoryManager mCategoryManager = AppManager.getCategoryManager();
+
         ArrayList<Category> categoryList = mCategoryManager.getAllCategories();
 
         categoryList = mCategoryManager.getAllCategories();

@@ -121,6 +121,14 @@ public class News {
     public Boolean getIsFavorite(){return isFavorite;}
     public void setIsRead(Boolean isRead){this.isRead = isRead;}
     public void setIsFavorite(Boolean isFavorite){this.isFavorite = isFavorite;}
+
+    public String[] getLabel(){
+        String[] label = new String[entities.length];
+        for(int i = 0; i < entities.length; i++){
+            label[i] = entities[i].getLabel();
+        }
+        return label;
+    }
 }
 
 class Author{

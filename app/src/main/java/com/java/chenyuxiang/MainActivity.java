@@ -7,12 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
-import android.widget.Filter.FilterResults;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -20,14 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.blankj.utilcode.util.SPUtils;
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
-import com.google.android.material.internal.DescendantOffsetUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
 import com.java.chenyuxiang.listViewUi.MyFragmentPagerAdapter;
@@ -38,8 +29,6 @@ import com.java.tanghao.Description;
 import com.java.tanghao.NewsManager;
 import com.java.tanghao.YiqingScholarDescription;
 
-import java.io.File;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -220,21 +209,20 @@ public class MainActivity extends AppCompatActivity {
             for (String key : map.keySet()) {
                 arr.add(map.get(key).toString());
             }
-            //显示历史数据列表
-            searchViewOfKnowledge.setThreshold(0);
-
-            //历史数据列表的 adapter,必须继承 ArrayAdater 或实现 filterable接口
-            HistoryAdapter adapter = new HistoryAdapter(MainActivity.this, R.layout.item_history, arr,searchView);
-            //设置 adapter
-            searchViewOfKnowledge.setAdapter(adapter);
-            //如果重写了 Adapter 的 getView 方法，可以不用实现 item 监听（实现了也没用），否则必须实现监听，不然会报错
-            searchViewOfKnowledge.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    searchView.setQuery(arr.get(position), true);
-                }
-            });
+//            //显示历史数据列表
+//            searchViewOfKnowledge.setThreshold(0);
+//
+//            //历史数据列表的 adapter,必须继承 ArrayAdater 或实现 filterable接口
+//            HistoryAdapter adapter = new HistoryAdapter(MainActivity.this, R.layout.item_history, arr,searchView);
+//            //设置 adapter
+//            searchViewOfKnowledge.setAdapter(adapter);
+//            //如果重写了 Adapter 的 getView 方法，可以不用实现 item 监听（实现了也没用），否则必须实现监听，不然会报错
+//            searchViewOfKnowledge.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                    searchView.setQuery(arr.get(position), true);
+//                }
+//            });
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -249,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> titles;
         Integer resourceId;
         SearchView searchView;
+        ArrayList<String> mOriginalValues;
         public HistoryAdapter(Context context, int resourceId, List<String> titles,SearchView searchView) {
             super(context, resourceId);
             this.context=context;
@@ -262,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         public Filter getFilter() {
             Filter filter = new Filter() {
                 @Override
-                protected FilterResults performFiltering(CharSequence charSequence) {
+                protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults results = new FilterResults();
                     List<String> filteredArrList = new ArrayList<String>();
                     if (mOriginalValues == null) {

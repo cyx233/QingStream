@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import javax.net.ssl.HttpsURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class QingUtils {
                 URL url = new URL(httpurl);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
-                connection.setConnectTimeout(15000);
+                connection.setConnectTimeout(30000);
                 connection.setReadTimeout(60000);
                 connection.connect();
                 if (connection.getResponseCode() == 200) {
@@ -75,6 +76,7 @@ public class QingUtils {
             }
         }
     }
+
 
     static class ParseNewsTask extends AsyncTask<String, Void, News[]> {
         @Override
@@ -134,6 +136,8 @@ public class QingUtils {
             if (strings[0] != null) s = strings[0];
             else s = "";
             YiqingEntityApi j = gson.fromJson(s, YiqingEntityApi.class);
+            if(j == null)
+                return new YiqingEntity[0];
             return j.getData();
         }
     }
@@ -146,6 +150,8 @@ public class QingUtils {
             if (strings[0] != null) s = strings[0];
             else s = "";
             YiqingScholarApi j = gson.fromJson(s, YiqingScholarApi.class);
+            if(j == null)
+                return new YiqingScholar[0];
             return j.getData();
         }
     }

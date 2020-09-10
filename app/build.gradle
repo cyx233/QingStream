@@ -15,11 +15,12 @@ android {
 
         python {
 //            buildPython "/home/ryan/anaconda3/envs/thu/lib/python3.7"
-//            pip{
-//                install "scipy"
+            pip{
+                install "scipy"
+                install "sklearn"
 //                options "-i", "https://pypi.tuna.tsinghua.edu.cn/simple"
-//                install "jieba"
-//            }
+                install "jieba"
+            }
         }
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -70,6 +71,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     def room_version = "2.2.5"
+    implementation 'com.blankj:utilcodex:1.28.0'
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor

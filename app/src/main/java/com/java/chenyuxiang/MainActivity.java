@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filter.FilterResults;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -15,10 +20,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+import com.google.android.material.internal.DescendantOffsetUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
 import com.java.chenyuxiang.listViewUi.MyFragmentPagerAdapter;
@@ -29,11 +38,14 @@ import com.java.tanghao.Description;
 import com.java.tanghao.NewsManager;
 import com.java.tanghao.YiqingScholarDescription;
 
+import java.io.File;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,19 +88,13 @@ public class MainActivity extends AppCompatActivity {
             mCategoryManager.insertCategory(new Category("国外",false));
         }
         loadPage.put("news",2);
-        loadPage.put("paper",2);
+        loadPage.put("event",2);
         loadPage.put("all",2);
 
-//        start test cluster
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
-
-//        end test cluster
-
-        Description[] news = mNewsManager.getPageNews(generateUrl("all"));
+        Description[] news = mNewsManager.getPageNews(generateUrl("event"));
         List<Description> list = Arrays.asList(news).subList(0,20);
         newsList = new ArrayList<>(list);
+
         scholarList = AppManager.getYiqingScholarManager().getScholar(false);
         if(scholarList.size()>20){
             scholarList = new ArrayList<>(scholarList.subList(0,20));
@@ -97,6 +103,24 @@ public class MainActivity extends AppCompatActivity {
         if(pastScholarList.size()>20){
             pastScholarList = new ArrayList<>(pastScholarList.subList(0,20));
         }
+
+//                start test cluster
+//        if (! Python.isStarted()) {
+//            Python.start(new AndroidPlatform(this));
+//            Python py = Python.getInstance();
+//            ArrayList<Description> d = new ArrayList<>();
+//            d = mNewsManager.getTypeNews("event");
+//            Description[] dd = (Description[])d.toArray(new Description[d.size()]);
+//            PyObject[] params = new PyObject[dd.length];
+//            for(int j = 0; j < dd.length; j++){
+//                params[j] =  PyObject.fromJava(dd[j]);
+//            }
+//            PyObject obj = py.getModule("cluster").callAttr("cluster_func", params, 2);
+//            py.getBuiltins().get("cluster").call();
+//            String[] data = obj.toJava(String[].class);
+//        }
+
+//        end test cluster
     }
     private String generateUrl(String type){
         Integer page = loadPage.get(type);
@@ -173,34 +197,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //在输入法按下搜索或者回车时，会调用次方法，在这里可以作保存历史记录的操作，我这里用了 sharepreference保存
-                SPUtils spUtils = new SPUtils("knowledgeHistory");
+                SPUtils spUtils = SPUtils.getInstance("knowledgeHistory");
                 spUtils.put(query, query);
-                presenter.searchKnowledge(query);
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
             //输入字符则回调此方法
-
-
             //当输入字符为空时，重新设置 item
-
                 if(newText==null||newText.length()==0){
-
                     //由于实现了历史数据的功能，在此重新设置此 item才能实时生效
                     initSearchView(item); }
-
                 return false;
             }
         });
-        //根据id-search_src_text获取TextView
-        searchViewOfKnowledge = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
-        //改变输入文字的颜色
-        searchViewOfKnowledge.setTextColor(ContextCompat.getColor(HomeTabActivity.this, R.color.colorAccent));
         try {
             //取出历史数据，你可以利用其他方式
             final List<String> arr = new ArrayList<>();
-            SPUtils spUtils = new SPUtils("knowledgeHistory");
+            SPUtils spUtils = SPUtils.getInstance("knowledgeHistory");
             Map<String, ?> map = spUtils.getAll();
 
             for (String key : map.keySet()) {
@@ -210,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             searchViewOfKnowledge.setThreshold(0);
 
             //历史数据列表的 adapter,必须继承 ArrayAdater 或实现 filterable接口
-            HistoryAdapter adapter = new HistoryAdapter(HomeTabActivity.this, R.layout.item_history, arr,searchView);
+            HistoryAdapter adapter = new HistoryAdapter(MainActivity.this, R.layout.item_history, arr,searchView);
             //设置 adapter
             searchViewOfKnowledge.setAdapter(adapter);
             //如果重写了 Adapter 的 getView 方法，可以不用实现 item 监听（实现了也没用），否则必须实现监听，不然会报错
@@ -224,12 +238,65 @@ public class MainActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
         //searchview 的关闭监听
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {        @Override        public boolean onClose() {
             return false;
         }
-        });}
+        });
+    }
+    class HistoryAdapter extends ArrayAdapter<String> {
+        Context context;
+        List<String> titles;
+        Integer resourceId;
+        SearchView searchView;
+        public HistoryAdapter(Context context, int resourceId, List<String> titles,SearchView searchView) {
+            super(context, resourceId);
+            this.context=context;
+            this.titles=titles;
+            this.resourceId=resourceId;
+            this.searchView=searchView;
+        }
+
+        @NonNull
+        @Override
+        public Filter getFilter() {
+            Filter filter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    FilterResults results = new FilterResults();
+                    List<String> filteredArrList = new ArrayList<String>();
+                    if (mOriginalValues == null) {
+                        //保存一份未筛选前的完整数据
+                        mOriginalValues = new ArrayList<String>(titles);
+                    }
+                    if (constraint == null || constraint.length() == 0) {
+                        //如果接收到的文字为空，则不作比较，直接返回未筛选前的完整数据
+                        results.count = mOriginalValues.size();
+                        results.values = mOriginalValues;
+                    } else {
+                        //遍历原始数据，与接收到的文字作比较，得到筛选结果
+                        constraint = constraint.toString().toLowerCase();
+                        for (int i = 0; i < mOriginalValues.size(); i++) {
+                            String data = mOriginalValues.get(i);
+                            if(data.toLowerCase().startsWith(constraint.toString())) {
+                                filteredArrList.add(data);
+                            }
+                        }
+                        //返回得到的筛选列表
+                        results.count = filteredArrList.size();
+                        results.values = filteredArrList;
+                    }
+                    return results;
+                }
+                @Override
+                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                    titles = (List<String>) filterResults.values; // 得到筛选后的列表结果
+                    notifyDataSetChanged();
+                }
+            };
+            return filter;
+        }
+    }
 
 
 

@@ -28,6 +28,7 @@ public class YiqingScholarManager {
             QingUtils.GetHttpResponseTask g = new QingUtils.GetHttpResponseTask();
             QingUtils.ParseYiqingScholarTask p = new QingUtils.ParseYiqingScholarTask();
             String data = g.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url).get();
+
             yiqingScholars = p.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data).get();
             insertScholar(yiqingScholars);
         }

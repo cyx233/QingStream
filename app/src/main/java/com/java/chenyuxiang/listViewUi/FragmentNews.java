@@ -187,10 +187,20 @@ public class FragmentNews extends ListFragment {
             Description c = getItem(position);
             TextView titleTextView = (TextView) convertView.findViewById(R.id.news_list_item_titleTextView);
             TextView dateTextView = (TextView) convertView.findViewById(R.id.news_list_item_dateTextView);
+            TextView sourceTextView = (TextView) convertView.findViewById(R.id.news_list_item_sourceTextView);
             assert c != null;
 
             titleTextView.setText(c.getTitle());
             dateTextView.setText(c.getDate());
+
+            if(c.getIsRead()){
+                String temp = "[已读]"+c.getTitle();
+                titleTextView.setText(temp);
+                titleTextView.setTextColor(0x969696);
+                dateTextView.setTextColor(0x969696);
+                sourceTextView.setTextColor(0x969696);
+            }
+
             return convertView;
         }
 

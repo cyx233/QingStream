@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
 import com.java.chenyuxiang.listViewUi.MyFragmentPagerAdapter;
@@ -72,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
         loadPage.put("news",2);
         loadPage.put("paper",2);
         loadPage.put("all",2);
+
+//        start test cluster
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+        }
+
+//        end test cluster
 
         Description[] news = mNewsManager.getPageNews(generateUrl("all"));
         List<Description> list = Arrays.asList(news).subList(0,20);

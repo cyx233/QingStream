@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.java.chenyuxiang.R;
+import com.java.tanghao.AppManager;
 import com.java.tanghao.News;
 
 import java.util.ArrayList;

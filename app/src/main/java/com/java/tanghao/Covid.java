@@ -1,10 +1,12 @@
 package com.java.tanghao;
 
+import java.util.HashMap;
+
 public class Covid{
-    private CovidProperties properties;
+    private HashMap<String, String> properties;
     private CovidRelation[] relations;
 
-    public void setProperties(CovidProperties properties) {
+    public void setProperties(HashMap<String, String> properties) {
         this.properties = properties;
     }
 
@@ -12,7 +14,7 @@ public class Covid{
         this.relations = relations;
     }
 
-    public CovidProperties getProperties() {
+    public HashMap<String, String> getProperties() {
         return properties;
     }
 

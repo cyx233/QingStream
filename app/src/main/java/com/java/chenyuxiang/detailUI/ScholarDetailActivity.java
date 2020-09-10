@@ -23,7 +23,7 @@ public class ScholarDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         setColor();
         setContentView(R.layout.activity_scholar_detail);
         handleIntent(getIntent());

@@ -2,8 +2,14 @@ package com.java.tanghao;
 
 import android.content.Context;
 
-import androidx.room.*;
-import com.google.gson.Gson;
+import androidx.room.Dao;
+import androidx.room.Database;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 @Dao
 interface NewsDao{
@@ -13,7 +19,7 @@ interface NewsDao{
     @Query("SELECT * FROM news WHERE type = :type ORDER BY time")
     News[] getTypeNews(String type);
 
-    @Query("SELECT * FROM news WHERE title like :value")
+    @Query("SELECT * FROM news WHERE title LIKE '%' || :value || '%'")
     News[] getSearchNews(String value);
 
     @Query("SELECT * FROM news WHERE id = :id")

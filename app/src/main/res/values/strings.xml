@@ -24,4 +24,7 @@
     <string name="view_scholar_detail_homepage">主页</string>
     <string name="view_scholar_detail_work">工作经历</string>
     <string name="view_scholar_detail_field">研究领域</string>
+    <string name="view_entity_detail_subtitle">Entity</string>
+    <string name="view_entity_detail_prop">Properties</string>
+    <string name="view_entity_detail_relation">Relations</string>
 </resources>

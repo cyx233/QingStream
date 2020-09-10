@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.java.tanghao.Description;
+import com.java.tanghao.YiqingEntity;
 
 import java.util.ArrayList;
 
@@ -13,12 +14,12 @@ public class MySearchFragmentPagerAdapter extends FragmentPagerAdapter{
 
     private ArrayList<String> tabList=new ArrayList<>();
     FragmentNewsResult mFragmentNews;
-    FragmentNewsResult mFragmentEntity;
+    FragmentEntityResult mFragmentEntity;
 
-    public MySearchFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> newsList, Integer currentPage) {
+    public MySearchFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> newsList, ArrayList<YiqingEntity> entityList, Integer currentPage) {
         super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mFragmentNews = new FragmentNewsResult(newsList,currentPage);
-        mFragmentEntity = new FragmentNewsResult(newsList,currentPage);
+        mFragmentEntity = new FragmentEntityResult(entityList,currentPage);
         tabList.add("疫情新闻");
         tabList.add("疫情图谱");
     }
@@ -31,6 +32,9 @@ public class MySearchFragmentPagerAdapter extends FragmentPagerAdapter{
             case 1: default:
                 return mFragmentEntity;
         }
+    }
+    public void updateNews(ArrayList<Description>list){
+        mFragmentNews.updateNews(list);
     }
 
     @Override

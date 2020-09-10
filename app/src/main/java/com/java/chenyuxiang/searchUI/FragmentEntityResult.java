@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,26 +15,24 @@ import androidx.fragment.app.ListFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.java.chenyuxiang.R;
-import com.java.chenyuxiang.detailUI.NewsDetailActivity;
+import com.java.chenyuxiang.detailUI.EntityDetailActivity;
 import com.java.chenyuxiang.view.SwipeRefreshView;
-import com.java.tanghao.Description;
+import com.java.tanghao.YiqingEntity;
 
 import java.util.ArrayList;
 
 public class FragmentEntityResult extends ListFragment {
-    ArrayList<Description> newsList;
+    ArrayList<YiqingEntity> entityList;
     EntityListAdapter adapter;//new出适配器的实例
     private SwipeRefreshView mSwipeRefreshView;
-    private Integer currentPage;
-    public FragmentEntityResult(ArrayList<Description> list,Integer currentPage){
-        newsList = list;
-        this.currentPage = currentPage;
+    public FragmentEntityResult(ArrayList<YiqingEntity> list, Integer currentPage){
+        entityList = list;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new EntityListAdapter(newsList);//new出适配器的实例
+        adapter = new EntityListAdapter(entityList);//new出适配器的实例
         setListAdapter(adapter);//和List绑定
     }
 
@@ -58,46 +55,23 @@ public class FragmentEntityResult extends ListFragment {
         mSwipeRefreshView.setOnLoadListener(new SwipeRefreshView.OnLoadListener() {
             @Override
             public void onLoad() {
-                Toast.makeText(getContext(), "加载新闻", Toast.LENGTH_SHORT).show();
-                mSwipeRefreshView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        myLoadOperation();
-                        adapter.notifyDataSetChanged();
-                        // 加载完后调用该方法
-                        mSwipeRefreshView.setLoading(false);
-                    }
-                }, 1500);
+                mSwipeRefreshView.setLoading(false);
             }
         });
         return view;
     }
 
-    private void myLoadOperation(){
-        adapter.notifyDataSetChanged();
-    }
-
-    private String generateUrl(String type,Integer page){
-        return "http://covid-dashboard.aminer.cn/api/events/list?type="+type+"&page="+page+"&size="+20;
-    }
-
-    public void updateNews(ArrayList<Description>list){
-        newsList.clear();
-        newsList.addAll(list);
-        adapter.notifyDataSetChanged();
-    }
-
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
-        Description detail = newsList.get(position);
-        Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
-        intent.putExtra("id",detail.getId());
+        YiqingEntity detail = entityList.get(position);
+        Intent intent = new Intent(this.getActivity(), EntityDetailActivity.class);
+        intent.putExtra("label",detail.getLabel());
         startActivity(intent);
     }
 
-    class EntityListAdapter extends ArrayAdapter<Description> {
-        private ArrayList<Description> mList;
-        public EntityListAdapter(ArrayList<Description> list) {
+    class EntityListAdapter extends ArrayAdapter<YiqingEntity> {
+        private ArrayList<YiqingEntity> mList;
+        public EntityListAdapter(ArrayList<YiqingEntity> list) {
             super(requireActivity(), android.R.layout.simple_list_item_1, list);
             mList=list;
         }
@@ -105,15 +79,16 @@ public class FragmentEntityResult extends ListFragment {
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if (null == convertView) {
-                convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
+                convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_entity, null);
             }
-            Description c = getItem(position);
-            TextView titleTextView = (TextView) convertView.findViewById(R.id.news_list_item_titleTextView);
-            TextView dateTextView = (TextView) convertView.findViewById(R.id.news_list_item_dateTextView);
+            YiqingEntity c = getItem(position);
+            TextView nameTextView = (TextView) convertView.findViewById(R.id.entity_list_item_name);
+            TextView hotTextView = (TextView) convertView.findViewById(R.id.entity_list_item_hot);
             assert c != null;
+            nameTextView.setText(c.getLabel());
+            String hotText = "热度:"+ (int) (c.getHot()*100);
+            hotTextView.setText(hotText);
 
-            titleTextView.setText(c.getTitle());
-            dateTextView.setText(c.getDate());
             return convertView;
         }
 
@@ -123,3 +98,4 @@ public class FragmentEntityResult extends ListFragment {
         }
     }
 }
+

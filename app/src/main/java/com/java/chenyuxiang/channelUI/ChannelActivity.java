@@ -32,7 +32,7 @@ public class ChannelActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         setContentView(R.layout.activity_demo);
         mRecy = (RecyclerView) findViewById(R.id.recy);
         currentCategory = Objects.requireNonNull(getIntent().getExtras()).getString("currentCategory");

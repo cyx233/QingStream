@@ -12,9 +12,12 @@ import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.R;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
-import com.java.tanghao.NewsManager;
+import com.java.tanghao.YiqingEntity;
+import com.java.tanghao.YiqingEntityManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SearchResultActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
@@ -23,21 +26,20 @@ public class SearchResultActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Integer currentPage;
     ArrayList<Description> newsList = new ArrayList<>();
-
-    private NewsManager mNewsManager;
-
+    ArrayList<YiqingEntity> entityList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         setContentView(R.layout.activity_search_result);
-        handleIntent(getIntent());
+        getNewsList(getIntent());
+        getEntityList(getIntent());
         initView();
     }
 
     private void initView(){
         //使用适配器将ViewPager与Fragment绑定在一起
-        mViewPager= (ViewPager) findViewById(R.id.viewPager);
-        mFragmentPagerAdapter = new MySearchFragmentPagerAdapter(getSupportFragmentManager(),newsList,currentPage);
+        mViewPager= (ViewPager) findViewById(R.id.viewPager_search);
+        mFragmentPagerAdapter = new MySearchFragmentPagerAdapter(getSupportFragmentManager(),newsList,entityList,currentPage);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起
@@ -52,15 +54,26 @@ public class SearchResultActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        handleIntent(getIntent());
+        getNewsList(getIntent());
+        getEntityList(getIntent());
+        mFragmentPagerAdapter.updateNews(newsList);
     }
 
-    private void handleIntent(Intent intent) {
+    private void getNewsList(Intent intent) {
         if (!Intent.ACTION_SEARCH.equals(intent.getAction())) {
             return;
         }
         currentPage=1;
         String query = intent.getStringExtra(SearchManager.QUERY);
         newsList = AppManager.getNewsManager().getSearchNews(query);
+    }
+    private void getEntityList(Intent intent){
+        if (!Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            return;
+        }
+        currentPage=1;
+        String query = intent.getStringExtra(SearchManager.QUERY);
+        List<YiqingEntity> temp = Arrays.asList(YiqingEntityManager.getYiqingEntity(query));
+        entityList = new ArrayList<>(temp);
     }
 }

@@ -15,11 +15,11 @@ android {
 
         python {
 //            buildPython "/home/ryan/anaconda3/envs/thu/lib/python3.7"
-            pip{
-                install "scipy"
+//            pip{
+//                install "scipy"
 //                options "-i", "https://pypi.tuna.tsinghua.edu.cn/simple"
-                install "jieba"
-            }
+//                install "jieba"
+//            }
         }
         ndk {
             abiFilters "armeabi-v7a", "x86"

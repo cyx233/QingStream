@@ -28,7 +28,6 @@ public class FragmentNewsResult extends ListFragment {
     NewsListAdapter adapter;//new出适配器的实例
     private SwipeRefreshView mSwipeRefreshView;
     private Integer currentPage;
-    private String currentCategory;
     public FragmentNewsResult(ArrayList<Description> list,Integer currentPage){
         allNewsList = list;
         if(allNewsList.size()<20){
@@ -91,6 +90,17 @@ public class FragmentNewsResult extends ListFragment {
             }else{
                 newsList.addAll(allNewsList.subList((currentPage-1)*20,currentPage*20));
             }
+        }
+        adapter.notifyDataSetChanged();
+    }
+    public void updateNews(ArrayList<Description> list){
+        currentPage=1;
+        newsList.clear();
+        allNewsList = list;
+        if(allNewsList.size()>20){
+            newsList.addAll(allNewsList.subList(0,20));
+        } else{
+            newsList.addAll(allNewsList);
         }
         adapter.notifyDataSetChanged();
     }

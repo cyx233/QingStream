@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".searchUI.SearchResultActivity">
+        <activity android:name=".searchUI.SearchResultActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
             <intent-filter>
@@ -33,6 +34,7 @@
         <activity android:name=".detailUI.NewsDetailActivity" />
         <activity android:name=".detailUI.ScholarDetailActivity"/>
         <activity android:name=".detailUI.PastScholarDetailActivity"/>
+        <activity android:name=".detailUI.EntityDetailActivity"/>
     </application>
 
 </manifest>

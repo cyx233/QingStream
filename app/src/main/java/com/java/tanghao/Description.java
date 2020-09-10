@@ -6,13 +6,15 @@ public class Description{
     private String title;
     private Boolean isRead;
     private String[] label;
+    private String source;
 
-    Description(String id, String date, String title, Boolean isRead, String[] label){
+    Description(String id, String date, String title, Boolean isRead, String[] label, String source){
         this.id = id;
         this.date = date;
         this.title = title;
         this.isRead = isRead;
         this.label = label;
+        this.source = source;
     }
 
     Description(News news){
@@ -21,6 +23,7 @@ public class Description{
         this.title = news.getTitle();
         this.isRead = news.getIsRead();
         this.label = news.getLabel();
+        this.source = news.getSource();
     }
 
     public void setId(String id) {
@@ -43,6 +46,10 @@ public class Description{
         this.label = label;
     }
 
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public String getId() {
         return id;
     }
@@ -63,4 +70,7 @@ public class Description{
         return label;
     }
 
+    public String getSource() {
+        return source;
+    }
 }

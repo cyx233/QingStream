@@ -4,12 +4,14 @@ from sklearn.cluster import KMeans
 from collections import Counter
 from java import jclass
 import copy
+import json
 
 def jieba_tokenize(text):
     return jieba.lcut(text)
 
-def cluster_func(news, num_clusters):
-    print("news[0]")
+def cluster_func(news):
+    print(news.split('QingSteamSplit'))
+    return "hello"
     # news_content = [new["title"] for new in news]
     # tfidf_vectorizer = TfidfVectorizer(tokenizer=jieba_tokenize, lowercase=False)
     # tfidf_matrix = tfidf_vectorizer.fit_transform(news_content)

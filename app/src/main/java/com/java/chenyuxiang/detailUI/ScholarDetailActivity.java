@@ -1,6 +1,8 @@
 package com.java.chenyuxiang.detailUI;
 
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -13,14 +15,16 @@ import com.java.tanghao.Profile;
 import com.java.tanghao.YiqingScholar;
 
 public class ScholarDetailActivity extends AppCompatActivity {
-    private TextView bioView;
-    private TextView eduView;
-    private TextView homepageView;
-    private TextView workView;
+    protected TextView bioView;
+    protected TextView eduView;
+    protected TextView homepageView;
+    protected TextView workView;
+    protected ColorMatrixColorFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setColor();
         setContentView(R.layout.activity_scholar_detail);
         handleIntent(getIntent());
     }
@@ -28,11 +32,18 @@ public class ScholarDetailActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setColor();
         setIntent(intent);
         handleIntent(getIntent());
     }
 
-    private void handleIntent(Intent intent) {
+    protected void setColor(){
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(1);//饱和度 0灰色 100过度彩色，50正常
+        filter = new ColorMatrixColorFilter(matrix);
+    }
+
+    protected void handleIntent(Intent intent) {
         String scholarId = intent.getStringExtra("id");
         bioView = findViewById(R.id.view_scholar_detail_bio);
         eduView = findViewById(R.id.view_scholar_detail_edu);
@@ -50,14 +61,17 @@ public class ScholarDetailActivity extends AppCompatActivity {
         if(detail.getWork()!=null)
             workView.setText(detail.getWork().replace("<br>","\n    "));
 
+        UrlImageView avatarView;
+        avatarView = findViewById(R.id.view_list_scholar_avatar);
+        avatarView.setColorFilter(filter);
+        avatarView.setImageURL(scholar.getAvatar());
+
         TextView nameTextView,companyTextView,profileTextView;
         MarqueeTextView dataTextView;
-        UrlImageView avatarView;
         nameTextView = findViewById(R.id.view_list_scholar_name);
         dataTextView = findViewById(R.id.view_list_scholar_data);
         companyTextView = findViewById(R.id.view_list_scholar_company);
         profileTextView = findViewById(R.id.view_list_scholar_profile);
-        avatarView = findViewById(R.id.view_list_scholar_avatar);
         if(scholar.getName_zh().equals(""))
             nameTextView.setText(scholar.getName());
         else
@@ -72,6 +86,5 @@ public class ScholarDetailActivity extends AppCompatActivity {
         dataTextView.setText(data);
         profileTextView.setText(scholar.getProfile().getPosition());
         companyTextView.setText(scholar.getProfile().getAffiliation());
-        avatarView.setImageURL(scholar.getAvatar());
     }
 }

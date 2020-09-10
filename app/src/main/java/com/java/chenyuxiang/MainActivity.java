@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentCategory;
     ArrayList<Description> newsList = new ArrayList<>();
     ArrayList<YiqingScholarDescription> scholarList = new ArrayList<>();
+    ArrayList<YiqingScholarDescription> pastScholarList = new ArrayList<>();
     private NewsManager mNewsManager;
     private CategoryManager mCategoryManager;
     private HashMap<String,Integer> loadPage= new HashMap<>();
@@ -79,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
         if(scholarList.size()>20){
             scholarList = new ArrayList<>(scholarList.subList(0,20));
         }
+        pastScholarList = AppManager.getYiqingScholarManager().getScholar(true);
+        if(pastScholarList.size()>20){
+            pastScholarList = new ArrayList<>(pastScholarList.subList(0,20));
+        }
     }
 private String generateUrl(String type){
         Integer page = loadPage.get(type);
@@ -91,7 +96,8 @@ private String generateUrl(String type){
     private void initViews() {
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
-        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList,scholarList,2,currentCategory);
+        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList,scholarList,
+                pastScholarList,2,currentCategory);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起

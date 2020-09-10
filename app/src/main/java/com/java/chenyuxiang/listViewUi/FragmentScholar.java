@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -41,12 +43,16 @@ import java.util.ArrayList;
 public class FragmentScholar extends ListFragment {
     ArrayList<YiqingScholarDescription> scholarList;
     ScholarListAdapter adapter;//new出适配器的实例
-    private SwipeRefreshView mSwipeRefreshView;
-    private Integer currentPage;
+    protected SwipeRefreshView mSwipeRefreshView;
+    protected Integer currentPage;
+    protected ColorMatrixColorFilter colorFilter;
 
     public FragmentScholar(ArrayList<YiqingScholarDescription> list, Integer currentPage){
         scholarList = list;
         this.currentPage = currentPage;
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(1);
+        colorFilter = new ColorMatrixColorFilter(cm);
     }
 
     @Override
@@ -88,7 +94,7 @@ public class FragmentScholar extends ListFragment {
         return view;
     }
 
-    private void myLoadOperation(){
+    protected void myLoadOperation(){
         ArrayList<YiqingScholarDescription> list;
         list = AppManager.getYiqingScholarManager().getScholar(false);
         if(list.size()<currentPage*20){
@@ -112,7 +118,7 @@ public class FragmentScholar extends ListFragment {
         startActivity(intent);
     }
 
-    class ScholarListAdapter extends ArrayAdapter<YiqingScholarDescription> {
+    protected class ScholarListAdapter extends ArrayAdapter<YiqingScholarDescription> {
         private ArrayList<YiqingScholarDescription> mList;
         private ListView mListView;
         private Bitmap mLoadingBitmap;
@@ -150,6 +156,7 @@ public class FragmentScholar extends ListFragment {
             String url = c.getAvatar();
             BitmapDrawable drawable = getBitmapFromMemoryCache(url);
             UrlImageView avatarView = (UrlImageView)convertView.findViewById(R.id.view_list_scholar_avatar);
+            avatarView.setColorFilter(colorFilter);
             if (drawable != null) {
                 avatarView.setImageDrawable(drawable);
             } else if (cancelPotentialWork(url, avatarView)) {

@@ -87,6 +87,5 @@ public class UrlImageView extends androidx.appcompat.widget.AppCompatImageView {
             }
         }.start();
     }
-
 }
 

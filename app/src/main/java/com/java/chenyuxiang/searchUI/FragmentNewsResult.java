@@ -1,4 +1,4 @@
-package com.java.chenyuxiang.listViewUi;
+package com.java.chenyuxiang.searchUI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,23 +18,26 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.java.chenyuxiang.R;
 import com.java.chenyuxiang.detailUI.NewsDetailActivity;
 import com.java.chenyuxiang.view.SwipeRefreshView;
-import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-
-public class FragmentNews extends ListFragment {
+public class FragmentNewsResult extends ListFragment {
+    ArrayList<Description> allNewsList;
     ArrayList<Description> newsList;
     NewsListAdapter adapter;//new出适配器的实例
     private SwipeRefreshView mSwipeRefreshView;
     private Integer currentPage;
     private String currentCategory;
-    public FragmentNews(ArrayList<Description> list,Integer currentPage,String category){
-        newsList = list;
+    public FragmentNewsResult(ArrayList<Description> list,Integer currentPage){
+        allNewsList = list;
+        if(allNewsList.size()<20){
+            newsList = allNewsList;
+        }
+        else{
+            newsList = new ArrayList<>(allNewsList.subList(0,20));
+        }
         this.currentPage = currentPage;
-        updateCategory(category);
     }
 
     @Override
@@ -55,16 +58,7 @@ public class FragmentNews extends ListFragment {
         mSwipeRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getContext(), "更新新闻", Toast.LENGTH_SHORT).show();
-                mSwipeRefreshView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        myUpdateOperation();
-                        adapter.notifyDataSetChanged();
-                        // 更新完后调用该方法结束刷新
-                        mSwipeRefreshView.setRefreshing(false);
-                    }
-                }, 1000);
+                mSwipeRefreshView.setRefreshing(false);
             }
         });
 
@@ -86,73 +80,19 @@ public class FragmentNews extends ListFragment {
         });
         return view;
     }
-    private void myUpdateOperation(){
-        currentPage = 1;
-        Description[] temp;
-        ArrayList<Description> list;
-        switch (currentCategory){
-            case "news": case"paper": case "all":
-                temp = AppManager.getNewsManager().getPageNews(generateUrl(currentCategory,currentPage));
-                list = new ArrayList<>(Arrays.asList(temp));
-                break;
-            default:
-                list = AppManager.getNewsManager().getTypeNews(currentCategory);
-                break;
-        }
-        updateNews(list);
-    }
 
     private void myLoadOperation(){
-        Description[] temp;
-        ArrayList<Description> list;
-        switch (currentCategory){
-            case "news": case"paper": case "all":
-                temp = AppManager.getNewsManager().getPageNews(generateUrl(currentCategory,currentPage+1));
-                newsList.addAll(Arrays.asList(temp));
-                currentPage+=1;
-                break;
-            default:
-                list = AppManager.getNewsManager().getTypeNews(currentCategory);
-                if(list.size()<currentPage*20){
-                    Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
-                }else{
-                    currentPage+=1;
-                    if(list.size()<currentPage*20){
-                        newsList.addAll(list.subList((currentPage-1)*20,list.size()));
-                    }else{
-                        newsList.addAll(list.subList((currentPage-1)*20,currentPage*20));
-                    }
-                }
-                break;
+        if(allNewsList.size()<currentPage*20){
+            Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
+        }else{
+            currentPage+=1;
+            if(allNewsList.size()<currentPage*20){
+                newsList.addAll(allNewsList.subList((currentPage-1)*20,allNewsList.size()));
+            }else{
+                newsList.addAll(allNewsList.subList((currentPage-1)*20,currentPage*20));
+            }
         }
         adapter.notifyDataSetChanged();
-    }
-
-    private String generateUrl(String type,Integer page){
-        return "http://covid-dashboard.aminer.cn/api/events/list?type="+type+"&page="+page+"&size="+20;
-    }
-
-    public void updateNews(ArrayList<Description>list){
-        newsList.clear();
-        newsList.addAll(list);
-        adapter.notifyDataSetChanged();
-    }
-
-    public void updateCategory(String category){
-        switch (category){
-            case "全部":
-                currentCategory="all";
-                break;
-            case "新闻":
-                currentCategory="news";
-                break;
-            case "论文":
-                currentCategory="paper";
-                break;
-            default:
-                currentCategory="";
-                break;
-        }
     }
 
 
@@ -190,8 +130,5 @@ public class FragmentNews extends ListFragment {
         public int getCount() {
             return mList.size();
         }
-
     }
 }
-
-

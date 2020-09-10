@@ -19,6 +19,9 @@ interface NewsDao{
     @Query("SELECT * FROM news WHERE type = :type ORDER BY time")
     News[] getTypeNews(String type);
 
+    @Query("SELECT * FROM news WHERE clusterCategory = :clusterCategory ORDER BY time")
+    News[] getClusterNews(String clusterCategory);
+
     @Query("SELECT * FROM news WHERE title LIKE '%' || :value || '%'")
     News[] getSearchNews(String value);
 
@@ -28,11 +31,11 @@ interface NewsDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(News... news);
 
-    @Query("UPDATE news SET isRead = :isRead")
-    void updateIsRead(Boolean isRead);
+    @Query("UPDATE news SET isRead = :isRead where id = :id")
+    void updateIsRead(Boolean isRead, String id);
 
-    @Query("UPDATE news SET isRead = :isFavorite")
-    void updateIsFavorite(Boolean isFavorite);
+    @Query("UPDATE news SET isRead = :isFavorite where id = :id")
+    void updateIsFavorite(Boolean isFavorite, String id);
 
     @Delete
     void delete(News... news);
@@ -49,6 +52,11 @@ interface CategoryDao{
     @Query("UPDATE category SET inCategory = :inCategory WHERE category = :category")
     void updateInCategory(String category, Boolean inCategory);
 
+    @Query("UPDATE category SET inCategory = :inCategory WHERE clusterCategory = :clusterCategory")
+    void updateClusterCategory(String clusterCategory, Boolean inCategory);
+
+    @Delete
+    void delete(Category... categories);
 }
 
 @Dao

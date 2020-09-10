@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -16,7 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
+import com.google.android.material.internal.DescendantOffsetUtils;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
 import com.java.chenyuxiang.listViewUi.MyFragmentPagerAdapter;
 import com.java.tanghao.AppManager;
@@ -31,7 +39,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import io.reactivex.rxjava3.core.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -90,21 +100,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
 //                start test cluster
-//        if (! Python.isStarted()) {
-//            Python.start(new AndroidPlatform(this));
-//            Python py = Python.getInstance();
-//            ArrayList<Description> d = new ArrayList<>();
-//            d = mNewsManager.getTypeNews("event");
-//            Description[] dd = (Description[])d.toArray(new Description[d.size()]);
-//            PyObject[] params = new PyObject[dd.length];
-//            for(int j = 0; j < dd.length; j++){
-//                params[j] =  PyObject.fromJava(dd[j]);
-//            }
-//            PyObject obj = py.getModule("cluster").callAttr("cluster_func", params, 2);
-//            py.getBuiltins().get("cluster").call();
-//            String[] data = obj.toJava(String[].class);
-//        }
-
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+            Python py = Python.getInstance();
+            ArrayList<Description> d = new ArrayList<>();
+            d = mNewsManager.getTypeNews("event");
+            Description[] dd = (Description[])d.toArray(new Description[d.size()]);
+            StringBuilder sb = new StringBuilder();
+            Gson gson = new Gson();
+            sb.append("3");
+            sb.append("QingSteamSplit");
+            for(int j = 0; j < dd.length; j++){
+                sb.append(gson.toJson(dd[j]));
+                sb.append("QingSteamSplit");
+            }
+            String param = sb.toString();
+            PyObject obj = py.getModule("cluster").callAttr("cluster_func", param);
+            py.getBuiltins().get("help").call();
+            String data = obj.toJava(String.class);
+            System.out.println("qing");
+        }
 //        end test cluster
     }
     private String generateUrl(String type){
@@ -127,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
 
         mToolbar = findViewById(R.id.toolbar);
+        MenuItem item=  mToolbar.findViewById(R.id.item_search);
+        setSupportActionBar(mToolbar);
     }
 
     @Override
@@ -168,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
     @Override protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         assert data != null;
@@ -201,5 +217,4 @@ public class MainActivity extends AppCompatActivity {
         mFragmentPagerAdapter.updateNewsCategory(currentCategory);
         Toast.makeText(this,currentCategory,Toast.LENGTH_SHORT).show();
     }
-
 }

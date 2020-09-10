@@ -7,14 +7,16 @@ public class Description{
     private Boolean isRead;
     private String[] label;
     private String source;
+    private String clusterLabel = "";
 
-    Description(String id, String date, String title, Boolean isRead, String[] label, String source){
+    Description(String id, String date, String title, Boolean isRead, String[] label, String source, String clusterLabel){
         this.id = id;
         this.date = date;
         this.title = title;
         this.isRead = isRead;
         this.label = label;
         this.source = source;
+        this.clusterLabel = clusterLabel;
     }
 
     Description(News news){
@@ -50,6 +52,10 @@ public class Description{
         this.source = source;
     }
 
+    public void setClusterLabel(String clusterLabel) {
+        this.clusterLabel = clusterLabel;
+    }
+
     public String getId() {
         return id;
     }
@@ -72,5 +78,9 @@ public class Description{
 
     public String getSource() {
         return source;
+    }
+
+    public String getClusterLabel() {
+        return clusterLabel;
     }
 }

@@ -129,6 +129,16 @@ public class News {
         }
         return label;
     }
+
+    private String clusterCategory = "";
+
+    public void setClusterCategory(String clusterCategory) {
+        this.clusterCategory = clusterCategory;
+    }
+
+    public String getClusterCategory() {
+        return clusterCategory;
+    }
 }
 
 class Author{

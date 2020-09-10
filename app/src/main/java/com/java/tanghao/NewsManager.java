@@ -128,36 +128,36 @@ public class NewsManager{
         }
     }
 
-    public void updateIsRead(Boolean isRead){
+    public void updateIsRead(News news){
         try {
             UpdateIsReadTask updateIsReadTask = new UpdateIsReadTask();
-            updateIsReadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, isRead);
+            updateIsReadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, news);
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    private class UpdateIsReadTask extends AsyncTask<Boolean, Void, Void>{
+    private class UpdateIsReadTask extends AsyncTask<News, Void, Void>{
         @Override
-        protected Void doInBackground(Boolean... params){
-            newsDao.updateIsRead(params[0]);
+        protected Void doInBackground(News... params){
+            newsDao.updateIsRead(params[0].getIsRead(), params[0].get_id());
             return null;
         }
     }
 
-    public void updateIsFavorate(Boolean isFavorite){
+    public void updateIsFavorate(News news){
         try {
             UpdateIsFavorateTask updateIsFavorateTask = new UpdateIsFavorateTask();
-            updateIsFavorateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, isFavorite);
+            updateIsFavorateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, news);
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    private class UpdateIsFavorateTask extends AsyncTask<Boolean, Void, Void>{
+    private class UpdateIsFavorateTask extends AsyncTask<News, Void, Void>{
         @Override
-        protected Void doInBackground(Boolean... params){
-            newsDao.updateIsFavorite(params[0]);
+        protected Void doInBackground(News... params){
+            newsDao.updateIsFavorite(params[0].getIsFavorite(), params[0].get_id());
             return null;
         }
     }

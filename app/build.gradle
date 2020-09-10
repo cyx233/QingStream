@@ -14,9 +14,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         python {
-//            buildPython "/home/ryan/anaconda3/envs/thu/lib/python3.7"
             pip{
-                install "scipy"
                 install "sklearn"
 //                options "-i", "https://pypi.tuna.tsinghua.edu.cn/simple"
                 install "jieba"
@@ -65,8 +63,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "io.reactivex.rxjava3:rxjava:3.0.6"
 
-    // if u use AndroidX, use the following
-    implementation 'com.blankj:utilcodex:1.28.0'
+    implementation "io.reactivex.rxjava3:rxjava:3.0.6"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

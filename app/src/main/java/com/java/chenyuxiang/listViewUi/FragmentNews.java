@@ -1,6 +1,7 @@
 package com.java.chenyuxiang.listViewUi;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.java.chenyuxiang.detailUI.NewsDetailActivity;
 import com.java.chenyuxiang.view.SwipeRefreshView;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
+import com.java.tanghao.News;
+import com.java.tanghao.NewsManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -167,9 +170,21 @@ public class FragmentNews extends ListFragment {
         }
         lastClickTime = currentTime;
         Description detail = newsList.get(position);
+        detail.setIsRead(true);
+
+        NewsManager mNewsManager = AppManager.getNewsManager();
+        News temp = mNewsManager.getNewsContent(detail.getId()).get(0);
+        temp.setIsRead(true);
+        mNewsManager.updateIsRead(temp);
+
+
         Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
+        temp = mNewsManager.getNewsContent(temp.get_id()).get(0);
         intent.putExtra("id",detail.getId());
         startActivity(intent);
+
+        newsList.set(position,detail);
+        adapter.notifyDataSetChanged();
     }
 
     class NewsListAdapter extends ArrayAdapter<Description> {
@@ -184,7 +199,7 @@ public class FragmentNews extends ListFragment {
             if (null == convertView) {
                 convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
             }
-            Description c = getItem(position);
+            Description c = mList.get(position);
             TextView titleTextView = (TextView) convertView.findViewById(R.id.news_list_item_titleTextView);
             TextView dateTextView = (TextView) convertView.findViewById(R.id.news_list_item_dateTextView);
             TextView sourceTextView = (TextView) convertView.findViewById(R.id.news_list_item_sourceTextView);
@@ -192,13 +207,18 @@ public class FragmentNews extends ListFragment {
 
             titleTextView.setText(c.getTitle());
             dateTextView.setText(c.getDate());
+            sourceTextView.setText(c.getSource());
 
-            if(c.getIsRead()){
+            if(c.getIsRead()!=null && c.getIsRead()){
                 String temp = "[已读]"+c.getTitle();
                 titleTextView.setText(temp);
-                titleTextView.setTextColor(0x969696);
-                dateTextView.setTextColor(0x969696);
-                sourceTextView.setTextColor(0x969696);
+                titleTextView.setTextColor(Color.parseColor("#C0C0C0"));
+                dateTextView.setTextColor(Color.parseColor("#C0C0C0"));
+                sourceTextView.setTextColor(Color.parseColor("#C0C0C0"));
+            } else{
+                titleTextView.setTextColor(Color.parseColor("#000000"));
+                dateTextView.setTextColor(Color.parseColor("#000000"));
+                sourceTextView.setTextColor(Color.parseColor("#000000"));
             }
 
             return convertView;

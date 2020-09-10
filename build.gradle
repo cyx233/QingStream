@@ -4,6 +4,8 @@ buildscript {
         google()
         jcenter()
         maven { url "https://chaquo.com/maven" }
+        mavenCentral()
+        maven { url "https://dl.bintray.com/thelasterstar/maven/" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.1"

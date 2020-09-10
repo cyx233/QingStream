@@ -1,6 +1,7 @@
 package com.java.chenyuxiang.searchUI;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.java.chenyuxiang.R;
 import com.java.chenyuxiang.detailUI.NewsDetailActivity;
 import com.java.chenyuxiang.view.SwipeRefreshView;
+import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
+import com.java.tanghao.NewsManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -118,6 +121,9 @@ public class FragmentNewsResult extends ListFragment {
         }
         lastClickTime = currentTime;
         Description detail = newsList.get(position);
+        NewsManager mNewsManager = AppManager.getNewsManager();
+
+
         Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
         intent.putExtra("id",detail.getId());
         startActivity(intent);
@@ -143,6 +149,19 @@ public class FragmentNewsResult extends ListFragment {
 
             titleTextView.setText(c.getTitle());
             dateTextView.setText(c.getDate());
+            sourceTextView.setText(c.getSource());
+
+            if(c.getIsRead()!=null && c.getIsRead()) {
+                String temp = "[已读]" + c.getTitle();
+                titleTextView.setText(temp);
+                titleTextView.setTextColor(Color.parseColor("#C0C0C0"));
+                dateTextView.setTextColor(Color.parseColor("#C0C0C0"));
+                sourceTextView.setTextColor(Color.parseColor("#C0C0C0"));
+            }else{
+                titleTextView.setTextColor(Color.parseColor("#000000"));
+                dateTextView.setTextColor(Color.parseColor("#000000"));
+                sourceTextView.setTextColor(Color.parseColor("#000000"));
+            }
             return convertView;
         }
 

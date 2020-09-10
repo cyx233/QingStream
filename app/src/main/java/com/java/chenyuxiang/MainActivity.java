@@ -7,9 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -22,7 +19,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-import com.google.android.material.internal.DescendantOffsetUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
@@ -33,15 +29,15 @@ import com.java.tanghao.CategoryManager;
 import com.java.tanghao.Description;
 import com.java.tanghao.NewsManager;
 import com.java.tanghao.YiqingScholarDescription;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import io.reactivex.rxjava3.core.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
         setContentView(R.layout.activity_main);
+        // 三个参数分别是上下文、应用的appId、是否检查签名（默认为false）
+        IWXAPI mWxApi = WXAPIFactory.createWXAPI(this, "fa70344612e204bdf7d77fbef3914fa8", true);
+        // 注册
+        mWxApi.registerApp("fa70344612e204bdf7d77fbef3914fa8");
         initData();
         //初始化视图
         initViews();
@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         loadPage.put("all",2);
 
         Description[] news = mNewsManager.getPageNews(generateUrl("event"));
+        news = mNewsManager.getPageNews(generateUrl("all"));
         List<Description> list = Arrays.asList(news).subList(0,20);
         newsList = new ArrayList<>(list);
 

@@ -62,6 +62,7 @@ dependencies {
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "io.reactivex.rxjava3:rxjava:3.0.6"
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 
     implementation "io.reactivex.rxjava3:rxjava:3.0.6"
 

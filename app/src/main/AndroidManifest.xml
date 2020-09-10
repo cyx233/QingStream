@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.java.chenyuxiang">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:usesCleartextTraffic="true"
@@ -35,6 +37,12 @@
         <activity android:name=".detailUI.ScholarDetailActivity"/>
         <activity android:name=".detailUI.PastScholarDetailActivity"/>
         <activity android:name=".detailUI.EntityDetailActivity"/>
+        <activity
+        android:name=".wxapi.WXEntryActivity"
+        android:exported="true"
+        android:launchMode="singleTop"
+        android:theme="@style/NoTitleTranslucent80Theme"
+        android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

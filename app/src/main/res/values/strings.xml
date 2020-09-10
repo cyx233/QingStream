@@ -27,4 +27,5 @@
     <string name="view_entity_detail_subtitle">Entity</string>
     <string name="view_entity_detail_prop">Properties</string>
     <string name="view_entity_detail_relation">Relations</string>
+    <string name="view_detial_toolbar_share">分享</string>
 </resources>

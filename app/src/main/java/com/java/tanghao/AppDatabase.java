@@ -28,7 +28,7 @@ interface NewsDao{
     @Query("SELECT * FROM news WHERE id = :id")
     News[] getIdNews(String id);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert()
     void insert(News... news);
 
     @Query("UPDATE news SET isRead = :isRead where id = :id")

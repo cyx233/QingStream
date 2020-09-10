@@ -18,13 +18,20 @@ import com.java.chenyuxiang.R;
 import com.java.chenyuxiang.detailUI.EntityDetailActivity;
 import com.java.chenyuxiang.view.SwipeRefreshView;
 import com.java.tanghao.YiqingEntity;
+import com.java.tanghao.YiqingEntityManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Objects;
 
 public class FragmentEntityResult extends ListFragment {
     ArrayList<YiqingEntity> entityList;
     EntityListAdapter adapter;//new出适配器的实例
     private SwipeRefreshView mSwipeRefreshView;
+    public static final int MIN_CLICK_DELAY_TIME = 900;
+    private long lastClickTime = 0;
+
     public FragmentEntityResult(ArrayList<YiqingEntity> list, Integer currentPage){
         entityList = list;
     }
@@ -61,12 +68,27 @@ public class FragmentEntityResult extends ListFragment {
         return view;
     }
 
+
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME)
+            return;
+        lastClickTime = currentTime;
         YiqingEntity detail = entityList.get(position);
         Intent intent = new Intent(this.getActivity(), EntityDetailActivity.class);
         intent.putExtra("label",detail.getLabel());
-        startActivity(intent);
+        startActivityForResult(intent,1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
+        String newEntityName = Objects.requireNonNull(data.getExtras()).getString("result");
+        entityList.clear();
+        entityList.addAll(Arrays.asList(YiqingEntityManager.getYiqingEntity(newEntityName)));
+        adapter.notifyDataSetChanged();
     }
 
     class EntityListAdapter extends ArrayAdapter<YiqingEntity> {

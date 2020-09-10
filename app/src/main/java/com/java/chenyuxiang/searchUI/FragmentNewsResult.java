@@ -21,6 +21,7 @@ import com.java.chenyuxiang.view.SwipeRefreshView;
 import com.java.tanghao.Description;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class FragmentNewsResult extends ListFragment {
     ArrayList<Description> allNewsList;
@@ -28,6 +29,9 @@ public class FragmentNewsResult extends ListFragment {
     NewsListAdapter adapter;//new出适配器的实例
     private SwipeRefreshView mSwipeRefreshView;
     private Integer currentPage;
+    public static final int MIN_CLICK_DELAY_TIME = 900;
+    private long lastClickTime = 0;
+
     public FragmentNewsResult(ArrayList<Description> list,Integer currentPage){
         allNewsList = list;
         if(allNewsList.size()<20){
@@ -108,6 +112,11 @@ public class FragmentNewsResult extends ListFragment {
 
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME) {
+            return;
+        }
+        lastClickTime = currentTime;
         Description detail = newsList.get(position);
         Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
         intent.putExtra("id",detail.getId());

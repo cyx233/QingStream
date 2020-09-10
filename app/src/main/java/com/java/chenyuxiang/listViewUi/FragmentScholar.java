@@ -39,6 +39,7 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class FragmentScholar extends ListFragment {
     ArrayList<YiqingScholarDescription> scholarList;
@@ -46,6 +47,8 @@ public class FragmentScholar extends ListFragment {
     protected SwipeRefreshView mSwipeRefreshView;
     protected Integer currentPage;
     protected ColorMatrixColorFilter colorFilter;
+    public static final int MIN_CLICK_DELAY_TIME = 900;
+    private long lastClickTime = 0;
 
     public FragmentScholar(ArrayList<YiqingScholarDescription> list, Integer currentPage){
         scholarList = list;
@@ -112,6 +115,11 @@ public class FragmentScholar extends ListFragment {
 
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME) {
+            return;
+        }
+        lastClickTime = currentTime;
         YiqingScholarDescription detail = scholarList.get(position);
         Intent intent = new Intent(this.getActivity(), ScholarDetailActivity.class);
         intent.putExtra("id",detail.getId());

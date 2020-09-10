@@ -15,8 +15,12 @@ import com.java.tanghao.AppManager;
 import com.java.tanghao.YiqingScholarDescription;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class FragmentPastScholar extends FragmentScholar {
+
+    public static final int MIN_CLICK_DELAY_TIME = 900;
+    private long lastClickTime = 0;
 
     public FragmentPastScholar(ArrayList<YiqingScholarDescription> list, Integer currentPage) {
         super(list, currentPage);
@@ -44,6 +48,11 @@ public class FragmentPastScholar extends FragmentScholar {
 
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME) {
+            return;
+        }
+        lastClickTime = currentTime;
         YiqingScholarDescription detail = scholarList.get(position);
         Intent intent = new Intent(this.getActivity(), PastScholarDetailActivity.class);
         intent.putExtra("id",detail.getId());

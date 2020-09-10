@@ -23,6 +23,7 @@ import com.java.tanghao.Description;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 
 public class FragmentNews extends ListFragment {
@@ -31,6 +32,8 @@ public class FragmentNews extends ListFragment {
     private SwipeRefreshView mSwipeRefreshView;
     private Integer currentPage;
     private String currentCategory;
+    public static final int MIN_CLICK_DELAY_TIME = 900;
+    private long lastClickTime = 0;
     public FragmentNews(ArrayList<Description> list,Integer currentPage,String category){
         newsList = list;
         this.currentPage = currentPage;
@@ -158,6 +161,11 @@ public class FragmentNews extends ListFragment {
 
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME) {
+            return;
+        }
+        lastClickTime = currentTime;
         Description detail = newsList.get(position);
         Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
         intent.putExtra("id",detail.getId());

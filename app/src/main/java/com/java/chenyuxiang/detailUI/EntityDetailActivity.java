@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.java.chenyuxiang.R;
+import com.java.chenyuxiang.view.MyListView;
 import com.java.chenyuxiang.view.UrlImageView;
 import com.java.tanghao.CovidRelation;
 import com.java.tanghao.YiqingEntity;
@@ -24,6 +23,7 @@ import com.java.tanghao.YiqingEntityManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Map;
 
 public class EntityDetailActivity extends AppCompatActivity {
@@ -31,12 +31,15 @@ public class EntityDetailActivity extends AppCompatActivity {
     private TextView hotView;
     private TextView bioView;
     private UrlImageView imgView;
-    private ListView relationListView;
-    private ListView propListView;
+    private MyListView relationListView;
+    private MyListView propListView;
     private ArrayList<CovidRelation> relationList;
     private ArrayList<Map.Entry<String,String>> propList;
     PropListAdapter mPropListAdapter;
     RelationListAdapter mRelationListAdapter;
+    private Intent backIntent = new Intent();
+    public static final int MIN_CLICK_DELAY_TIME = 900;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +56,23 @@ public class EntityDetailActivity extends AppCompatActivity {
         mPropListAdapter = new PropListAdapter(this,propList);
         mRelationListAdapter = new RelationListAdapter(this,relationList);
 
-
-
         relationListView.setAdapter(mRelationListAdapter);
         propListView.setAdapter(mPropListAdapter);
 
         relationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME) {
+                    return;
+                }
+                lastClickTime = currentTime;
                 Toast.makeText(parent.getContext(),relationList.get(position).getLabel(),Toast.LENGTH_SHORT).show();
+                backIntent.putExtra("result", relationList.get(position).getLabel());
+                //设置返回数据
+                EntityDetailActivity.this.setResult(RESULT_OK, backIntent);
+                //关闭Activity
+                EntityDetailActivity.this.finish();
             }
         });
     }
@@ -77,6 +88,7 @@ public class EntityDetailActivity extends AppCompatActivity {
     private void updateList(Intent intent) {
         String entityLabel = intent.getStringExtra("label");
         YiqingEntity entity= YiqingEntityManager.getYiqingEntity(entityLabel)[0];
+        backIntent.putExtra("result",entity.getLabel());
         String hotText = "热度:"+(int)(entity.getHot()*100);
         nameView.setText(entity.getLabel());
         hotView.setText(hotText);
@@ -84,7 +96,6 @@ public class EntityDetailActivity extends AppCompatActivity {
         if(entity.getImg()!=null){
             imgView.setImageURL(entity.getImg());
         }
-
         relationList = new ArrayList<>(Arrays.asList(entity.getAbstractInfo().getCOVID().getRelations()));
         propList = new ArrayList<>(entity.getAbstractInfo().getCOVID().getProperties().entrySet());
     }
@@ -149,29 +160,5 @@ public class EntityDetailActivity extends AppCompatActivity {
         public int getCount() {
             return mList.size();
         }
-    }
-
-    public void setListViewHeightBasedOnChildren(ListView listView) {
-        // 获取ListView对应的Adapter
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-
-        int totalHeight = 0;
-        for (int i = 0, len = listAdapter.getCount(); i < len; i++) {
-            // listAdapter.getCount()返回数据项的数目
-            View listItem = listAdapter.getView(i, null, listView);
-            // 计算子项View 的宽高
-            listItem.measure(0, 0);
-            // 统计所有子项的总高度
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        // listView.getDividerHeight()获取子项间分隔符占用的高度
-        // params.height最后得到整个ListView完整显示需要的高度
-        listView.setLayoutParams(params);
     }
 }

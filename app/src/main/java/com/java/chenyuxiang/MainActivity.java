@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.java.tanghao.YiqingScholarDescription;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private NewsManager mNewsManager;
     private CategoryManager mCategoryManager;
     private HashMap<String,Integer> loadPage= new HashMap<>();
+    public static final int MIN_CLICK_DELAY_TIME = 900;
+    private long lastClickTime = 0;
 
 
     @Override
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             pastScholarList = new ArrayList<>(pastScholarList.subList(0,20));
         }
     }
-private String generateUrl(String type){
+    private String generateUrl(String type){
         Integer page = loadPage.get(type);
         String url= "http://covid-dashboard.aminer.cn/api/events/list?type="+type+"&page="+page+"&size="+20;
         page+=1;
@@ -114,7 +118,9 @@ private String generateUrl(String type){
         mTabLayout.setupWithViewPager(mViewPager);
 
         mToolbar = findViewById(R.id.toolbar);
+        MenuItem item=  mToolbar.findViewById(R.id.item_search);
         setSupportActionBar(mToolbar);
+        initSearchView(item);
     }
 
     @Override
@@ -132,8 +138,13 @@ private String generateUrl(String type){
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME)
+            return false;
+        lastClickTime = currentTime;
         int id = item.getItemId();
         Intent intent=null;
         switch (id){
@@ -148,6 +159,79 @@ private String generateUrl(String type){
         }
         return false;
     }
+
+    private void initSearchView(final MenuItem item){
+        //通过 item 获取 actionview
+        final SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint("搜索知识库");
+
+        //改变默认的搜索图标
+        //((ImageView)searchView.findViewById(R.id.search_button)).setImageResource(R.drawable.ic_search);
+
+        //搜索监听
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //在输入法按下搜索或者回车时，会调用次方法，在这里可以作保存历史记录的操作，我这里用了 sharepreference保存
+                SPUtils spUtils = new SPUtils("knowledgeHistory");
+                spUtils.put(query, query);
+                presenter.searchKnowledge(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+            //输入字符则回调此方法
+
+
+            //当输入字符为空时，重新设置 item
+
+                if(newText==null||newText.length()==0){
+
+                    //由于实现了历史数据的功能，在此重新设置此 item才能实时生效
+                    initSearchView(item); }
+
+                return false;
+            }
+        });
+        //根据id-search_src_text获取TextView
+        searchViewOfKnowledge = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
+        //改变输入文字的颜色
+        searchViewOfKnowledge.setTextColor(ContextCompat.getColor(HomeTabActivity.this, R.color.colorAccent));
+        try {
+            //取出历史数据，你可以利用其他方式
+            final List<String> arr = new ArrayList<>();
+            SPUtils spUtils = new SPUtils("knowledgeHistory");
+            Map<String, ?> map = spUtils.getAll();
+
+            for (String key : map.keySet()) {
+                arr.add(map.get(key).toString());
+            }
+            //显示历史数据列表
+            searchViewOfKnowledge.setThreshold(0);
+
+            //历史数据列表的 adapter,必须继承 ArrayAdater 或实现 filterable接口
+            HistoryAdapter adapter = new HistoryAdapter(HomeTabActivity.this, R.layout.item_history, arr,searchView);
+            //设置 adapter
+            searchViewOfKnowledge.setAdapter(adapter);
+            //如果重写了 Adapter 的 getView 方法，可以不用实现 item 监听（实现了也没用），否则必须实现监听，不然会报错
+            searchViewOfKnowledge.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    searchView.setQuery(arr.get(position), true);
+                }
+            });
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        //searchview 的关闭监听
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {        @Override        public boolean onClose() {
+            return false;
+        }
+        });}
+
+
 
     @Override protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

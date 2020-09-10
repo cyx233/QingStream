@@ -180,6 +180,7 @@ public class FragmentNews extends ListFragment {
 
         Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
         temp = mNewsManager.getNewsContent(temp.get_id()).get(0);
+
         intent.putExtra("id",detail.getId());
         startActivity(intent);
 

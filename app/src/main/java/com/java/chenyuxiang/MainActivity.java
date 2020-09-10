@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         news = mNewsManager.getPageNews(generateUrl("all"));
         List<Description> list = Arrays.asList(news).subList(0,20);
         newsList = new ArrayList<>(list);
+//        newsList = mNewsManager.getAllNews();
 
         scholarList = AppManager.getYiqingScholarManager().getScholar(false);
         if(scholarList.size()>20){
@@ -101,26 +102,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
 //                start test cluster
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-            Python py = Python.getInstance();
-            ArrayList<Description> d = new ArrayList<>();
-            d = mNewsManager.getTypeNews("event");
-            Description[] dd = (Description[])d.toArray(new Description[d.size()]);
-            StringBuilder sb = new StringBuilder();
-            Gson gson = new Gson();
-            sb.append("3");
-            sb.append("QingSteamSplit");
-            for(int j = 0; j < dd.length; j++){
-                sb.append(gson.toJson(dd[j]));
-                sb.append("QingSteamSplit");
-            }
-            String param = sb.toString();
-            PyObject obj = py.getModule("cluster").callAttr("cluster_func", param);
-            py.getBuiltins().get("help").call();
-            String data = obj.toJava(String.class);
-            System.out.println("qing");
-        }
+//        if (! Python.isStarted()) {
+//            Python.start(new AndroidPlatform(this));
+//            Python py = Python.getInstance();
+//            ArrayList<Description> d = new ArrayList<>();
+//            d = mNewsManager.getTypeNews("event");
+//            Description[] dd = (Description[])d.toArray(new Description[d.size()]);
+//            StringBuilder sb = new StringBuilder();
+//            Gson gson = new Gson();
+//            sb.append("3");
+//            sb.append("QingSteamSplit");
+//            for(int j = 0; j < dd.length; j++){
+//                sb.append(gson.toJson(dd[j]));
+//                sb.append("QingSteamSplit");
+//            }
+//            String param = sb.toString();
+//            PyObject obj = py.getModule("cluster").callAttr("cluster_func", param);
+//            py.getBuiltins().get("help").call();
+//            String data = obj.toJava(String.class);
+//            System.out.println("qing");
+//        }
 //        end test cluster
     }
     private String generateUrl(String type){

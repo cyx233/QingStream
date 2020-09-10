@@ -114,8 +114,8 @@ public class News {
         this.isFavorite = false;
     }
 
-    private Boolean isRead;
-    private Boolean isFavorite;
+    private Boolean isRead = false;
+    private Boolean isFavorite = false;
 
     public Boolean getIsRead(){return isRead;}
     public Boolean getIsFavorite(){return isFavorite;}

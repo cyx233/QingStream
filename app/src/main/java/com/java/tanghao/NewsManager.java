@@ -162,6 +162,23 @@ public class NewsManager{
         }
     }
 
+    public void updateClusterCategory(Description description){
+        try {
+            UpdateClusterCategoryTask updateClusterCategoryTask = new UpdateClusterCategoryTask();
+            updateClusterCategoryTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, description);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private class UpdateClusterCategoryTask extends AsyncTask<Description, Void, Void>{
+        @Override
+        protected Void doInBackground(Description... params){
+            newsDao.updateClusterCategory(params[0].getClusterCategory(), params[0].getId());
+            return null;
+        }
+    }
+
     public void updateIsFavorate(News news){
         try {
             UpdateIsFavorateTask updateIsFavorateTask = new UpdateIsFavorateTask();

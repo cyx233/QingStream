@@ -1,7 +1,11 @@
 package com.java.tanghao;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -16,6 +20,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class QingUtils {
@@ -157,6 +162,53 @@ public class QingUtils {
             if(j == null)
                 return new YiqingScholar[0];
             return j.getData();
+        }
+    }
+
+    static String[] clusterTask(ClusterParam clusterParam){
+        String[] s = new String[0];
+        try {
+            ClusterTask c= new ClusterTask();
+            return c.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, clusterParam).get();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    static class ClusterTask extends AsyncTask<ClusterParam, Void, String[]>{
+        @Override
+        protected String[] doInBackground(ClusterParam... clusterParams) {
+            String[] result = new String[0];
+            if (! Python.isStarted()) {
+                Python.start(new AndroidPlatform(clusterParams[0].getContext()));
+                Python py = Python.getInstance();
+                ArrayList<Description> d = new ArrayList<>();
+                NewsManager mNewsManager = AppManager.getNewsManager();
+                d = mNewsManager.getTypeNews("event");
+                Description[] dd = (Description[]) d.toArray(new Description[d.size()]);
+                StringBuilder sb = new StringBuilder();
+                Gson gson = new Gson();
+                sb.append(clusterParams[0].getClusterNum());
+                sb.append("QingSteamSplit");
+                for (int j = 0; j < dd.length; j++) {
+                    sb.append(gson.toJson(dd[j]));
+                    sb.append("QingSteamSplit");
+                }
+                String param = sb.toString();
+                PyObject obj = py.getModule("cluster").callAttr("cluster_func", param);
+                String data = obj.toJava(String.class);
+                String[] tmp = data.split("QingSteamSplit");
+                result = tmp[0].split("QingClusterSplit");
+                String[] des = tmp[1].split("QingNewsSplit");
+                Description[] descriptions = new Description[d.size()];
+                for(int j = 0; j < d.size(); j++){
+                    descriptions[j] = gson.fromJson(des[j], Description.class);
+                    mNewsManager.updateClusterCategory(descriptions[j]);
+                }
+            }
+            return result;
         }
     }
 }

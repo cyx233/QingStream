@@ -37,6 +37,9 @@ interface NewsDao{
     @Query("UPDATE news SET isRead = :isFavorite where id = :id")
     void updateIsFavorite(Boolean isFavorite, String id);
 
+    @Query("UPDATE news SET clusterCategory = :clusterCategory where id = :id")
+    void updateClusterCategory(String clusterCategory, String id);
+
     @Delete
     void delete(News... news);
 }

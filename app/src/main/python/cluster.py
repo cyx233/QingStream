@@ -42,7 +42,9 @@ def cluster_func(news):
         s += cluster_result[i]
         s += "QingClusterSplit"
     s += "QingSteamSplit"
-    s += json.dumps(news_json)
+    for news in news_json:
+        s += json.dumps(news_json)
+        s += "QingNewsSplit"
 
     return s
 

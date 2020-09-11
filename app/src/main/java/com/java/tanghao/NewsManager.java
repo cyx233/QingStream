@@ -123,6 +123,28 @@ public class NewsManager{
         }
     }
 
+    public ArrayList<Description> getClusterNews(String cluster){
+        try {
+            GetClusterNewsTask getClusterNewsTask = new GetClusterNewsTask();
+            return new ArrayList<Description>(Arrays.asList(getClusterNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cluster).get()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private class GetClusterNewsTask extends AsyncTask<String, Void, Description[]>{
+        @Override
+        protected  Description[] doInBackground(String... params){
+            News[] news = newsDao.getClusterNews(params[0]);
+            Description[] d = new Description[news.length];
+            for(int i = 0; i < news.length; i++){
+                d[i] = new Description(news[i]);
+            }
+            return d;
+        }
+    }
+
     public ArrayList<Description> getSearchNews(String value){
         try {
             GetSearchNewsTask getSearchNewsTask = new GetSearchNewsTask();

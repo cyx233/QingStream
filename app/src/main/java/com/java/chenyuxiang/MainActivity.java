@@ -197,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent,1);
                 break;
             case R.id.item_history:
+                intent = new Intent(this, HistoryActivity.class);
+                startActivity(intent);
                 break;
         }
         return false;

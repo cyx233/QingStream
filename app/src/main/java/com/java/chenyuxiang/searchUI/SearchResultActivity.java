@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.R;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
+import com.java.tanghao.History;
 import com.java.tanghao.YiqingEntity;
 import com.java.tanghao.YiqingEntityManager;
 
@@ -73,6 +74,7 @@ public class SearchResultActivity extends AppCompatActivity {
         }
         currentPage=1;
         String query = intent.getStringExtra(SearchManager.QUERY);
+        AppManager.getHistoryManager().insertHistory(new History(query));
         List<YiqingEntity> temp = Arrays.asList(YiqingEntityManager.getYiqingEntity(query));
         entityList = new ArrayList<>(temp);
     }

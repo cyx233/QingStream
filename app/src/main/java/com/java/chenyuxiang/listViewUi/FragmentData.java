@@ -77,7 +77,7 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         // add charts
         ArrayList<Integer> xs;
         ArrayList<ArrayList<Integer>> ys;

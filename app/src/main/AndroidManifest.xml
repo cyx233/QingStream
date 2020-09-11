@@ -46,6 +46,7 @@
         android:launchMode="singleTop"
         android:theme="@style/NoTitleTranslucent80Theme"
         android:screenOrientation="portrait"/>
+        <activity android:name=".HistoryActivity"/>
     </application>
 
 </manifest>

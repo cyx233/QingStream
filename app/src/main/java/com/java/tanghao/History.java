@@ -17,7 +17,7 @@ public class History{
         this.content = content;
     }
 
-    History(String content){
+    public History(String content){
         this.content = content;
     }
 }

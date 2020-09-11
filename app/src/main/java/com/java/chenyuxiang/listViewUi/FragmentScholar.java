@@ -60,7 +60,7 @@ public class FragmentScholar extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         currentPage = 1;
         adapter = new ScholarListAdapter(requireContext(),scholarList);//new出适配器的实例
         setListAdapter(adapter);//和List绑定
@@ -82,7 +82,6 @@ public class FragmentScholar extends ListFragment {
         mSwipeRefreshView.setOnLoadListener(new SwipeRefreshView.OnLoadListener() {
             @Override
             public void onLoad() {
-                Toast.makeText(getContext(), "加载数据", Toast.LENGTH_SHORT).show();
                 mSwipeRefreshView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -110,6 +109,7 @@ public class FragmentScholar extends ListFragment {
                 scholarList.addAll(list.subList((currentPage-1)*20,currentPage*20));
             }
         }
+        Toast.makeText(getContext(), "加载成功", Toast.LENGTH_SHORT).show();
         adapter.notifyDataSetChanged();
     }
 

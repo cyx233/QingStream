@@ -72,7 +72,6 @@ public class FragmentNewsResult extends ListFragment {
         mSwipeRefreshView.setOnLoadListener(new SwipeRefreshView.OnLoadListener() {
             @Override
             public void onLoad() {
-                Toast.makeText(getContext(), "加载新闻", Toast.LENGTH_SHORT).show();
                 mSwipeRefreshView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -98,6 +97,7 @@ public class FragmentNewsResult extends ListFragment {
                 newsList.addAll(allNewsList.subList((currentPage-1)*20,currentPage*20));
             }
         }
+        Toast.makeText(getContext(), "加载成功", Toast.LENGTH_SHORT).show();
         adapter.notifyDataSetChanged();
     }
     public void updateNews(ArrayList<Description> list){

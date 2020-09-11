@@ -29,13 +29,22 @@ def cluster_func(news):
         for word in news_json[idx]['label']:
             cluster_word[result[idx]].append(word)
 
-    cluster_result = ''
+    cluster_result = []
     for lst in cluster_word:
         word_counts = Counter(lst)
-        cluster_result += word_counts.most_common(1)[0][0]
+        cluster_result.append(word_counts.most_common(1)[0][0])
 
-    # TODO: change the cluster label in news
-    return cluster_result;
+    for i in range(len(news_json)):
+        news_json[i]['clusterLabel'] = cluster_result[result[i]]
+
+    s = ""
+    for i in range(num_clusters):
+        s += cluster_result[i]
+        s += "QingClusterSplit"
+    s += "QingSteamSplit"
+    s += json.dumps(news_json)
+
+    return s
 
 
 

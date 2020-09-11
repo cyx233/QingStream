@@ -70,6 +70,9 @@ interface YiqingDataDao{
     @Query("SELECT * FROM yiqingdata WHERE location = :location")
     YiqingData[] getLocationYiqingData(String location);
 
+    @Query("SELECT * FROM yiqingdata WHERE location LIKE '%' || :location || '%'")
+    YiqingData[] getStreetYiqingData(String location);
+
 }
 
 @Dao

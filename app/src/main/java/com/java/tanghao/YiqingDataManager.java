@@ -90,4 +90,21 @@ public class YiqingDataManager {
         }
     }
 
+    public ArrayList<YiqingData> getStreetYiqingData(String location){
+        try {
+            YiqingDataManager.GetStreetYiqingDataTask getStreetYiqingDataTask = new YiqingDataManager.GetStreetYiqingDataTask();
+            return new ArrayList<YiqingData>(Arrays.asList(getStreetYiqingDataTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,location).get()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private class GetStreetYiqingDataTask extends AsyncTask<String, Void, YiqingData[]>{
+        @Override
+        protected  YiqingData[] doInBackground(String... params){
+            return yiqingDataDao.getStreetYiqingData(params[0]);
+        }
+    }
+
 }

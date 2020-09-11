@@ -6,8 +6,18 @@ import androidx.room.*;
 @Entity(tableName = "history")
 public class History{
     @PrimaryKey
+    private int id;
+
     @NonNull
     private String content;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     public String getContent() {
         return content;

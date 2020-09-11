@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class YiqingDataManager {
     private static YiqingDataManager Instance = null;

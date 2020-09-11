@@ -6,6 +6,8 @@ import androidx.room.*;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
+import java.util.HashMap;
+
 @Entity(tableName = "yiqingdata")
 @TypeConverters({Integer2DConverter.class})
 public class YiqingData {
@@ -25,6 +27,24 @@ public class YiqingData {
         this.location = location;
         this.begin = begin;
         this.data = data;
+    }
+
+    public HashMap<String, Integer> getToday(){
+        HashMap<String, Integer> hm = new HashMap<>();
+        hm.put("confirmed", data[data.length - 1][0]);
+        hm.put("suspected", data[data.length - 1][1]);
+        hm.put("cure", data[data.length - 1][2]);
+        hm.put("dead", data[data.length - 1][3]);
+        return hm;
+    }
+
+    public HashMap<String, Integer> getYesterday(){
+        HashMap<String, Integer> hm = new HashMap<>();
+        hm.put("confirmed", data[data.length - 2][0]);
+        hm.put("suspected", data[data.length - 2][1]);
+        hm.put("cure", data[data.length - 2][2]);
+        hm.put("dead", data[data.length - 2][3]);
+        return hm;
     }
 
     public void setLocation(String location) {

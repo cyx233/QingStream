@@ -23,7 +23,6 @@ public class NewsDetailActivity extends AppCompatActivity {
     private TextView contentView;
     String title;
     String content;
-    String appid = "fa70344612e204bdf7d77fbef3914fa8";
     public static final int MIN_CLICK_DELAY_TIME = 900;
     private long lastClickTime = 0;
 
@@ -67,7 +66,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME)
             return false;
         lastClickTime = currentTime;
-        WXShareUtils.share(this,appid,"标题"+title+"   正文"+content);
+        WXShareUtils.share(this,"标题"+title+"   正文"+content,title);
         return false;
     }
 

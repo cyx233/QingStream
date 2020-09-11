@@ -10,6 +10,7 @@ import com.java.tanghao.Description;
 import com.java.tanghao.YiqingScholarDescription;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -18,21 +19,26 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     FragmentData mFragmentData;
     FragmentScholar mFragmentScholar;
     FragmentScholar mFragmentPastScholar;
-    FragmentFavorite mFragmentFavorite;
+    ArrayList<String> provinceList;
+    ArrayList<String> countryList;
 
-    public MyFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> newsList, ArrayList<YiqingScholarDescription> scholarList,
-                                  ArrayList<YiqingScholarDescription> pastScholarList ,Integer currentPage, String currentCategory) {
+    public MyFragmentPagerAdapter(FragmentManager fm, ArrayList<Description> newsList,
+                                  List<String> chinaList, List<String> worldList,
+                                  ArrayList<YiqingScholarDescription> scholarList,
+                                  ArrayList<YiqingScholarDescription> pastScholarList , Integer currentPage, String currentCategory) {
         super(fm,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        provinceList = new ArrayList<>(chinaList);
+        countryList = new ArrayList<>(worldList);
+
+
         mFragmentNews = new FragmentNews(newsList,currentPage,currentCategory);
-        mFragmentData = new FragmentData();
+        mFragmentData = new FragmentData(provinceList,countryList);
         mFragmentScholar = new FragmentScholar(scholarList,currentPage);
         mFragmentPastScholar = new FragmentPastScholar(pastScholarList,currentPage);
-        mFragmentFavorite = new FragmentFavorite();
         tabList.add("疫情新闻");
         tabList.add("最新数据");
         tabList.add("高关注学者");
         tabList.add("追忆学者");
-        tabList.add("我的收藏");
     }
     public void updateNews(ArrayList<Description>list){
         mFragmentNews.updateNews(list);
@@ -50,10 +56,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
                 return mFragmentData;
             case 2:
                 return mFragmentScholar;
-            case 3:
-                return mFragmentPastScholar;
             case 4: default:
-                return mFragmentFavorite;
+                return mFragmentPastScholar;
         }
     }
 

@@ -47,6 +47,13 @@ android {
         }
     }
     buildTypes {}
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+repositories {
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -62,7 +69,9 @@ dependencies {
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "io.reactivex.rxjava3:rxjava:3.0.6"
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
     implementation "io.reactivex.rxjava3:rxjava:3.0.6"
 

@@ -16,24 +16,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
 import com.java.chenyuxiang.listViewUi.MyFragmentPagerAdapter;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Category;
 import com.java.tanghao.CategoryManager;
 import com.java.tanghao.Description;
-import com.java.tanghao.News;
 import com.java.tanghao.NewsManager;
 import com.java.tanghao.YiqingScholarDescription;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,15 +52,21 @@ public class MainActivity extends AppCompatActivity {
     public static final int MIN_CLICK_DELAY_TIME = 900;
     private long lastClickTime = 0;
 
+    public static List<String> chinaList = Arrays.asList("Hong Kong","Xinjiang","Beijing","Sichuan","Gansu","Shanghai","Guangdong","Taiwan","Hebei",
+            "Shaanxi","Shanxi","Yunnan","Chongqing","Inner Mongol","Shandong","Zhejiang","Tianjin","Liaoning","Fujian","Jiangsu","Hainan","Macao",
+            "Jilin","Hubei","Jiangxi","Heilongjiang","Anhui","Guizhou","Hunan","Henan","Guangxi","Ningxia","Qinghai","Xizang");
+    public static List<String> worldList = Arrays.asList("China","Italy","United States of America","India","Brazil","Russia","Peru","Colombia","Mexico",
+    "SouthAfrica","Spain","Argentina","Chile","Iran","France","United Kingdom","Saudi Arabia","Pakistan","Turkey","Italy");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
         setContentView(R.layout.activity_main);
         // 三个参数分别是上下文、应用的appId、是否检查签名（默认为false）
-        IWXAPI mWxApi = WXAPIFactory.createWXAPI(this, "fa70344612e204bdf7d77fbef3914fa8", true);
+        IWXAPI mWxApi = WXAPIFactory.createWXAPI(this, "wxa713e14b9f46a7ec", true);
         // 注册
-        mWxApi.registerApp("fa70344612e204bdf7d77fbef3914fa8");
+        mWxApi.registerApp("wxa713e14b9f46a7ec");
         initData();
         //初始化视图
         initViews();
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             mCategoryManager.insertCategory(new Category("国外",false));
         }
         loadPage.put("news",2);
+        loadPage.put("paper",2);
         loadPage.put("event",2);
         loadPage.put("all",2);
 
@@ -149,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
-        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList,scholarList,
-                pastScholarList,2,currentCategory);
+        mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList,
+                chinaList,worldList,scholarList, pastScholarList,2,currentCategory);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起
@@ -194,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
                 mCategoryManager.updateInCategory(new Category(currentCategory,true));
                 intent.putExtra("currentCategory",currentCategory);
                 startActivityForResult(intent,1);
+                break;
+            case R.id.item_history:
                 break;
         }
         return false;

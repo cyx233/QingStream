@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="疫情数据"
+                android:layout_marginVertical="5dp"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="国内疫情数据"
+                android:layout_marginVertical="2dp"
+                android:padding="8dp"
+                android:background="#EAFBCC"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginBottom="5dp"
+                />
+
+            <include android:id="@+id/dataTable_China"
+                layout="@layout/data_table" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:background="#EAFBCC"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginVertical="5dp"
+                android:text="国内疫情趋势" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/charts_china"
+                android:layout_margin="1dp"
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager_china"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="1dp"
+                android:padding="8dp" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginVertical="5dp"
+                android:padding="8dp"
+                android:background="#EAFBCC"
+                android:text="国内详细数据" />
+
+            <include
+                android:id="@+id/detail_table_china"
+                layout="@layout/detail_data_table"/>
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginVertical="5dp"
+                android:padding="8dp"
+                android:background="#EAFBCC"
+                android:layout_height="wrap_content"
+                android:text="国际疫情数据" />
+
+            <include
+                android:id="@+id/dataTable_World"
+                layout="@layout/data_table" />
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginVertical="5dp"
+                android:padding="8dp"
+                android:background="#EAFBCC"
+                android:text="国际疫情趋势" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/charts_world"
+                android:layout_width="match_parent"
+                android:layout_margin="1dp"
+                android:padding="8dp"
+                android:layout_height="wrap_content"/>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager_world"
+                android:layout_width="match_parent"
+                android:layout_margin="1dp"
+                android:padding="8dp"
+                android:layout_height="200dp" >
+
+            </androidx.viewpager.widget.ViewPager>
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginVertical="5dp"
+                android:padding="8dp"
+                android:background="#EAFBCC"
+                android:text="重点国家数据" />
+
+            <include
+                android:id="@+id/detail_table_world"
+                layout="@layout/detail_data_table"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

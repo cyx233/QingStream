@@ -1,16 +1,23 @@
 package com.java.tanghao;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class YiqingDataManager {
     private static YiqingDataManager Instance = null;
     private final YiqingDataDao yiqingDataDao;
     private final AppDatabase appDB;
+    private Boolean isReady = false;
+
+    public void setIsReady(Boolean isReady) {
+        this.isReady = isReady;
+    }
+
+    public Boolean getIsReady() {
+        return isReady;
+    }
 
     private YiqingDataManager(AppDatabase appDB){
         this.appDB = appDB;
@@ -53,6 +60,7 @@ public class YiqingDataManager {
         @Override
         protected Void doInBackground(YiqingData... yiqingData){
             yiqingDataDao.insert(yiqingData);
+            isReady = true;
             return null;
         }
     }

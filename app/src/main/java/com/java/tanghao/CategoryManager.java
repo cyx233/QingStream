@@ -74,4 +74,21 @@ public class CategoryManager {
             return null;
         }
     }
+
+    public void deleteClsuterCategory(Category category){
+        try {
+            DeleteClsuterCategoryTask deleteClsuterCategoryTask = new DeleteClsuterCategoryTask();
+            deleteClsuterCategoryTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,category);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private class DeleteClsuterCategoryTask extends AsyncTask<Category, Void, Void>{
+        @Override
+        protected Void doInBackground(Category... params){
+            categoryDao.delete(params);
+            return null;
+        }
+    }
 }

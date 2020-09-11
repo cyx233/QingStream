@@ -235,6 +235,49 @@ public class NewsManager{
         }
     }
 
+    public void initCluster(InputStreamReader sr){
+        try {
+            InitClusterTask c= new InitClusterTask();
+            c.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, sr);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private class InitClusterTask extends AsyncTask<InputStreamReader, Void, Void>{
+        @Override
+        protected Void doInBackground(InputStreamReader... params){
+            StringBuilder sb = new StringBuilder();
+            try {
+                InputStreamReader inputReader = params[0];
+                BufferedReader bufReader = new BufferedReader(inputReader);
+                String line="";
+                while((line = bufReader.readLine()) != null)
+                    sb.append(line);
+                String s = sb.toString();
+                String[] news = s.split("#");
+                for(int j = 0; j < news.length; j++){
+                    String[] res = news[j].split("\\*");
+                    NewsManager m = AppManager.getNewsManager();
+                    String type;
+                    if(res[1].equals("0")){
+                        type = "临床试验";
+                    }
+                    else if(res[1].equals("1")){
+                        type = "新冠疫情";
+                    }
+                    else{
+                        type = "疫苗";
+                    }
+                    m.updateClusterCategory(new Description(res[0], res[1]));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
     public Description[] initNews(InputStreamReader sr){
         try {

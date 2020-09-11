@@ -19,6 +19,11 @@ public class Description{
         this.clusterCategory = clusterCategory;
     }
 
+    Description(String id, String clusterCategory){
+        this.id = id;
+        this.clusterCategory = clusterCategory;
+    }
+
     Description(News news){
         this.id = news.get_id();
         this.date = news.getDate();

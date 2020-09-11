@@ -52,7 +52,7 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
     final static Integer CURED = 2;
     final static Integer DEAD = 3;
 
-    private static final String[] table_titles = new String[]{"现存确诊", "累计感染", "累计死亡", "累计治愈"};
+    private static final String[] table_titles = new String[]{"现存确诊", "累计感染", "累计治愈", "累计死亡"};
     public static final String[] STAT_ENTRIES = new String[]{"curInfected", "totalInfected", "totalCured", "totalDead"};
 
     private LineChart chart;
@@ -78,8 +78,6 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         // add charts
         ArrayList<Integer> xs;
         ArrayList<ArrayList<Integer>> ys;
@@ -92,13 +90,13 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         Integer[][] data = worldTotal.getData();
         String[] temp = worldTotal.getBegin().split("-");
         LocalDate d = LocalDate.of(Integer.parseInt(temp[0]),Integer.parseInt(temp[1]),Integer.parseInt(temp[2]));
-        for(int i=0;i<data[0].length;++i) {
+        for(int i=0;i<data.length;++i) {
             xs.add(d.getMonthValue() * 100 + d.getDayOfMonth());
             ys.get(0).add(data[i][CONFIRM]-data[i][CURED]-data[i][DEAD]);
             ys.get(1).add(data[i][CONFIRM]);
             ys.get(2).add(data[i][CURED]);
             ys.get(3).add(data[i][DEAD]);
-            d.plusDays(1);
+            d=d.plusDays(1);
         }
         for (int i = 0; i < table_titles.length; i++)
             fragments_world.add(ChartFragment.newInstance(table_titles[i], xs, ys.get(i)));
@@ -111,13 +109,13 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         data = chinaTotal.getData();
         temp = chinaTotal.getBegin().split("-");
         d = LocalDate.of(Integer.parseInt(temp[0]),Integer.parseInt(temp[1]),Integer.parseInt(temp[2]));
-        for(int i=0;i<data[0].length;++i) {
+        for(int i=0;i<data.length;++i) {
             xs.add(d.getMonthValue() * 100 + d.getDayOfMonth());
             ys.get(0).add(data[i][CONFIRM]-data[i][CURED]-data[i][DEAD]);
             ys.get(1).add(data[i][CONFIRM]);
             ys.get(2).add(data[i][CURED]);
             ys.get(3).add(data[i][DEAD]);
-            d.plusDays(1);
+            d=d.plusDays(1);
         }
         for (int i = 0; i < table_titles.length; i++)
             fragments_china.add(ChartFragment.newInstance(table_titles[i], xs, ys.get(i)));
@@ -182,35 +180,33 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
            String location = countryList.get(i);
            YiqingData temp = yiqingDataManager.getLocationYiqingData(location).get(0);
            Integer[][] data = temp.getData();
-           int size = data[0].length;
-           SnapShot snapShot = new SnapShot(data[CONFIRM][size-1],data[CURED][size-1],data[DEAD][size-1]);
+           int size = data.length;
+           SnapShot snapShot = new SnapShot(data[size-1][CONFIRM],data[size-1][CURED],data[size-1][DEAD]);
            if(location.equals("United States of America"))
                location = "U.S.A";
            tmpWorldSnapshot.put(location,snapShot);
         }
 
-
         for(int i=0;i<provinceList.size();++i){
             String location = "China|"+provinceList.get(i);
             YiqingData temp = yiqingDataManager.getLocationYiqingData(location).get(0);
             Integer[][] data = temp.getData();
-            int size = data[0].length;
+            int size = data.length;
             SnapShot snapShot = new SnapShot(data[size-1][CONFIRM],data[size-1][CURED],data[size-1][DEAD]);
-            provinceDataSnapshot.put(location,snapShot);
+            provinceDataSnapshot.put(provinceList.get(i),snapShot);
 
             LinkedHashMap<String ,SnapShot> tmp = new LinkedHashMap<>();
             ArrayList<YiqingData> provDetail = yiqingDataManager.getStreetYiqingData(location+"|");
             for(int j=0;j<provDetail.size();++j){
-                temp = provDetail.get(i);
-                String city = temp.getLocation().split("|")[2];
+                temp = provDetail.get(j);
+                String city = temp.getLocation().split("\\|")[2];
                 data = temp.getData();
-                size = data[0].length;
+                size = data.length;
                 snapShot = new SnapShot(data[size-1][CONFIRM],data[size-1][CURED],data[size-1][DEAD]);
                 tmp.put(city,snapShot);
             }
-
             provinceDetailDataSnapshot.put(
-                    location,
+                    provinceList.get(i),
                     tmp.entrySet()
                             .stream()
                             .sorted((e1, e2) -> {
@@ -239,10 +235,10 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
 
     public Map<String, Map<String, Integer>> getChinaStats() {
         Integer[][] chinaData = chinaTotal.getData();
-        Integer chinaSize = chinaData[0].length;
+        Integer chinaSize = chinaData.length;
 
         HashMap<String, Integer> cumulative = new HashMap<>();
-        int curInfected = chinaData[CONFIRM][chinaSize-1] - chinaData[CURED][chinaSize-1] - chinaData[DEAD][chinaSize-1];
+        int curInfected = chinaData[chinaSize-1][CONFIRM] - chinaData[chinaSize-1][CURED] - chinaData[chinaSize-1][DEAD];
         cumulative.put(STAT_ENTRIES[0], curInfected);
         cumulative.put(STAT_ENTRIES[1], chinaData[chinaSize-1][CONFIRM]);
         cumulative.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED]);
@@ -262,10 +258,10 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
 
     public Map<String, Map<String, Integer>> getWorldStats() {
         Integer[][] chinaData = worldTotal.getData();
-        Integer chinaSize = chinaData[0].length;
+        Integer chinaSize = chinaData.length;
 
         HashMap<String, Integer> cumulative = new HashMap<>();
-        int curInfected = chinaData[CONFIRM][chinaSize-1] - chinaData[CURED][chinaSize-1] - chinaData[DEAD][chinaSize-1];
+        int curInfected = chinaData[chinaSize-1][CONFIRM] - chinaData[chinaSize-1][CURED] - chinaData[chinaSize-1][DEAD];
         cumulative.put(STAT_ENTRIES[0], curInfected);
         cumulative.put(STAT_ENTRIES[1], chinaData[chinaSize-1][CONFIRM]);
         cumulative.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED]);
@@ -317,7 +313,6 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
     private void inflateDetailTable1(TableLayout table, Map<String, SnapShot> sum, Map<String, LinkedHashMap<String, SnapShot>> details) {
         if (sum == null)
             return;
-
         boolean odd = false;
         for(String prov: sum.keySet()) {
             TableRow tbRow = new TableRow(this.getContext());
@@ -329,8 +324,7 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
             SnapShot e = sum.get(prov);
             boolean hasDetail = details.containsKey(prov);
             tbRow.addView(hasDetail ? getTextView("\u25B6", prov) : getTextView(prov));
-            tbRow.addView(hasDetail ? getTextView("\u25B6", prov) : getTextView(prov));
-
+            tbRow.addView(getTextView(dispCurConfirmed(e.confirm,e.cure,e.dead)));
             tbRow.addView(getTextView(dispConfirmed(e.confirm)));
             tbRow.addView(getTextView(dispDead(e.dead)));
             tbRow.addView(getTextView(dispCured(e.cure)));
@@ -349,7 +343,6 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
                     subR.addView(getTextView("  " + city));
 
                     SnapShot en = entry.getValue();
-
                     subR.addView(getTextView(dispCurConfirmed(en.confirm,en.cure,en.dead)));
                     subR.addView(getTextView(dispConfirmed(en.confirm)));
                     subR.addView(getTextView(dispDead(en.dead)));
@@ -358,7 +351,6 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
                     table.addView(subR);
                     subTable.add(subR);
                 }
-                final  List<TableRow> sTable = subTable;
                 tbRow.getChildAt(0).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -367,13 +359,14 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
                             t.setText("\u25BC");
                         else
                             t.setText("\u25B6");
-                        for(TableRow row: sTable) {
+                        for(TableRow row: subTable) {
                             row.setVisibility(8 - row.getVisibility());
                         }
                     }
                 });
             }
         }
+
     }
 
     private void inflateDetailTable2(TableLayout table, Map<String, SnapShot> sum, int topN) {

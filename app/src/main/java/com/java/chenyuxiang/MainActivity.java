@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
     public static List<String> chinaList = Arrays.asList("Hong Kong","Xinjiang","Beijing","Sichuan","Gansu","Shanghai","Guangdong","Taiwan","Hebei",
             "Shaanxi","Shanxi","Yunnan","Chongqing","Inner Mongol","Shandong","Zhejiang","Tianjin","Liaoning","Fujian","Jiangsu","Hainan","Macao",
             "Jilin","Hubei","Jiangxi","Heilongjiang","Anhui","Guizhou","Hunan","Henan","Guangxi","Ningxia","Qinghai","Xizang");
-    public static List<String> worldList = Arrays.asList("China","Italy","United States of America","India","Brazil","Russia","Peru","Colombia","Mexico",
-    "SouthAfrica","Spain","Argentina","Chile","Iran","France","United Kingdom","Saudi Arabia","Pakistan","Turkey","Italy");
+    public static List<String> worldList = Arrays.asList("China","United States of America","India","Brazil","Russia","Peru","Colombia","Mexico",
+    "South Africa","Spain","Argentina","Chile","Iran","France","United Kingdom","Saudi Arabia","Pakistan","Turkey","Italy");
 
 
     @Override

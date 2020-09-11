@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.R;
+import com.java.chenyuxiang.Utils.NetWorkUtils;
 import com.java.chenyuxiang.dataUI.ChartFragment;
 import com.java.chenyuxiang.dataUI.ChartFragmentAdapter;
 import com.java.tanghao.AppManager;
@@ -57,12 +59,24 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
 
     private LineChart chart;
     private TextView tvX, tvY;
+    private boolean network = true;
 
-    public FragmentData(ArrayList<String>list,ArrayList<String> list2) {
+    public FragmentData(ArrayList<String>list, ArrayList<String> list2) {
         yiqingDataManager = AppManager.getYiqingDataManager();
-        yiqingDataManager.getPageYiqingData("https://covid-dashboard.aminer.cn/api/dist/epidemic.json");
         provinceList = list;
         countryList = list2;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(null);
+        if(NetWorkUtils.isNetworkAvailable())
+            yiqingDataManager.getPageYiqingData("https://covid-dashboard.aminer.cn/api/dist/epidemic.json");
+        else{
+            Toast.makeText(getContext(),"无网络连接,仅能查看新闻",Toast.LENGTH_SHORT).show();
+            network=false;
+            return;
+        }
         while (!yiqingDataManager.getIsReady()){
             try{
                 Thread.sleep(10);
@@ -73,12 +87,10 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         chinaTotal = yiqingDataManager.getLocationYiqingData("China").get(0);
         worldTotal = yiqingDataManager.getLocationYiqingData("World").get(0);
         init();
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(null);
         // add charts
+        if(!network)
+            return;
         ArrayList<Integer> xs;
         ArrayList<ArrayList<Integer>> ys;
 
@@ -122,11 +134,14 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
 
     }
 
+
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_interface2, container, false);
+        if(!network)
+            return root;
 
         // setup charts
         TabLayout tab = root.findViewById(R.id.charts_china);

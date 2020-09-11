@@ -95,10 +95,10 @@ interface YiqingScholarDao{
 
 @Dao
 interface HistoryDao{
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert()
     void insert(History... histories);
 
-    @Query("SELECT * FROM history")
+    @Query("SELECT * FROM history ORDER BY id DESC")
     History[] getAllHistories();
 
     @Delete

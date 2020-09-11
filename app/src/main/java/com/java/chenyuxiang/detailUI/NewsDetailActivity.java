@@ -15,7 +15,6 @@ import com.java.chenyuxiang.Utils.WXShareUtils;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.News;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class NewsDetailActivity extends AppCompatActivity {
@@ -44,14 +43,17 @@ public class NewsDetailActivity extends AppCompatActivity {
         String newsId = intent.getStringExtra("id");
         titleView = findViewById(R.id.view_detail_title);
         contentView = findViewById(R.id.view_detail_content);
-        ArrayList<News> detail = AppManager.getNewsManager().getNewsContent(newsId);
-        title = detail.get(0).getTitle();
+        News detail = AppManager.getNewsManager().getNewsContent(newsId).get(0);
+        title = detail.getTitle();
         titleView.setText(title);
 
-        if(detail.get(0).getContent()!=null){
-            content = "    "+detail.get(0).getContent().replace("<br>","\n    ");
+        if(detail.getContent()!=null){
+            content = "    "+detail.getContent().replace("<br>","\n    ");
             contentView.setText(content);
         }
+
+        detail.setIsRead(true);
+        AppManager.getNewsManager().updateIsRead(detail);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         if (currentTime - lastClickTime <= MIN_CLICK_DELAY_TIME)
             return false;
         lastClickTime = currentTime;
-        WXShareUtils.share(this,"标题"+title+"   正文"+content,title);
+        WXShareUtils.share(this,"标题:"+title+"\n正文"+content,title);
         return false;
     }
 

@@ -1,6 +1,5 @@
 package com.java.tanghao;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.ExclusionStrategy;
@@ -270,7 +269,7 @@ public class NewsManager{
                     else{
                         type = "疫苗";
                     }
-                    m.updateClusterCategory(new Description(res[0], res[1]));
+                    m.updateClusterCategory(new Description(res[0], type));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

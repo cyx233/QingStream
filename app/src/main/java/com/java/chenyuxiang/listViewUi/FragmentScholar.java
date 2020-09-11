@@ -28,6 +28,7 @@ import androidx.fragment.app.ListFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.java.chenyuxiang.R;
+import com.java.chenyuxiang.Utils.NetWorkUtils;
 import com.java.chenyuxiang.detailUI.MarqueeTextView;
 import com.java.chenyuxiang.detailUI.ScholarDetailActivity;
 import com.java.chenyuxiang.view.SwipeRefreshView;
@@ -62,7 +63,7 @@ public class FragmentScholar extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
         currentPage = 1;
-        adapter = new ScholarListAdapter(requireContext(),scholarList);//new出适配器的实例
+        adapter = new ScholarListAdapter(getActivity(),scholarList);//new出适配器的实例
         setListAdapter(adapter);//和List绑定
     }
 
@@ -97,6 +98,10 @@ public class FragmentScholar extends ListFragment {
     }
 
     protected void myLoadOperation(){
+        if(!NetWorkUtils.isNetworkAvailable()){
+            Toast.makeText(getContext(),"无网络连接,仅能查看新闻",Toast.LENGTH_SHORT).show();
+            return;
+        }
         ArrayList<YiqingScholarDescription> list;
         list = AppManager.getYiqingScholarManager().getScholar(false);
         if(list.size()<currentPage*20){
@@ -109,7 +114,6 @@ public class FragmentScholar extends ListFragment {
                 scholarList.addAll(list.subList((currentPage-1)*20,currentPage*20));
             }
         }
-        Toast.makeText(getContext(), "加载成功", Toast.LENGTH_SHORT).show();
         adapter.notifyDataSetChanged();
     }
 
@@ -136,7 +140,7 @@ public class FragmentScholar extends ListFragment {
         private LruCache<String, BitmapDrawable> mMemoryCache;
 
         public ScholarListAdapter(Context context, ArrayList<YiqingScholarDescription> list) {
-            super(requireActivity(), android.R.layout.simple_list_item_1, list);
+            super(getActivity(), android.R.layout.simple_list_item_1, list);
             mList=list;
             mLoadingBitmap = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.empty_photo);
@@ -157,7 +161,7 @@ public class FragmentScholar extends ListFragment {
                 mListView = (ListView) parent;
             }
             if (null == convertView) {
-                convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_scholar, null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_scholar, null);
             }
             YiqingScholarDescription c = getItem(position);
             assert c != null;

@@ -24,12 +24,14 @@ def cluster_func(news):
 
     km_cluster = KMeans(n_clusters=num_clusters, max_iter=300, n_init=1, init='k-means++',n_jobs=1)
     result = km_cluster.fit_predict(tfidf_matrix)
+
     cluster_word = [[] for i in range(num_clusters)]
     for idx in range(len(news_json)):
         for word in news_json[idx]['label']:
             cluster_word[result[idx]].append(word)
 
     cluster_result = []
+
     for lst in cluster_word:
         word_counts = Counter(lst)
         cluster_result.append(word_counts.most_common(1)[0][0])

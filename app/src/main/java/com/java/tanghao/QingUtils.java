@@ -1,6 +1,5 @@
 package com.java.tanghao;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.chaquo.python.PyObject;
@@ -167,7 +166,7 @@ public class QingUtils {
 
 
 
-    static String[] clusterTask(ClusterParam clusterParam){
+    public static String[] clusterTask(ClusterParam clusterParam){
         String[] s = new String[0];
         try {
             ClusterTask c= new ClusterTask();

@@ -96,8 +96,8 @@ public class FragmentNewsResult extends ListFragment {
             }else{
                 newsList.addAll(allNewsList.subList((currentPage-1)*20,currentPage*20));
             }
+            Toast.makeText(getContext(), "加载成功", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(getContext(), "加载成功", Toast.LENGTH_SHORT).show();
         adapter.notifyDataSetChanged();
     }
     public void updateNews(ArrayList<Description> list){
@@ -127,19 +127,23 @@ public class FragmentNewsResult extends ListFragment {
         Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
         intent.putExtra("id",detail.getId());
         startActivity(intent);
+
+        detail.setIsRead(true);
+        newsList.set(position,detail);
+        adapter.notifyDataSetChanged();
     }
 
     class NewsListAdapter extends ArrayAdapter<Description> {
         private ArrayList<Description> mList;
         public NewsListAdapter(ArrayList<Description> list) {
-            super(requireActivity(), android.R.layout.simple_list_item_1, list);
+            super(getActivity(), android.R.layout.simple_list_item_1, list);
             mList=list;
         }
         @NonNull
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if (null == convertView) {
-                convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
             }
             Description c = getItem(position);
             TextView titleTextView = (TextView) convertView.findViewById(R.id.news_list_item_titleTextView);

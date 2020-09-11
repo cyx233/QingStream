@@ -17,12 +17,11 @@ import androidx.fragment.app.ListFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.java.chenyuxiang.R;
+import com.java.chenyuxiang.Utils.NetWorkUtils;
 import com.java.chenyuxiang.detailUI.NewsDetailActivity;
 import com.java.chenyuxiang.view.SwipeRefreshView;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
-import com.java.tanghao.News;
-import com.java.tanghao.NewsManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,33 +91,78 @@ public class FragmentNews extends ListFragment {
         return view;
     }
     private void myUpdateOperation(){
+        boolean network = NetWorkUtils.isNetworkAvailable();
         currentPage = 1;
         Description[] temp;
         ArrayList<Description> list;
         switch (currentCategory){
             case "news": case"paper": case "all":
-                temp = AppManager.getNewsManager().getPageNews(generateUrl(currentCategory,currentPage));
-                list = new ArrayList<>(Arrays.asList(temp));
+                if(network){
+                    temp = AppManager.getNewsManager().getPageNews(generateUrl(currentCategory,currentPage));
+                    list = new ArrayList<>(Arrays.asList(temp));
+                }else{
+                    Toast.makeText(getActivity(),"无网络连接,显示本地新闻",Toast.LENGTH_LONG).show();
+                    switch (currentCategory){
+                        case "news": case"paper":
+                            list = AppManager.getNewsManager().getTypeNews(currentCategory);
+                            break;
+                        case "all":
+                            list = AppManager.getNewsManager().getAllNews();
+                            break;
+                        default:
+                            list = AppManager.getNewsManager().getClusterNews(currentCategory);
+                            break;
+                    }
+                    if(list.size()>20){
+                       list = new ArrayList<>(list.subList(0,20));
+                    }
+                }
                 break;
             default:
-                list = AppManager.getNewsManager().getTypeNews(currentCategory);
+                list = AppManager.getNewsManager().getClusterNews(currentCategory);
                 break;
         }
-        Toast.makeText(getContext(), "加载成功", Toast.LENGTH_SHORT).show();
         updateNews(list);
     }
 
     private void myLoadOperation(){
         Description[] temp;
         ArrayList<Description> list;
+        boolean network = NetWorkUtils.isNetworkAvailable();
         switch (currentCategory){
             case "news": case"paper": case "all":
-                temp = AppManager.getNewsManager().getPageNews(generateUrl(currentCategory,currentPage+1));
-                newsList.addAll(Arrays.asList(temp));
-                currentPage+=1;
+                if(network){
+                    temp = AppManager.getNewsManager().getPageNews(generateUrl(currentCategory,currentPage+1));
+                    newsList.addAll(Arrays.asList(temp));
+                    currentPage+=1;
+                } else {
+                    Toast.makeText(getActivity(),"无网络连接,显示本地新闻",Toast.LENGTH_LONG).show();
+                    switch (currentCategory){
+                        case "news": case"paper":
+                            list = AppManager.getNewsManager().getTypeNews(currentCategory);
+                            break;
+                        case "all":
+                            list = AppManager.getNewsManager().getAllNews();
+                            break;
+                        default:
+                            list = AppManager.getNewsManager().getClusterNews(currentCategory);
+                            break;
+                    }
+                    if(list.size()<currentPage*20){
+                        Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
+                    }else{
+                        currentPage+=1;
+                        if(list.size()<currentPage*20){
+                            newsList.addAll(list.subList((currentPage-1)*20,list.size()));
+                        }else{
+                            newsList.addAll(list.subList((currentPage-1)*20,currentPage*20));
+                        }
+                    }
+
+                }
                 break;
             default:
-                list = AppManager.getNewsManager().getTypeNews(currentCategory);
+                list = AppManager.getNewsManager().getClusterNews(currentCategory);
                 if(list.size()<currentPage*20){
                     Toast.makeText(getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
                 }else{
@@ -156,7 +200,7 @@ public class FragmentNews extends ListFragment {
                 currentCategory="paper";
                 break;
             default:
-                currentCategory="";
+                currentCategory=category;
                 break;
         }
     }
@@ -170,20 +214,12 @@ public class FragmentNews extends ListFragment {
         }
         lastClickTime = currentTime;
         Description detail = newsList.get(position);
-        detail.setIsRead(true);
-
-        NewsManager mNewsManager = AppManager.getNewsManager();
-        News temp = mNewsManager.getNewsContent(detail.getId()).get(0);
-        temp.setIsRead(true);
-        mNewsManager.updateIsRead(temp);
-
 
         Intent intent = new Intent(this.getActivity(), NewsDetailActivity.class);
-        temp = mNewsManager.getNewsContent(temp.get_id()).get(0);
-
         intent.putExtra("id",detail.getId());
         startActivity(intent);
 
+        detail.setIsRead(true);
         newsList.set(position,detail);
         adapter.notifyDataSetChanged();
     }
@@ -191,14 +227,14 @@ public class FragmentNews extends ListFragment {
     class NewsListAdapter extends ArrayAdapter<Description> {
         private ArrayList<Description> mList;
         public NewsListAdapter(ArrayList<Description> list) {
-            super(requireActivity(), android.R.layout.simple_list_item_1, list);
+            super(getActivity(), android.R.layout.simple_list_item_1, list);
             mList=list;
         }
         @NonNull
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if (null == convertView) {
-                convertView = requireActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
             }
             Description c = mList.get(position);
             TextView titleTextView = (TextView) convertView.findViewById(R.id.news_list_item_titleTextView);

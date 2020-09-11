@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.java.chenyuxiang.Utils.NetWorkUtils;
 import com.java.chenyuxiang.detailUI.PastScholarDetailActivity;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.YiqingScholarDescription;
@@ -31,6 +32,10 @@ public class FragmentPastScholar extends FragmentScholar {
 
     @Override
     protected void myLoadOperation() {
+        if(!NetWorkUtils.isNetworkAvailable()){
+            Toast.makeText(getContext(),"无网络连接,仅能查看新闻",Toast.LENGTH_SHORT).show();
+            return;
+        }
         ArrayList<YiqingScholarDescription> list;
         list = AppManager.getYiqingScholarManager().getScholar(true);
         if(list.size()<currentPage*20){

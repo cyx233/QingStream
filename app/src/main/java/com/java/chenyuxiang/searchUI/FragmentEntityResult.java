@@ -84,7 +84,8 @@ public class FragmentEntityResult extends ListFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        assert data != null;
+        if(data==null)
+            return;
         String newEntityName = Objects.requireNonNull(data.getExtras()).getString("result");
         entityList.clear();
         entityList.addAll(Arrays.asList(YiqingEntityManager.getYiqingEntity(newEntityName)));

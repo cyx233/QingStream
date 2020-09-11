@@ -1,7 +1,9 @@
 package com.java.chenyuxiang;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,13 +19,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.java.chenyuxiang.Utils.NetWorkUtils;
 import com.java.chenyuxiang.channelUI.ChannelActivity;
 import com.java.chenyuxiang.listViewUi.MyFragmentPagerAdapter;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Category;
 import com.java.tanghao.CategoryManager;
+import com.java.tanghao.ClusterParam;
 import com.java.tanghao.Description;
 import com.java.tanghao.NewsManager;
+import com.java.tanghao.QingUtils;
 import com.java.tanghao.YiqingScholarDescription;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private String currentCategory;
     ArrayList<Description> newsList = new ArrayList<>();
+    ArrayList<Description> allNewsList = new ArrayList<>();
     ArrayList<YiqingScholarDescription> scholarList = new ArrayList<>();
     ArrayList<YiqingScholarDescription> pastScholarList = new ArrayList<>();
     private NewsManager mNewsManager;
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
+        NetWorkUtils.getInstance(getApplicationContext());
         setContentView(R.layout.activity_main);
         // 三个参数分别是上下文、应用的appId、是否检查签名（默认为false）
         IWXAPI mWxApi = WXAPIFactory.createWXAPI(this, "wxa713e14b9f46a7ec", true);
@@ -73,8 +80,14 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initData(){
         currentCategory = "全部";
+        boolean network = true;
         AppManager.getAppManager(this);
-        AppManager.getYiqingScholarManager().getPageScholar("https://innovaapi.aminer.cn/predictor/api/v1/valhalla/highlight/get_ncov_expers_list?v=2");
+        if(NetWorkUtils.isNetworkAvailable())
+            AppManager.getYiqingScholarManager().getPageScholar("https://innovaapi.aminer.cn/predictor/api/v1/valhalla/highlight/get_ncov_expers_list?v=2");
+        else{
+            Toast.makeText(this,"无网络连接",Toast.LENGTH_LONG).show();
+            network=false;
+        }
         mCategoryManager = AppManager.getCategoryManager();
         mNewsManager = AppManager.getNewsManager();
         ArrayList<Category> categoryList = mCategoryManager.getAllCategories();
@@ -82,13 +95,14 @@ public class MainActivity extends AppCompatActivity {
             mCategoryManager.insertCategory(new Category("全部",true));
             mCategoryManager.insertCategory(new Category("论文",true));
             mCategoryManager.insertCategory(new Category("新闻",true));
-            mCategoryManager.insertCategory(new Category("国内",false));
-            mCategoryManager.insertCategory(new Category("国外",false));
+            mCategoryManager.insertCategory(new Category("临床试验",false));
+            mCategoryManager.insertCategory(new Category("疫苗",false));
+            mCategoryManager.insertCategory(new Category("新冠疫情",false));
         }
-        loadPage.put("news",2);
-        loadPage.put("paper",2);
-        loadPage.put("event",2);
-        loadPage.put("all",2);
+        loadPage.put("news",1);
+        loadPage.put("paper",1);
+        loadPage.put("event",1);
+        loadPage.put("all",1);
 
 //        Description[] news = mNewsManager.getPageNews(generateUrl("event"));
 //        news = mNewsManager.getPageNews(generateUrl("all"));
@@ -102,19 +116,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         List<Description> list = Arrays.asList(news).subList(0,20);
+        allNewsList = new ArrayList<>(Arrays.asList(news));
         newsList = new ArrayList<>(list);
-//        newsList = mNewsManager.getAllNews();
 
-        scholarList = AppManager.getYiqingScholarManager().getScholar(false);
-        if(scholarList.size()>20){
-            scholarList = new ArrayList<>(scholarList.subList(0,20));
+        if(network){
+            scholarList = AppManager.getYiqingScholarManager().getScholar(false);
+            if(scholarList.size()>20){
+                scholarList = new ArrayList<>(scholarList.subList(0,20));
+            }
+            pastScholarList = AppManager.getYiqingScholarManager().getScholar(true);
+            if(pastScholarList.size()>20){
+                pastScholarList = new ArrayList<>(pastScholarList.subList(0,20));
+            }
         }
-        pastScholarList = AppManager.getYiqingScholarManager().getScholar(true);
-        if(pastScholarList.size()>20){
-            pastScholarList = new ArrayList<>(pastScholarList.subList(0,20));
+        try{
+            mNewsManager.initCluster(new InputStreamReader(getResources().getAssets().open("result.txt")));
+        } catch (Exception e){
+            e.printStackTrace();
         }
-
-
 
 //                start test cluster
 //        if (! Python.isStarted()) {
@@ -150,8 +169,9 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         //使用适配器将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.viewPager);
+        mViewPager.setOffscreenPageLimit(4);
         mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),newsList,
-                chinaList,worldList,scholarList, pastScholarList,2,currentCategory);
+                chinaList,worldList,scholarList, pastScholarList,1,currentCategory);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //将TabLayout与ViewPager绑定在一起
@@ -200,6 +220,31 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(this, HistoryActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.item_cluster:
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("选择聚类数量");
+                //    指定下拉列表的显示数据
+                final String[] cities = {"2", "3", "4", "5"};
+                //    设置一个下拉的列表选择项
+                builder.setItems(cities, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        Toast.makeText(MainActivity.this, "选择聚类数量：" + cities[which], Toast.LENGTH_SHORT).show();
+                        ClusterParam temp = new ClusterParam(MainActivity.this,cities[which]);
+                        String[] result = QingUtils.clusterTask(temp);
+                        mCategoryManager.deleteClsuterCategory((Category[])mCategoryManager.getAllCategories().toArray());
+                        mCategoryManager.insertCategory(new Category("全部",true));
+                        mCategoryManager.insertCategory(new Category("论文",false));
+                        mCategoryManager.insertCategory(new Category("新闻",true));
+
+                        for(int i=0;i<result.length;++i){
+                            mCategoryManager.insertCategory(new Category(result[i],true));
+                        }
+                    }
+                });
+                builder.show();
         }
         return false;
     }
@@ -210,25 +255,29 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         assert data != null;
         ArrayList<Description>newsList;
+        boolean network = NetWorkUtils.isNetworkAvailable();
         currentCategory = Objects.requireNonNull(data.getExtras()).getString("result");//得到新Activity 关闭后返回的数据
         assert currentCategory != null;
         switch (currentCategory){
             case "论文":
                 newsList = mNewsManager.getTypeNews("paper");
-                if(newsList.size()==0){
+                if(newsList.size()==0 && network){
                     Description[]temp = mNewsManager.getPageNews(generateUrl("paper"));
                     newsList = new ArrayList<Description>(Arrays.asList(temp));
                 }
                 break;
             case "新闻":
                 newsList = mNewsManager.getTypeNews("news");
-                if(newsList.size()==0){
+                if(newsList.size()==0 && network){
                     Description[]temp = mNewsManager.getPageNews(generateUrl("news"));
                     newsList = new ArrayList<Description>(Arrays.asList(temp));
                 }
                 break;
-            default:
+            case "全部":
                 newsList = mNewsManager.getAllNews();
+                break;
+            default:
+                newsList = mNewsManager.getClusterNews(currentCategory);
                 break;
         }
         if(newsList.size()>20)
@@ -236,6 +285,16 @@ public class MainActivity extends AppCompatActivity {
         else
             mFragmentPagerAdapter.updateNews(newsList);
         mFragmentPagerAdapter.updateNewsCategory(currentCategory);
-        Toast.makeText(this,currentCategory,Toast.LENGTH_SHORT).show();
+        if(newsList.size()==0){
+            if(network){
+                Toast.makeText(this,"此类为空",Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(this,"无网络连接",Toast.LENGTH_SHORT).show();
+            }
+        } else{
+            if(!network) {
+                Toast.makeText(this, "无网络连接,显示本地新闻", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

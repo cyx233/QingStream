@@ -5,7 +5,7 @@ import androidx.room.*;
 
 @Entity(tableName = "history")
 public class History{
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @NonNull

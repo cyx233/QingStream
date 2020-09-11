@@ -3,6 +3,7 @@ package com.java.chenyuxiang.searchUI;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.java.chenyuxiang.R;
+import com.java.chenyuxiang.Utils.NetWorkUtils;
 import com.java.tanghao.AppManager;
 import com.java.tanghao.Description;
 import com.java.tanghao.History;
@@ -75,7 +77,12 @@ public class SearchResultActivity extends AppCompatActivity {
         currentPage=1;
         String query = intent.getStringExtra(SearchManager.QUERY);
         AppManager.getHistoryManager().insertHistory(new History(query));
-        List<YiqingEntity> temp = Arrays.asList(YiqingEntityManager.getYiqingEntity(query));
+        List<YiqingEntity> temp=new ArrayList<>();
+        if(NetWorkUtils.isNetworkAvailable())
+            temp = Arrays.asList(YiqingEntityManager.getYiqingEntity(query));
+        else{
+            Toast.makeText(this,"无网络连接,仅显示本地新闻",Toast.LENGTH_LONG).show();
+        }
         entityList = new ArrayList<>(temp);
     }
 }

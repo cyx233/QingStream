@@ -75,7 +75,7 @@ public class CategoryManager {
         }
     }
 
-    public void deleteClsuterCategory(Category category){
+    public void deleteClsuterCategory(Category[] category){
         try {
             DeleteClsuterCategoryTask deleteClsuterCategoryTask = new DeleteClsuterCategoryTask();
             deleteClsuterCategoryTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,category);

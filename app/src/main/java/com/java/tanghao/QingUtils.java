@@ -2,9 +2,6 @@ package com.java.tanghao;
 
 import android.os.AsyncTask;
 
-import androidx.annotation.NonNull;
-import androidx.room.*;
-
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -17,7 +14,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import javax.net.ssl.HttpsURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -122,6 +118,14 @@ public class QingUtils {
             int index = 0;
             for (Map.Entry<String, YiqingDataApi> entry : j.entrySet()) {
                 result[index++] = new YiqingData(entry.getKey(), entry.getValue());
+                Integer[][] data = result[index-1].getData();
+                for(int i=0;i<data.length;++i){
+                    for(int k=0;k<data[i].length;++k){
+                        if(data[i][k]==null)
+                            data[i][k]=0;
+                    }
+                }
+                result[index-1].setData(data);
             }
             return result;
         }

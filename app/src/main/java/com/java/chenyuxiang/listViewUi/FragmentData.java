@@ -94,10 +94,10 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         LocalDate d = LocalDate.of(Integer.parseInt(temp[0]),Integer.parseInt(temp[1]),Integer.parseInt(temp[2]));
         for(int i=0;i<data[0].length;++i) {
             xs.add(d.getMonthValue() * 100 + d.getDayOfMonth());
-            ys.get(0).add(data[CONFIRM][i]-data[CURED][i]-data[DEAD][i]);
-            ys.get(1).add(data[CONFIRM][i]);
-            ys.get(2).add(data[CURED][i]);
-            ys.get(3).add(data[DEAD][i]);
+            ys.get(0).add(data[i][CONFIRM]-data[i][CURED]-data[i][DEAD]);
+            ys.get(1).add(data[i][CONFIRM]);
+            ys.get(2).add(data[i][CURED]);
+            ys.get(3).add(data[i][DEAD]);
             d.plusDays(1);
         }
         for (int i = 0; i < table_titles.length; i++)
@@ -113,10 +113,10 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         d = LocalDate.of(Integer.parseInt(temp[0]),Integer.parseInt(temp[1]),Integer.parseInt(temp[2]));
         for(int i=0;i<data[0].length;++i) {
             xs.add(d.getMonthValue() * 100 + d.getDayOfMonth());
-            ys.get(0).add(data[CONFIRM][i]-data[CURED][i]-data[DEAD][i]);
-            ys.get(1).add(data[CONFIRM][i]);
-            ys.get(2).add(data[CURED][i]);
-            ys.get(3).add(data[DEAD][i]);
+            ys.get(0).add(data[i][CONFIRM]-data[i][CURED]-data[i][DEAD]);
+            ys.get(1).add(data[i][CONFIRM]);
+            ys.get(2).add(data[i][CURED]);
+            ys.get(3).add(data[i][DEAD]);
             d.plusDays(1);
         }
         for (int i = 0; i < table_titles.length; i++)
@@ -195,7 +195,7 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
             YiqingData temp = yiqingDataManager.getLocationYiqingData(location).get(0);
             Integer[][] data = temp.getData();
             int size = data[0].length;
-            SnapShot snapShot = new SnapShot(data[CONFIRM][size-1],data[CURED][size-1],data[DEAD][size-1]);
+            SnapShot snapShot = new SnapShot(data[size-1][CONFIRM],data[size-1][CURED],data[size-1][DEAD]);
             provinceDataSnapshot.put(location,snapShot);
 
             LinkedHashMap<String ,SnapShot> tmp = new LinkedHashMap<>();
@@ -205,7 +205,7 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
                 String city = temp.getLocation().split("|")[2];
                 data = temp.getData();
                 size = data[0].length;
-                snapShot = new SnapShot(data[CONFIRM][size-1],data[CURED][size-1],data[DEAD][size-1]);
+                snapShot = new SnapShot(data[size-1][CONFIRM],data[size-1][CURED],data[size-1][DEAD]);
                 tmp.put(city,snapShot);
             }
 
@@ -244,15 +244,15 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         HashMap<String, Integer> cumulative = new HashMap<>();
         int curInfected = chinaData[CONFIRM][chinaSize-1] - chinaData[CURED][chinaSize-1] - chinaData[DEAD][chinaSize-1];
         cumulative.put(STAT_ENTRIES[0], curInfected);
-        cumulative.put(STAT_ENTRIES[1], chinaData[CONFIRM][chinaSize-1]);
-        cumulative.put(STAT_ENTRIES[2], chinaData[CURED][chinaSize-1]);
-        cumulative.put(STAT_ENTRIES[3], chinaData[DEAD][chinaSize-1]);
+        cumulative.put(STAT_ENTRIES[1], chinaData[chinaSize-1][CONFIRM]);
+        cumulative.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED]);
+        cumulative.put(STAT_ENTRIES[3], chinaData[chinaSize-1][DEAD]);
 
         HashMap<String, Integer> change = new HashMap<>();
-        change.put(STAT_ENTRIES[0], curInfected - (chinaData[CONFIRM][chinaSize-2]-chinaData[CURED][chinaSize-2]-chinaData[DEAD][chinaSize-2]));
-        change.put(STAT_ENTRIES[1], chinaData[CONFIRM][chinaSize-1] - chinaData[CONFIRM][chinaSize-2]);
-        change.put(STAT_ENTRIES[2], chinaData[CURED][chinaSize-1] - chinaData[CONFIRM][chinaSize-2]);
-        change.put(STAT_ENTRIES[3], chinaData[DEAD][chinaSize-1] - chinaData[CONFIRM][chinaSize-2]);
+        change.put(STAT_ENTRIES[0], curInfected - (chinaData[chinaSize-2][CONFIRM]-chinaData[chinaSize-2][CURED]-chinaData[chinaSize-2][DEAD]));
+        change.put(STAT_ENTRIES[1], chinaData[chinaSize-1][CONFIRM] - chinaData[chinaSize-2][CONFIRM]);
+        change.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED] - chinaData[chinaSize-2][CONFIRM]);
+        change.put(STAT_ENTRIES[3], chinaData[chinaSize-1][DEAD] - chinaData[chinaSize-2][CONFIRM]);
 
         HashMap<String, Map<String, Integer>> ret = new HashMap<>();
         ret.put("cumulative", cumulative);
@@ -267,15 +267,15 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         HashMap<String, Integer> cumulative = new HashMap<>();
         int curInfected = chinaData[CONFIRM][chinaSize-1] - chinaData[CURED][chinaSize-1] - chinaData[DEAD][chinaSize-1];
         cumulative.put(STAT_ENTRIES[0], curInfected);
-        cumulative.put(STAT_ENTRIES[1], chinaData[CONFIRM][chinaSize-1]);
-        cumulative.put(STAT_ENTRIES[2], chinaData[CURED][chinaSize-1]);
-        cumulative.put(STAT_ENTRIES[3], chinaData[DEAD][chinaSize-1]);
+        cumulative.put(STAT_ENTRIES[1], chinaData[chinaSize-1][CONFIRM]);
+        cumulative.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED]);
+        cumulative.put(STAT_ENTRIES[3], chinaData[chinaSize-1][DEAD]);
 
         HashMap<String, Integer> change = new HashMap<>();
-        change.put(STAT_ENTRIES[0], curInfected - (chinaData[CONFIRM][chinaSize-2]-chinaData[CURED][chinaSize-2]-chinaData[DEAD][chinaSize-2]));
-        change.put(STAT_ENTRIES[1], chinaData[CONFIRM][chinaSize-1] - chinaData[CONFIRM][chinaSize-2]);
-        change.put(STAT_ENTRIES[2], chinaData[CURED][chinaSize-1] - chinaData[CONFIRM][chinaSize-2]);
-        change.put(STAT_ENTRIES[3], chinaData[DEAD][chinaSize-1] - chinaData[CONFIRM][chinaSize-2]);
+        change.put(STAT_ENTRIES[0], curInfected - (chinaData[chinaSize-2][CONFIRM]-chinaData[chinaSize-2][CURED]-chinaData[chinaSize-2][DEAD]));
+        change.put(STAT_ENTRIES[1], chinaData[chinaSize-1][CONFIRM] - chinaData[chinaSize-2][CONFIRM]);
+        change.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED] - chinaData[chinaSize-2][CONFIRM]);
+        change.put(STAT_ENTRIES[3], chinaData[chinaSize-1][DEAD] - chinaData[chinaSize-2][CONFIRM]);
 
         HashMap<String, Map<String, Integer>> ret = new HashMap<>();
         ret.put("cumulative", cumulative);

@@ -115,11 +115,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Description> list = Arrays.asList(news).subList(0,20);
-        allNewsList = new ArrayList<>(Arrays.asList(news));
-        newsList = new ArrayList<>(list);
 
         if(network){
+            news = mNewsManager.getPageNews(generateUrl("all"));
             scholarList = AppManager.getYiqingScholarManager().getScholar(false);
             if(scholarList.size()>20){
                 scholarList = new ArrayList<>(scholarList.subList(0,20));
@@ -134,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e){
             e.printStackTrace();
         }
+        List<Description> list = Arrays.asList(news).subList(0,20);
+        allNewsList = new ArrayList<>(Arrays.asList(news));
+        newsList = new ArrayList<>(list);
 
 //                start test cluster
 //        if (! Python.isStarted()) {
@@ -154,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
 //            PyObject obj = py.getModule("cluster").callAttr("cluster_func", param);
 //            py.getBuiltins().get("help").call();
 //            String data = obj.toJava(String.class);
-            System.out.println("qing");
 //        }
 //        end test cluster
     }

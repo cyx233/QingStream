@@ -15,7 +15,8 @@
             android:layout_height="wrap_content">
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="300dp"
+                android:layout_weight="2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:orientation="horizontal"
@@ -47,7 +48,8 @@
                 android:layout_margin="5dp"
                 android:id="@+id/view_entity_detail_img"
                 android:scaleType="fitCenter"
-                android:layout_width="100dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="100dp"/>
         </LinearLayout>
         <TextView

@@ -142,16 +142,17 @@ public class EntityDetailActivity extends AppCompatActivity {
             }
             CovidRelation c = getItem(position);
             TextView relationTextView = (TextView) convertView.findViewById(R.id.view_entity_relation);
-            ImageView imgView = (ImageView) convertView.findViewById(R.id.view_entity_relation_img);
+            ImageView imgViewLeft = (ImageView) convertView.findViewById(R.id.dir_left);
+            ImageView imgViewRignt = (ImageView) convertView.findViewById(R.id.dir_right);
             TextView otherTextView = (TextView) convertView.findViewById(R.id.view_entity_relation_other);
             assert c != null;
 
             relationTextView.setText(c.getRelation());
             otherTextView.setText(c.getLabel());
             if(c.getForward()){
-
+                imgViewLeft.setVisibility(View.GONE);
             } else {
-
+                imgViewRignt.setVisibility(View.GONE);
             }
             return convertView;
         }

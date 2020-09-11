@@ -186,7 +186,7 @@ public class FragmentScholar extends ListFragment {
             companyTextView = (TextView)convertView.findViewById(R.id.view_list_scholar_company);
             profileTextView = (TextView)convertView.findViewById(R.id.view_list_scholar_profile);
 
-            if(c.getName_zh().equals(" "))
+            if(c.getName_zh().equals(""))
                 nameTextView.setText(c.getName());
             else
                 nameTextView.setText(c.getName_zh());

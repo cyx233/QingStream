@@ -262,8 +262,8 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         HashMap<String, Integer> change = new HashMap<>();
         change.put(STAT_ENTRIES[0], curInfected - (chinaData[chinaSize-2][CONFIRM]-chinaData[chinaSize-2][CURED]-chinaData[chinaSize-2][DEAD]));
         change.put(STAT_ENTRIES[1], chinaData[chinaSize-1][CONFIRM] - chinaData[chinaSize-2][CONFIRM]);
-        change.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED] - chinaData[chinaSize-2][CONFIRM]);
-        change.put(STAT_ENTRIES[3], chinaData[chinaSize-1][DEAD] - chinaData[chinaSize-2][CONFIRM]);
+        change.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED] - chinaData[chinaSize-2][CURED]);
+        change.put(STAT_ENTRIES[3], chinaData[chinaSize-1][DEAD] - chinaData[chinaSize-2][DEAD]);
 
         HashMap<String, Map<String, Integer>> ret = new HashMap<>();
         ret.put("cumulative", cumulative);
@@ -285,8 +285,8 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         HashMap<String, Integer> change = new HashMap<>();
         change.put(STAT_ENTRIES[0], curInfected - (chinaData[chinaSize-2][CONFIRM]-chinaData[chinaSize-2][CURED]-chinaData[chinaSize-2][DEAD]));
         change.put(STAT_ENTRIES[1], chinaData[chinaSize-1][CONFIRM] - chinaData[chinaSize-2][CONFIRM]);
-        change.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED] - chinaData[chinaSize-2][CONFIRM]);
-        change.put(STAT_ENTRIES[3], chinaData[chinaSize-1][DEAD] - chinaData[chinaSize-2][CONFIRM]);
+        change.put(STAT_ENTRIES[2], chinaData[chinaSize-1][CURED] - chinaData[chinaSize-2][CURED]);
+        change.put(STAT_ENTRIES[3], chinaData[chinaSize-1][DEAD] - chinaData[chinaSize-2][DEAD]);
 
         HashMap<String, Map<String, Integer>> ret = new HashMap<>();
         ret.put("cumulative", cumulative);
@@ -308,7 +308,7 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
         t = table.findViewById(R.id.textTotalCured);
         t.setText(Integer.toString(cum.get(STAT_ENTRIES[2])));
         t = table.findViewById(R.id.textTotalDeath);
-        t.setText(Integer.toString(cum.get(STAT_ENTRIES[2])));
+        t.setText(Integer.toString(cum.get(STAT_ENTRIES[3])));
 
         cum = data.get("change");
         t = table.findViewById(R.id.textNewCurSick);
@@ -398,8 +398,8 @@ public class FragmentData extends Fragment implements OnChartValueSelectedListen
             tbRow.addView(getTextView(prov));
             tbRow.addView(getTextView(dispCurConfirmed(e.confirm,e.cure,e.dead)));
             tbRow.addView(getTextView(dispConfirmed(e.confirm)));
-            tbRow.addView(getTextView(dispDead(e.dead)));
             tbRow.addView(getTextView(dispCured(e.cure)));
+            tbRow.addView(getTextView(dispDead(e.dead)));
 
             table.addView(tbRow);
             if (++i >= topN) {

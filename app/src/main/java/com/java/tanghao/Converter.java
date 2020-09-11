@@ -31,7 +31,7 @@ class Integer2DConverter{
         String[] ss = data.split("#QingSteamSplit#");
         Integer[][] result = new Integer[ss.length][];
         for(int i = 0; i < ss.length; i++){
-            String[] sss = ss[i].split("QingSteam2DSplit");
+            String[] sss = ss[i].split("#QingSteam2DSplit#");
             result[i] = new Integer[sss.length];
             for(int j = 0; j < sss.length; j++){
                 result[i][j] = Integer.valueOf(sss[j]);

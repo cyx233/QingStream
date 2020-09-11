@@ -3,6 +3,13 @@ package com.java.tanghao;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -190,4 +197,66 @@ public class NewsManager{
     }
 
 
+    public Description[] initNews(InputStreamReader sr){
+        try {
+            InitNewsTask initNewsTask = new InitNewsTask();
+            return initNewsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, sr).get();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private class InitNewsTask extends AsyncTask<InputStreamReader, Void, Description[]>{
+        @Override
+        protected Description[] doInBackground(InputStreamReader... params){
+            News[] news = new News[0];
+            Description[] d = new Description[0];
+            StringBuilder sb = new StringBuilder();
+            try {
+                InputStreamReader inputReader = params[0];
+                BufferedReader bufReader = new BufferedReader(inputReader);
+                String line="";
+                while((line = bufReader.readLine()) != null)
+                    sb.append(line);
+                String s = sb.toString();
+                ExclusionStrategy myExclusionStrategy = new ExclusionStrategy() {
+
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes fa) {
+                        return fa.getName().equals("isRead") || fa.getName().equals("isFavorite"); // <---
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                };
+
+                Gson gson = new GsonBuilder()
+                        .setExclusionStrategies(myExclusionStrategy)
+                        .create();
+                NewsApi na = gson.fromJson(s, NewsApi.class);
+                if (na != null) news = na.getData();
+                for(int i = 0; i < news.length; i++){
+                    Integer size = getNewsContent(news[i].get_id()).size();
+                    if(size == 0){
+                        news[i].setIsRead(false);
+                        news[i].setIsFavorite(false);
+                    }
+                    else{
+                        news[i] = getNewsContent(news[i].get_id()).get(0);
+                    }
+                }
+                insertNews(news);
+                d = new Description[news.length];
+                for(int i = 0; i < news.length; i++){
+                    d[i] = new Description(news[i]);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return d;
+        }
+    }
 }

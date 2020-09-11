@@ -27,11 +27,14 @@ import com.java.tanghao.AppManager;
 import com.java.tanghao.Category;
 import com.java.tanghao.CategoryManager;
 import com.java.tanghao.Description;
+import com.java.tanghao.News;
 import com.java.tanghao.NewsManager;
 import com.java.tanghao.YiqingScholarDescription;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -86,8 +89,17 @@ public class MainActivity extends AppCompatActivity {
         loadPage.put("event",2);
         loadPage.put("all",2);
 
-        Description[] news = mNewsManager.getPageNews(generateUrl("event"));
-        news = mNewsManager.getPageNews(generateUrl("all"));
+//        Description[] news = mNewsManager.getPageNews(generateUrl("event"));
+//        news = mNewsManager.getPageNews(generateUrl("all"));
+//        init news
+        Description[] news = new Description[0];
+        try {
+            news = mNewsManager.initNews(new InputStreamReader(getResources().getAssets().open("event.json")));
+            news = mNewsManager.initNews(new InputStreamReader(getResources().getAssets().open("news.json")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         List<Description> list = Arrays.asList(news).subList(0,20);
         newsList = new ArrayList<>(list);
 //        newsList = mNewsManager.getAllNews();
@@ -100,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         if(pastScholarList.size()>20){
             pastScholarList = new ArrayList<>(pastScholarList.subList(0,20));
         }
+
+
 
 //                start test cluster
 //        if (! Python.isStarted()) {
@@ -120,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 //            PyObject obj = py.getModule("cluster").callAttr("cluster_func", param);
 //            py.getBuiltins().get("help").call();
 //            String data = obj.toJava(String.class);
-//            System.out.println("qing");
+            System.out.println("qing");
 //        }
 //        end test cluster
     }
